@@ -38,6 +38,8 @@ class LevelParser extends TiledMap					// BEHOLD MY NON COMMENTED UNREADABLE COD
 		super(loadedLevel + "level.tmx");
 		
 		FlxG.camera.setScrollBounds(0, fullWidth, 0, fullHeight);
+		trace(fullWidth);
+		trace(fullHeight);
 		
 		loadTiles();
 	}
@@ -87,7 +89,7 @@ class LevelParser extends TiledMap					// BEHOLD MY NON COMMENTED UNREADABLE COD
 				tilemap.body.type = BodyType.STATIC;
 				tilemap.setupCollideIndex(1, new Material(0, 0.1, 0, 1, 0.1));
 				tilemap.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
-				//tilemap.body.space = FlxNapeSpace.space;
+				tilemap.body.space = FlxNapeSpace.space;
 				staticTiles.add(tilemap);
 			}
 		}
@@ -122,16 +124,12 @@ class LevelParser extends TiledMap					// BEHOLD MY NON COMMENTED UNREADABLE COD
 				else if (object.custom.contains("left") && object.custom.contains("right")) platform = new Platform(x, y, loadedLevel + tileset.imageSource, object.custom.get("left"), object.custom.get("right"), false);
 				platform.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
 				platform.body.type = BodyType.KINEMATIC;
-				//platform.body.space = FlxNapeSpace.space;
 				state.platforms.add(platform);
 				
 			case "player_start":
 				var tileset = group.map.getGidOwner(object.gid);
 				var player = new PlayerRenderer(x, y, loadedLevel + tileset.imageSource);
 				player.facing = FlxObject.RIGHT;
-				player.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
-				player.body.type = BodyType.DYNAMIC;
-				//player.body.space = FlxNapeSpace.space;
 				state.player = player;
 				state.add(player);
 				
@@ -144,7 +142,6 @@ class LevelParser extends TiledMap					// BEHOLD MY NON COMMENTED UNREADABLE COD
 				var coin = new FlxNapeSprite(x, y, loadedLevel + tileset.imageSource);
 				coin.body.type = BodyType.KINEMATIC;
 				coin.body.setShapeFilters(new InteractionFilter(0, 0, 0, 0, 0, 0));
-				//coin.body.space = FlxNapeSpace.space;
 				state.coins.add(coin);
 				
 			case "level_exit":

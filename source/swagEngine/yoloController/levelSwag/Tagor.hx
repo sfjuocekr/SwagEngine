@@ -30,6 +30,8 @@ class Tagor extends FlxState
 		super.create();
 		
 		FlxNapeSpace.init();
+		FlxNapeSpace.space.gravity.y = 1000;
+		FlxNapeSpace.space.worldLinearDrag = 1;
 		
 		level = new LevelParser("assets/levels/Tagor/");				// LOAD THE LEVEL, HERE IS WERE YOU ADD STUFF TO THE STUFF DECLARED ABOVE LIKE COINS
 		

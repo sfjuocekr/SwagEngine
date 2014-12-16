@@ -30,6 +30,8 @@ class Tutorial extends FlxState
 		super.create();
 		
 		FlxNapeSpace.init();
+		FlxNapeSpace.space.gravity.y = 1000;
+		FlxNapeSpace.space.worldLinearDrag = 1;
 		
 		level = new LevelParser("assets/levels/tutorial/");
 		
@@ -42,13 +44,13 @@ class Tutorial extends FlxState
 	}
 	
 	private function getCoin(coin:FlxObject, player:FlxObject)
-	{		
+	{
 		coin.kill();
 		if (coins.countLiving() == 0) exit.exists = true;
 	}
 
 	override public function update(elapsed:Float):Void
-	{		
+	{
 		if (FlxG.overlap(boundaries, player)) FlxG.resetState();
 		if (FlxG.overlap(exit, player)) FlxG.resetState();
 		
