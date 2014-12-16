@@ -79,7 +79,7 @@ class Tutorial extends FlxState
 	
 	override public function update(elapsed:Float):Void
 	{
-		if (player.overlaps(coins, false))
+		if (player.overlaps(coins))
 		{
 			trace("overlaps!");
 		}
