@@ -23,9 +23,7 @@ class Main extends Sprite
 	private var stageHeight:Int;
 	
 	public static function main():Void
-	{
-//		for (i in 0...FileSystem.readDirectory("assets/levels").length) Settings.levels[i] = i;
-		
+	{		
 		Lib.current.addChild(new Main());
 	}
 	

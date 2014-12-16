@@ -1,10 +1,11 @@
 package swagEngine.yoloController.levelSwag.objects;
+
 import flixel.addons.nape.FlxNapeSprite;
 import nape.phys.BodyType;
 import nape.phys.Material;
 import nape.shape.Polygon;
 import flixel.FlxG;
-
+import nape.dynamics.InteractionFilter;
 /**
  * ...
  * @author Sjoer van der Ploeg
@@ -26,6 +27,9 @@ class Platform extends FlxNapeSprite
 		body.shapes.pop();		
 		body.shapes.add(new Polygon(Polygon.rect(-width / 2 + 1, -width / 2, width - 2, 4), new Material(0, 1, 0, 1, 0))); // TOP
 		body.shapes.add(new Polygon(Polygon.rect(-width / 2, -width / 2 + 4, width, width - 4), new Material(0, 0, 0, 1, 0))); // REST
+		
+		body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
+		body.type = BodyType.KINEMATIC;
 		
 		if (axis) yMovement = 1;
 		else xMovement = 1;

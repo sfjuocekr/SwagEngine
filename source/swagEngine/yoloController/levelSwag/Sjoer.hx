@@ -19,7 +19,6 @@ import flixel.addons.nape.FlxNapeTilemap;
 
 class Sjoer extends FlxState
 {
-	//public var level:LevelParser;
 	public var level:FlxTiledMap;
 	public var platforms:FlxSpriteGroup = new FlxSpriteGroup();
 	public var coins:FlxGroup = new FlxGroup();

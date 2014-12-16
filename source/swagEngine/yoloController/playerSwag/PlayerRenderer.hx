@@ -6,6 +6,7 @@ import nape.phys.BodyType;
 import nape.phys.Material;
 import nape.shape.Polygon;
 import nape.dynamics.InteractionFilter;
+import flixel.FlxObject;
 
 /**
  * ...
@@ -15,6 +16,7 @@ import nape.dynamics.InteractionFilter;
 class PlayerRenderer extends FlxNapeSprite
 {
 	private var controller:PlayerController;
+	public var cards:CardManager;
 	
 	private function init()
 	{
@@ -25,20 +27,23 @@ class PlayerRenderer extends FlxNapeSprite
 		body.shapes.add(new Polygon(Polygon.rect(-width / 2 + 4, -width, width - 8, height - 4), new Material(0, 0, 0, .25, 0))); // BODY
 		body.shapes.add(new Polygon(Polygon.rect(-width / 2, -width, 4, height - 4), new Material(0, 0, 0, .25, 0))); // LEFT
 		body.shapes.add(new Polygon(Polygon.rect(width / 2 - 4, -width, 4, height - 4), new Material(0, 0, 0, .25, 0))); // RIGHT
-		body.shapes.add(new Polygon(Polygon.rect(-width / 2 + 1, width -4, width - 2, 4), new Material(0, 1, 0, .25, 0))); // FEET
+		body.shapes.add(new Polygon(Polygon.rect(-width / 2, width - 4, 1, 4), new Material(0, 1, 0, .25, 0))); // FEETLEFT
+		body.shapes.add(new Polygon(Polygon.rect(-width / 2 + 1, width - 4, width - 2, 4), new Material(0, 1, 0, .25, 0))); // FEET
+		body.shapes.add(new Polygon(Polygon.rect(width / 2 - 1, width - 4, 1, 4), new Material(0, 1, 0, .25, 0))); // RIGHTLEFT
 		
 		body.allowRotation = false;
+		
+		facing = FlxObject.RIGHT;
 	}
 	
-	public function new(X:Float = 0, Y:Float = 0, SimpleGraphic:Dynamic, CreateRectangularBody:Bool = true, EnablePhysics:Bool = true)
+	override public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic)
 	{
-		super(X, Y, SimpleGraphic);
-		
-		FlxG.camera.follow(this);
+		super(x, y, SimpleGraphic);
 		
 		init();
 		
 		controller = new PlayerController(this);
+		cards = new CardManager();
 	}
 	
 	override public function update(elapsed:Float)
