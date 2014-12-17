@@ -68,6 +68,8 @@ class Tutorial extends FlxState
 		// MAKE THE CAMERA FOLLOW THE PLAYER RESTRICTED TO THE TOTAL MAP SIZE
 		FlxG.camera.setScrollBounds(0, level.width, 0, level.height);
 		FlxG.camera.follow(player);
+		FlxG.worldBounds.set(0, 0, level.width, level.height);
+		
 		active = true;
 	}
 	
