@@ -13,6 +13,8 @@ import flixel.addons.nape.FlxNapeSprite;
 import flixel.FlxObject;
 import flixel.FlxBasic;
 import flixel.group.FlxGroup;
+import swagEngine.yoloController.levelSwag.objects.animator.Dove;
+import swagEngine.yoloController.levelSwag.objects.animator.Rabbit;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
 import swagEngine.yoloController.levelSwag.objects.Coin;
 
@@ -38,7 +40,7 @@ class Tutorial extends FlxState
 		//FlxNapeSpace.space.gravity.y = 1000;
 		FlxNapeSpace.space.worldLinearDrag = 1;
 		FlxNapeSpace.drawDebug = true;
-		active = false;
+		
 		var wantedLayers:Array<String> = ["Clouds", "Background", "Level", "Foreground"];						// 0 = clouds, 1 = background, 2 = level, 3 = foreground
 		var wantedObjects:Array<String> = ["bounds", "player_start", "level_exit", "coins", "platforms"];		// 0 = bounds, 1 = player_start, 2 = level_exit, 3 = coinds, 4 = platforms
 		
@@ -66,15 +68,17 @@ class Tutorial extends FlxState
 		add(UI);
 		
 		// MAKE THE CAMERA FOLLOW THE PLAYER RESTRICTED TO THE TOTAL MAP SIZE
+		
+		add(new Rabbit(128,128));
+		add(new Dove(0,0));
+		
 		FlxG.camera.setScrollBounds(0, level.width, 0, level.height);
 		FlxG.camera.follow(player);
 		FlxG.worldBounds.set(0, 0, level.width, level.height);
-		
-		active = true;
 	}
 	
 	private function getCoin(coin:FlxObject, player:FlxObject)
-	{		
+	{	
 		coin.kill();
 		//if (coins.countLiving() == 0) exit.exists = true;
 	}
