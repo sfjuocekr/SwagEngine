@@ -25,4 +25,7 @@
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+	
+	<haxeflag name="-dce full" />
+	<haxeflag name="--macro keep(null,['Main', 'flixel.system.FlxAssets', 'flixel.system.ui', 'flixel.input'])" />
 </project>
