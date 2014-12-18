@@ -4,15 +4,16 @@
 	<app preloader="flixel.system.FlxPreloader" />
 	
 	<window width="1280" height="720" background="#000000" hardware="true" vsync="true" />
-	<window if="web" orientation="portrait"  />
-	<window if="desktop" orientation="landscape" fullscreen="false" resizable="false" />
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
+	<window if="desktop" fullscreen="false" resizable="false" />
+	<window if="mobile" orientation="landscape" fullscreen="true" />
 	
 	<set name="BUILD_DIR" value="export" />
 	
 	<classpath name="source" />
 	
+	<assets path="assets" />
 	<assets path="assets" exclude="icon.png" />
+	<assets path="assets/levels/Sjoer" exlude="PSD/" />
 
 	<icon path="assets/icon.png" />	
 	
@@ -26,6 +27,7 @@
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 	
-	<haxeflag name="-dce full" />
+	<haxeflag name="-dce std" unless="neko" />
+	<haxeflag name="-dce full" if="neko" />
 	<haxeflag name="--macro keep(null,['Main', 'flixel.system.FlxAssets', 'flixel.system.ui', 'flixel.input'])" />
 </project>
