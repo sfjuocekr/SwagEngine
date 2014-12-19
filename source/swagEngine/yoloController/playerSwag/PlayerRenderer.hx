@@ -48,6 +48,13 @@ class PlayerRenderer extends FlxNapeSprite
 	
 	override public function update(elapsed:Float)
 	{
+        if(this != null && body != null)
+        {
+            x = body.position.x;
+            y = body.position.y;
+            angle = body.rotation;
+        }
+		
 		controller.update();
 		
 		if (body.velocity.x > 200 && body.velocity.x > 10) body.velocity.x = 200;

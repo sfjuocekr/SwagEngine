@@ -29,13 +29,12 @@ class Tutorial extends FlxState
 {
 	private var map:String = "Tutorial";
 	private var level:ParseFlxTiledMap;
-	private var UI:FlxSpriteGroup;
+	private var UI:Interface;
 	private var player:PlayerRenderer;
-	private var floor:FlxGroup = new FlxGroup();
+	private var bounds:FlxGroup = new FlxGroup();
 	private var coins:FlxGroup = new FlxGroup();
 	private var platforms:FlxGroup = new FlxGroup();
 	private var exits:FlxGroup = new FlxGroup();
-	private var water:FlxGroup = new FlxGroup();
 
 	override public function create():Void
 	{
@@ -46,8 +45,8 @@ class Tutorial extends FlxState
 		FlxNapeSpace.space.worldLinearDrag = 1;
 		FlxNapeSpace.drawDebug = true;
 		
-		var wantedLayers:Array<String> = ["Clouds", "Background", "Level", "Foreground", "Water"];						// 0 = clouds, 1 = background, 2 = level, 3 = foreground
-		var wantedObjects:Array<String> = ["bounds", "player_start", "level_exit", "coins", "platforms"];		// 0 = bounds, 1 = player_start, 2 = level_exit, 3 = coinds, 4 = platforms
+		var wantedLayers:Array<String> = ["Clouds", "Background", "Level", "Foreground", "Water"];					// 0 = clouds, 1 = background, 2 = level, 3 = foreground, water = 4
+		var wantedObjects:Array<String> = ["bounds", "player_start", "level_exit", "coins", "platforms"];			// 0 = bounds, 1 = player_start, 2 = level_exit, 3 = coinds, 4 = platforms
 		
 		level = new ParseFlxTiledMap(map, wantedLayers, wantedObjects);
 		player = new PlayerRenderer(FlxG.width * 0.5, FlxG.height * 0.5, "assets/levels/" + map + "/" + level._map.getTilesetByGID(level.objects[1].objects[0].gid).image.source);
@@ -60,8 +59,8 @@ class Tutorial extends FlxState
 		
 		for (platform in level.objects[4])
 		{
-			if (platform.properties.get("top") != null && platform.properties.get("bottom") != null) platforms.add(new Platform(platform.x, platform.y, "assets/levels/" + map + "/" + level._map.getTilesetByGID(platform.gid).image.source, platform.properties.get("top"), platform.properties.get("bottom"), true));
-			else if (platform.properties.get("left") != null && platform.properties.get("right") != null) platforms.add(new Platform(platform.x, platform.y, "assets/levels/" + map + "/" + level._map.getTilesetByGID(platform.gid).image.source, platform.properties.get("left"), platform.properties.get("right"), false));
+			if (platform.type == "vertical") platforms.add(new Platform(platform.x, platform.y, "assets/levels/" + map + "/" + level._map.getTilesetByGID(platform.gid).image.source, platform.properties.get("min"), platform.properties.get("max"), true));
+			else if (platform.type == "horizontal") platforms.add(new Platform(platform.x, platform.y, "assets/levels/" + map + "/" + level._map.getTilesetByGID(platform.gid).image.source, platform.properties.get("min"), platform.properties.get("max"), false));
 		}
 		add(platforms);
 		
@@ -81,16 +80,17 @@ class Tutorial extends FlxState
 		add(level.layers[2]);	// LEVEL AS DEFINED BY WANTEDLAYERS ABOVE
 		
 		add(player);			// PLAYER SHOULD BE ONTOP OF THE LEVEL LAYER
+		
 		add(level.layers[3]);	// FOREGROUND AS DEFINED BY WANTEDLAYERS ABOVE
 		
 		level.layers[4].set_active(true);
 		add(level.layers[4]);	// WATER AS DEFINED BY WANTEDLAYERS ABOVE
 		
-		floor.add(new FlxObject(level.objects[0].objects[0].x, level.objects[0].objects[0].y, level.objects[0].objects[0].width, level.objects[0].objects[0].height));
+		bounds.add(new FlxObject(level.objects[0].objects[0].x, level.objects[0].objects[0].y, level.objects[0].objects[0].width, level.objects[0].objects[0].height));
 			var debug = new FlxSprite(level.objects[0].objects[0].x, level.objects[0].objects[0].y);
 				debug.makeGraphic(level.objects[0].objects[0].width, level.objects[0].objects[0].height, 0xff3f3f3f);
-			floor.add(debug);
-		add(floor);
+			bounds.add(debug);
+		add(bounds);
 		
 		// ADD THE INTERFACE
 		UI = new Interface();
@@ -123,10 +123,10 @@ class Tutorial extends FlxState
 	
 	override public function update(elapsed:Float):Void
 	{
-		FlxG.overlap(level.layers[4], player, hitWater);
+		//FlxG.overlap(level.layers[4], player, hitWater);
 		FlxG.overlap(coins, player, getCoin);
 				
-		if (FlxG.overlap(floor, player)) FlxG.resetState();
+		if (FlxG.overlap(bounds, player)) FlxG.resetState();
 		if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 		if (!player.isOnScreen()) FlxG.resetState();
 		
