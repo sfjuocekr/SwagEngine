@@ -30,7 +30,7 @@ class PlayerController
 		
 		if (FlxG.keys.justPressed.DOWN)
 		{
-			player.body.applyImpulse(new Vec2(0, 750));
+			player.body.applyImpulse(new Vec2(0, 10));
 		}
 		
 		if (FlxG.keys.pressed.LEFT)

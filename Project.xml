@@ -20,12 +20,15 @@
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="openfl-tiled-flixel" />
+	<haxelib name="openfl-tiled-flixel" />
 	<haxelib name="nape" />
 	
 	<haxedef name="FLX_NO_NATIVE_CURSOR" />
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+	
+	<android minimum-sdk-version="16" target-sdk-version="21" />
 	
 	<haxeflag name="-dce std" unless="neko" />
 	<haxeflag name="-dce full" if="neko" />

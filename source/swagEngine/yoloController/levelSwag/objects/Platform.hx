@@ -22,11 +22,17 @@ class Platform extends FlxNapeSprite
 	{
 		super(x, y, SimpleGraphic);
 		
+		body.position.x += graphic.width / 2;
+		body.position.y -= graphic.height / 2;
+		
 		body.type = BodyType.KINEMATIC;
 		
-		body.shapes.pop();		
-		body.shapes.add(new Polygon(Polygon.rect(-width / 2 + 1, -width / 2, width - 2, 4), new Material(0, 1, 0, 1, 0))); // TOP
-		body.shapes.add(new Polygon(Polygon.rect(-width / 2, -width / 2 + 4, width, width - 4), new Material(0, 0, 0, 1, 0))); // REST
+		body.shapes.pop();
+		
+		body.shapes.add(new Polygon(Polygon.rect(-width / 2, -height / 2 + 0.1, 1, 3.9), new Material(0, 0, 0, 1, 0))); // TOPLEFT
+		body.shapes.add(new Polygon(Polygon.rect(-width / 2 + 1, -height / 2, width - 2, 4), new Material(0, 1, 0, 1, 0))); // TOP
+		body.shapes.add(new Polygon(Polygon.rect(width / 2 - 1, -height / 2 + 0.1, 1, 3.9), new Material(0, 0, 0, 1, 0))); // TOPRIGHT
+		body.shapes.add(new Polygon(Polygon.rect(-width / 2, -height / 2 + 4, width, height - 4), new Material(0, 0, 0, 1, 0))); // REST
 		
 		body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
 		body.type = BodyType.KINEMATIC;
