@@ -24,12 +24,12 @@ class PlayerRenderer extends FlxNapeSprite
 		body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
 		
 		body.shapes.pop();
-		body.shapes.add(new Polygon(Polygon.rect(-width / 2 + 4, -width, width - 8, height - 4), new Material(0, 0, 0, .25, 0))); // BODY
-		body.shapes.add(new Polygon(Polygon.rect(-width / 2, -width, 4, height - 4), new Material(0, 0, 0, .25, 0))); // LEFT
-		body.shapes.add(new Polygon(Polygon.rect(width / 2 - 4, -width, 4, height - 4), new Material(0, 0, 0, .25, 0))); // RIGHT
-		body.shapes.add(new Polygon(Polygon.rect(-width / 2, width - 4, 1, 4), new Material(0, 1, 0, .25, 0))); // FEETLEFT
-		body.shapes.add(new Polygon(Polygon.rect(-width / 2 + 1, width - 4, width - 2, 4), new Material(0, 1, 0, .25, 0))); // FEET
-		body.shapes.add(new Polygon(Polygon.rect(width / 2 - 1, width - 4, 1, 4), new Material(0, 1, 0, .25, 0))); // RIGHTLEFT
+		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5 + 4, -width, width - 8, height - 4), new Material(0, 0, 0, .25, 0))); // BODY
+		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5, -width, 4, height - 4), new Material(0, 0, 0, .25, 0))); // LEFT
+		body.shapes.add(new Polygon(Polygon.rect(width * 0.5 - 4, -width, 4, height - 4), new Material(0, 0, 0, .25, 0))); // RIGHT
+		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5, width - 4, 1, 4), new Material(0, 1, 0, .25, 0))); // FEETLEFT
+		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5 + 1, width - 4, width - 2, 4), new Material(0, 1, 0, .25, 0))); // FEET
+		body.shapes.add(new Polygon(Polygon.rect(width * 0.5 - 1, width - 4, 1, 4), new Material(0, 1, 0, .25, 0))); // RIGHTLEFT
 		
 		body.allowRotation = false;
 		

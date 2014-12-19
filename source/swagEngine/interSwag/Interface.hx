@@ -40,8 +40,8 @@ class Interface	extends FlxSpriteGroup
 		add(minimap);
 		
 			escapeMenu.makeGraphic(256, 384, FlxColor.BLACK);
-			escapeMenu.x = (FlxG.width / 2) - (escapeMenu.width / 2);
-			escapeMenu.y = (FlxG.height / 2) - (escapeMenu.height / 2);
+			escapeMenu.x = (FlxG.width * 0.5) - (escapeMenu.width * 0.5);
+			escapeMenu.y = (FlxG.height * 0.5) - (escapeMenu.height * 0.5);
 			escapeMenu.visible = false;
 		add(escapeMenu);
 	}

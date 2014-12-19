@@ -16,8 +16,8 @@ class Coin extends FlxNapeSprite
 	{
 		super(x, y, SimpleGraphic);
 		
-		body.position.x += graphic.width / 2;
-		body.position.y -= graphic.height / 2;
+		body.position.x += graphic.width * 0.5;
+		body.position.y -= graphic.height * 0.5;
 		
 		body.type = BodyType.KINEMATIC;
 		

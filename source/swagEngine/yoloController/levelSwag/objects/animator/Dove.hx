@@ -31,8 +31,8 @@ class Dove extends FlxSprite
 	
 	override public function update(elapsed:Float)
 	{
-		if (x < 1 * 32 + width / 2) xMovement = 1;
-		else if (x > 8 * 32 + width / 2) xMovement = -1;
+		if (x < 1 * 32 + width * 0.5) xMovement = 1;
+		else if (x > 8 * 32 + width * 0.5) xMovement = -1;
 		
 		velocity.x = xMovement * 64;
 		

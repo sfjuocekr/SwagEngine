@@ -31,10 +31,12 @@ class MainMenu extends FlxState
 		
 		for (i in Settings.levels)
 		{
-			levelButton[i] = new FlxButtonPlus((Settings.gameWidth / 2) - 64, 32 + (i * 32 + 4), startLevel.bind(i), null, 128, 32);
+			levelButton[i] = new FlxButtonPlus((Settings.gameWidth * 0.5) - 64, 32 + (i * 32 + 4), startLevel.bind(i), null, 128, 32);
 			levelButton[i].loadButtonGraphic(new FlxSprite(0, 0, FlxAssets.getBitmapData("assets/buttons/" + i + ".png")), new FlxSprite(0, 0, FlxAssets.getBitmapData("assets/buttons/" + i + "_hl.png")));
 			add(levelButton[i]);
 		}
+		
+		FlxG.fixedTimestep = false;
 	}
 		
 	private function startLevel(level:Int)

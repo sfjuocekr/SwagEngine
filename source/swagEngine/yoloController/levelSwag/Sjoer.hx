@@ -49,8 +49,8 @@ class Sjoer extends FlxState
 		add(level.layers[3]);		// Level
 		add(level.layers[4]);		// WaterLayer
 		
-		var playerX = level._map.getObjectGroupByName("Player").objects[0].x + level._map.getObjectGroupByName("Player").objects[0].width / 2;
-		var playerY = level._map.getObjectGroupByName("Player").objects[0].y - level._map.getObjectGroupByName("Player").objects[0].height / 2;
+		var playerX = level._map.getObjectGroupByName("Player").objects[0].x + level._map.getObjectGroupByName("Player").objects[0].width * 0.5;
+		var playerY = level._map.getObjectGroupByName("Player").objects[0].y - level._map.getObjectGroupByName("Player").objects[0].height * 0.5;
 		var playerImage = level._map.getTilesetByGID(level._map.getObjectGroupByName("Player").objects[0].gid).image.source;
 		player = new PlayerRenderer(playerX, playerY, "assets/levels/Sjoer/" + playerImage);
 		player.facing = FlxObject.RIGHT;

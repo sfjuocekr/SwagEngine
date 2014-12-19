@@ -30,6 +30,7 @@ class ParseFlxTiledMap
 	public function new(map:String, wantedLayers:Array<String>, wantedObjects:Array<String>)
 	{
 		level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");
+		
 		_map = level._map;
 		
 		width = level.totalWidth;

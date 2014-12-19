@@ -15,23 +15,22 @@
 -D nape=2.0.16
 -cp source
 -cp C:\cygdrive\c\HaxeToolkit\haxe\lib/lime/2,0,1/legacy
--D PLATFORM=android-14
 -D FLX_NO_FOCUS_LOST_SCREEN
 -D tools=2.0.1
 -D lime-legacy
 -D FLX_NO_DEBUG
--D NAPE_NO_INLINE
 -D no-compilation
 -D NAPE_RELEASE_BUILD
 -D native
 -D lime-native
 -D openfl-native
 -D FLX_NO_NATIVE_CURSOR
--D TOOLCHAIN_VERSION=4.6
 -D windows
 -D desktop
 --remap flash:openfl
 --macro flixel.system.macros.FlxConditionals.run()
+-dce std
+#--macro keep(null,['Main', 'flixel.system.FlxAssets', 'flixel.system.ui', 'flixel.input'])
 -cp export/windows/cpp/haxe
 -cpp export/windows/cpp/obj
 #--macro keep("Main")

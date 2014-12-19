@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
+import haxe.Timer;
 import swagEngine.interSwag.Interface;
 import swagEngine.interSwag.MainMenu;
 import swagEngine.yoloController.levelSwag.customSwag.ParseFlxTiledMap;
@@ -29,11 +30,12 @@ class Tutorial extends FlxState
 	private var map:String = "Tutorial";
 	private var level:ParseFlxTiledMap;
 	private var UI:FlxSpriteGroup;
-	private var player:FlxObject;
-	private var floor:FlxObject;
+	private var player:PlayerRenderer;
+	private var floor:FlxGroup = new FlxGroup();
 	private var coins:FlxGroup = new FlxGroup();
 	private var platforms:FlxGroup = new FlxGroup();
 	private var exits:FlxGroup = new FlxGroup();
+	private var water:FlxGroup = new FlxGroup();
 
 	override public function create():Void
 	{
@@ -48,11 +50,10 @@ class Tutorial extends FlxState
 		var wantedObjects:Array<String> = ["bounds", "player_start", "level_exit", "coins", "platforms"];		// 0 = bounds, 1 = player_start, 2 = level_exit, 3 = coinds, 4 = platforms
 		
 		level = new ParseFlxTiledMap(map, wantedLayers, wantedObjects);
-		
-		player = new PlayerRenderer(level.objects[1].objects[0].x + (level.objects[1].objects[0].width / 2), level.objects[1].objects[0].y - (level.objects[1].objects[0].height / 2), "assets/levels/" + map + "/" + level._map.getTilesetByGID(level.objects[1].objects[0].gid).image.source);
+		player = new PlayerRenderer(FlxG.width * 0.5, FlxG.height * 0.5, "assets/levels/" + map + "/" + level._map.getTilesetByGID(level.objects[1].objects[0].gid).image.source);
 		
 		add(level.bgColor); 	// SET THE BACKGROUND COLOR
-		
+				
 		for (coin in level.objects[3])
 			coins.add(new Coin(coin.x, coin.y, "assets/levels/" + map + "/" + level._map.getTilesetByGID(coin.gid).image.source));
 		add(coins);
@@ -71,15 +72,24 @@ class Tutorial extends FlxState
 				exit.exists = false;
 			exits.add(exit);
 		}
+		add(exits);
 		
 		add(level.layers[0]);	// BACKGROUND AS DEFINED BY WANTEDLAYERS ABOVE
 		add(level.layers[1]);	// BACKGROUND AS DEFINED BY WANTEDLAYERS ABOVE
+		
+		level.layers[2].set_active(true);
 		add(level.layers[2]);	// LEVEL AS DEFINED BY WANTEDLAYERS ABOVE
+		
 		add(player);			// PLAYER SHOULD BE ONTOP OF THE LEVEL LAYER
 		add(level.layers[3]);	// FOREGROUND AS DEFINED BY WANTEDLAYERS ABOVE
+		
+		level.layers[4].set_active(true);
 		add(level.layers[4]);	// WATER AS DEFINED BY WANTEDLAYERS ABOVE
 		
-		floor = new FlxObject(level.objects[0].objects[0].x, level.objects[0].objects[0].y, level.objects[0].objects[0].width, level.objects[0].objects[0].height);
+		floor.add(new FlxObject(level.objects[0].objects[0].x, level.objects[0].objects[0].y, level.objects[0].objects[0].width, level.objects[0].objects[0].height));
+			var debug = new FlxSprite(level.objects[0].objects[0].x, level.objects[0].objects[0].y);
+				debug.makeGraphic(level.objects[0].objects[0].width, level.objects[0].objects[0].height, 0xff3f3f3f);
+			floor.add(debug);
 		add(floor);
 		
 		// ADD THE INTERFACE
@@ -94,9 +104,9 @@ class Tutorial extends FlxState
 		FlxG.camera.setScrollBounds(0, level.width, 0, level.height);
 		FlxG.camera.follow(player);
 		FlxG.worldBounds.set(0, 0, level.width, level.height);
-		FlxG.fixedTimestep = false;
 		
-		player.health = 100;
+		player.health = 1000;
+		player.setPosition(level.objects[1].objects[0].x + (level.objects[1].objects[0].width * 0.5), level.objects[1].objects[0].y - (level.objects[1].objects[0].height * 0.5));
 	}
 	
 	private function getCoin(coin:FlxObject, player:FlxObject)
@@ -105,16 +115,22 @@ class Tutorial extends FlxState
 		if (coins.countLiving() == 0) exits.members[0].exists = true;
 	}
 	
+	private function hitWater(a:FlxObject, b:FlxObject)
+	{	
+		// player.hurt(1);					// WATER DOES DAMAGE?
+		// test overlap in some funky way
+	}
+	
 	override public function update(elapsed:Float):Void
 	{
-		if (FlxG.overlap(level.layers[4], player)) trace("ARGH WATER!!!");			// WTF CHECK WATER OFFSET?!?!?!?!?!??!??!?!?!?12121111?!!?!!1
+		FlxG.overlap(level.layers[4], player, hitWater);
 		FlxG.overlap(coins, player, getCoin);
 				
 		if (FlxG.overlap(floor, player)) FlxG.resetState();
 		if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 		if (!player.isOnScreen()) FlxG.resetState();
 		
-		if (player.health <= 0) FlxG.resetState();
+		if (!player.alive) FlxG.resetState();
 		UI.health = player.health;
 		
 		super.update(FlxG.elapsed);
