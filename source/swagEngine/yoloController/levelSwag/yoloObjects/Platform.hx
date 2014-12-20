@@ -1,4 +1,4 @@
-package swagEngine.yoloController.levelSwag.objects;
+package swagEngine.yoloController.levelSwag.yoloObjects ;
 
 import flixel.addons.nape.FlxNapeSprite;
 import nape.phys.BodyType;
@@ -6,6 +6,7 @@ import nape.phys.Material;
 import nape.shape.Polygon;
 import flixel.FlxG;
 import nape.dynamics.InteractionFilter;
+
 /**
  * ...
  * @author Sjoer van der Ploeg
@@ -22,26 +23,26 @@ class Platform extends FlxNapeSprite
 	{
 		super(x, y, SimpleGraphic);
 		
-		body.position.x += graphic.width * 0.5;
-		body.position.y -= graphic.height * 0.5;
+		//body.position.x += graphic.width * 0.5;
+		//body.position.y -= graphic.height * 0.5;
 		
-		body.type = BodyType.KINEMATIC;
+		this.body.type = BodyType.KINEMATIC;
 		
-		body.shapes.pop();
+		this.body.shapes.pop();
 		
-		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5, -height * 0.5 + 0.1, 1, 3.9), new Material(0, 0, 0, 1, 0))); // TOPLEFT
-		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5 + 1, -height * 0.5, width - 2, 4), new Material(0, 1, 0, 1, 0))); // TOP
-		body.shapes.add(new Polygon(Polygon.rect(width * 0.5 - 1, -height * 0.5 + 0.1, 1, 3.9), new Material(0, 0, 0, 1, 0))); // TOPRIGHT
-		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5, -height * 0.5 + 4, width, height - 4), new Material(0, 0, 0, 1, 0))); // REST
+		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5, -this.height * 0.5 + 0.1, 1, 3.9), new Material(0, 0, 0, 1, 0))); // TOPLEFT
+		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5 + 1, -this.height * 0.5, this.width - 2, 4), new Material(0, 1, 0, 1, 0))); // TOP
+		this.body.shapes.add(new Polygon(Polygon.rect(this.width * 0.5 - 1, -this.height * 0.5 + 0.1, 1, 3.9), new Material(0, 0, 0, 1, 0))); // TOPRIGHT
+		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5, -this.height * 0.5 + 4, this.width, this.height - 4), new Material(0, 0, 0, 1, 0))); // REST
 		
-		body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
-		body.type = BodyType.KINEMATIC;
+		this.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
+		this.body.type = BodyType.KINEMATIC;
 		
-		if (axis) yMovement = 1;
-		else xMovement = 1;
+		if (axis) this.yMovement = 1;
+		else this.xMovement = 1;
 		
-		min = Std.parseInt(a);
-		max = Std.parseInt(b);
+		this.min = Std.parseInt(a);
+		this.max = Std.parseInt(b);
 	}
 	
 	override public function update (elapsed:Float)

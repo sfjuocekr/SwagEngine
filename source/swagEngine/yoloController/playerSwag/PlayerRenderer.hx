@@ -40,21 +40,14 @@ class PlayerRenderer extends FlxNapeSprite
 	{
 		super(x, y, SimpleGraphic);
 		
-		init();
+		this.init();
 		
-		controller = new PlayerController(this);
-		cards = new CardManager();
+		this.controller = new PlayerController(this);
+		this.cards = new CardManager();
 	}
 	
 	override public function update(elapsed:Float)
-	{
-        if(this != null && body != null)
-        {
-            x = body.position.x;
-            y = body.position.y;
-            angle = body.rotation;
-        }
-		
+	{		
 		controller.update();
 		
 		if (body.velocity.x > 200 && body.velocity.x > 10) body.velocity.x = 200;
@@ -62,6 +55,6 @@ class PlayerRenderer extends FlxNapeSprite
 		
 		if (!(FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT) && body.velocity.x != 0) body.velocity.x *= 0.95;
 		
-		super.update(FlxG.elapsed);
+		super.update(FlxG.elapsed);	
 	}
 }

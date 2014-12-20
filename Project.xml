@@ -15,7 +15,7 @@
 	
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
-	<haxelib name="openfl-tiled-flixel" />
+	<haxelib name="openfl-tiled" />
 	<haxelib name="openfl-tiled-flixel" />
 	<haxelib name="nape" />
 	

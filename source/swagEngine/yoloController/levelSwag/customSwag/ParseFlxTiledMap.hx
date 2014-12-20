@@ -1,14 +1,13 @@
 package swagEngine.yoloController.levelSwag.customSwag;
 
+import flixel.addons.nape.FlxNapeTilemap;
+import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import openfl.tiled.FlxTiledMap;
-import openfl.tiled.Layer;
-import swagEngine.yoloController.playerSwag.PlayerRenderer;
-import flixel.FlxBasic;
-import flixel.FlxObject;
-import openfl.tiled.TiledObjectGroup;
 import openfl.tiled.TiledMap;
+import openfl.tiled.TiledObjectGroup;
+import swagEngine.yoloController.playerSwag.PlayerRenderer;
 
 /**
 * ...
@@ -26,28 +25,32 @@ class ParseFlxTiledMap
 	public var height:Float = 0;
 	public var bgColor:FlxSprite;
 	public var _map:TiledMap;
+	public var yolo:FlxNapeTilemap;
 	
-	public function new(map:String, wantedLayers:Array<String>, wantedObjects:Array<String>)
+	public function new(map:String, wantedLayers:Array<String>, wantedObjects:Array<String>, ?levelLayer:String = null)
 	{
-		level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");
+		this.level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");
 		
-		_map = level._map;
+		this._map = level._map;
 		
-		width = level.totalWidth;
-		height = level.totalHeight;
+		this.width = level.totalWidth;
+		this.height = level.totalHeight;
 		
-		bgColor = new FlxSprite(0, 0);
-		bgColor.makeGraphic(Std.int(FlxG.stage.stageWidth), Std.int(FlxG.stage.stageHeight), level._map.backgroundColor);
-		bgColor.scrollFactor.set(0, 0);
+		this.bgColor = new FlxSprite(0, 0);
+		this.bgColor.makeGraphic(Std.int(FlxG.stage.stageWidth), Std.int(FlxG.stage.stageHeight), level._map.backgroundColor);
+		this.bgColor.scrollFactor.set(0, 0);
 		
 		for (i in wantedLayers)
 		{
-			layers.push(level.getLayerByName(i));
+			this.layers.push(level.getLayerByName(i));
 		}
 		
 		for (i in wantedObjects)
 		{
-			objects.push(level._map.getObjectGroupByName(i));
+			this.objects.push(level._map.getObjectGroupByName(i));
 		}
+		
+		// >> WHY DOES THIS NOT WORK?
+		yolo.loadMapFromCSV(this.level.getLayerByName(levelLayer)._layer.toCSV(), ("assets/levels/" + map + "/level.png"));
 	}	
 }
