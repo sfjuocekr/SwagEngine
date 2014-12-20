@@ -12,8 +12,6 @@
 	<classpath name="source" />
 	
 	<assets path="assets" />
-
-	<icon path="assets/icon.svg" />	
 	
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
@@ -31,4 +29,7 @@
 	<haxeflag name="-dce std" unless="neko" />
 	<haxeflag name="-dce full" if="neko" />
 	<haxeflag name="--macro keep(null,['Main', 'flixel.system.FlxAssets', 'flixel.system.ui', 'flixel.input'])" />
+	
+	<set name="PRERENDERED_ICON" value="true" />
+	<icon path="assets/icon.svg" />	
 </project>
