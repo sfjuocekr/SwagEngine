@@ -12,10 +12,8 @@
 	<classpath name="source" />
 	
 	<assets path="assets" />
-	<assets path="assets" exclude="icon.png" />
-	<assets path="assets/levels/Sjoer" exlude="PSD/" />
 
-	<icon path="assets/icon.png" />	
+	<icon path="assets/icon.svg" />	
 	
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
