@@ -30,10 +30,10 @@ class Platform extends FlxNapeSprite
 		
 		this.body.shapes.pop();
 		
-		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5, -this.height * 0.5 + 0.1, 1, 3.9), new Material(0, 0, 0, 1, 0))); // TOPLEFT
-		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5 + 1, -this.height * 0.5, this.width - 2, 4), new Material(0, 1, 0, 1, 0))); // TOP
-		this.body.shapes.add(new Polygon(Polygon.rect(this.width * 0.5 - 1, -this.height * 0.5 + 0.1, 1, 3.9), new Material(0, 0, 0, 1, 0))); // TOPRIGHT
-		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5, -this.height * 0.5 + 4, this.width, this.height - 4), new Material(0, 0, 0, 1, 0))); // REST
+		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5,		-this.height * 0.5,			1,					4),					new Material(0, 0, 0, 1, 0))); 		// TOPLEFT
+		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5 + 1,	-this.height * 0.5,			this.width - 2,		4),					new Material(0, 1, 0, 1, 0))); 		// TOP
+		this.body.shapes.add(new Polygon(Polygon.rect( this.width * 0.5 - 1,	-this.height * 0.5,			1,					4),					new Material(0, 0, 0, 1, 0))); 		// TOPRIGHT
+		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5, 		-this.height * 0.5 + 4,		this.width,			this.height - 4),	new Material(0, 0, 0, 1, 0))); 		// REST
 		
 		this.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
 		this.body.type = BodyType.KINEMATIC;

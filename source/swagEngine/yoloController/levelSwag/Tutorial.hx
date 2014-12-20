@@ -17,6 +17,7 @@ import flixel.FlxBasic;
 import flixel.group.FlxGroup;
 import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.Dove;
 import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.Rabbit;
+import swagEngine.yoloController.levelSwag.yoloObjects.Enemy;
 import swagEngine.yoloController.levelSwag.yoloObjects.Platform;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
 import swagEngine.yoloController.levelSwag.yoloObjects.Coin;
@@ -39,6 +40,7 @@ class Tutorial extends FlxState
 	private var platforms:FlxGroup = new FlxGroup();
 	private var exits:FlxGroup = new FlxGroup();
 	private var water:FlxGroup = new FlxGroup();
+	private var enemies:FlxGroup = new FlxGroup();
 	
 	override public function create():Void
 	{
@@ -49,10 +51,11 @@ class Tutorial extends FlxState
 		FlxNapeSpace.space.worldLinearDrag = 1;
 		FlxNapeSpace.drawDebug = true;
 		
-		var wantedLayers:Array<String> = ["Level", "Clouds", "Background", "Foreground", "Water"];									// 0 = level, 1 = clouds, 2 = background, 3 = foreground
+		var wantedLayers:Array<String> = ["Level", "Clouds", "Background", "Foreground", "Water"];				// 0 = level, 1 = clouds, 2 = background, 3 = foreground
 		var wantedObjects:Array<String> = ["player_start", "level_exit", "coins", "platforms"];					// 0 = player_start, 1 = level_exit, 2 = coins, 3 = platforms, 4 = water
 		
 		level = new ParseFlxTiledMap(map, wantedLayers, wantedObjects, wantedLayers[0]);
+		
 		player = new PlayerRenderer(FlxG.width * 0.5, FlxG.height * 0.5, "assets/levels/" + map + "/" + level._map.getTilesetByGID(level.objects[0].objects[0].gid).image.source);
 		
 		add(level.bgColor); 	// SET THE BACKGROUND COLOR
@@ -96,8 +99,9 @@ class Tutorial extends FlxState
 		
 		// MAKE THE CAMERA FOLLOW THE PLAYER RESTRICTED TO THE TOTAL MAP SIZE
 		
-		add(new Rabbit(128,128));
-		add(new Dove(0,0));
+		//enemies.add(new Enemy(128, 128, "bird"));
+		//enemies.add(new Enemy(256, 256, "rabbit"));
+		add(enemies);
 		
 		FlxG.camera.setScrollBounds(0, level.width, 0, level.height);
 		FlxG.camera.follow(player);
@@ -117,6 +121,7 @@ class Tutorial extends FlxState
 	{	
 		// player.hurt(1);					// WATER DOES DAMAGE?
 		// test overlap in some funky way
+		trace("yolo");
 	}
 	
 	override public function update(elapsed:Float):Void

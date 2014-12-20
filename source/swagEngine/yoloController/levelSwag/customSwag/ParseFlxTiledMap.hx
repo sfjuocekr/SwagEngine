@@ -8,7 +8,7 @@ import openfl.tiled.FlxTiledMap;
 import openfl.tiled.TiledMap;
 import openfl.tiled.TiledObjectGroup;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
-
+import flixel.addons.nape.FlxNapeSprite;
 /**
 * ...
 * @author Sjoer van der Ploeg
@@ -51,6 +51,6 @@ class ParseFlxTiledMap
 		}
 		
 		// >> WHY DOES THIS NOT WORK?
-		yolo.loadMapFromCSV(this.level.getLayerByName(levelLayer)._layer.toCSV(), ("assets/levels/" + map + "/level.png"));
+		//yolo.loadMapFromCSV(this.level.getLayerByName(levelLayer)._layer.toCSV(), ("assets/levels/" + map + "/level.png"));
 	}	
 }

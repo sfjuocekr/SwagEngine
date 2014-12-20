@@ -1,6 +1,8 @@
 package swagEngine.yoloController.levelSwag.yoloObjects.animationSwag ;
 
-import flixel.FlxSprite;
+import nape.dynamics.InteractionFilter;
+import nape.phys.BodyType;
+import flixel.addons.nape.FlxNapeSprite;
 import flixel.FlxG;
 import flixel.FlxObject;
 
@@ -9,7 +11,7 @@ import flixel.FlxObject;
  * @author ...
  */
 
-class Dove extends FlxSprite
+class Dove extends FlxNapeSprite
 {
 	private var xMovement:Float = 1;
 	
@@ -17,24 +19,27 @@ class Dove extends FlxSprite
 	{
 		super(x, y);
 		
-		loadGraphic("assets/animations/dove.png", true, 64, 64);
+		this.loadGraphic("assets/animations/dove.png", true, 64, 64);
+		
+		this.body.type = BodyType.KINEMATIC;
+		this.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
 		
 		var framesArray = new Array();
 		
 		for (i in 0...27) framesArray[i] = i;
 		
-		animation.add("fly", framesArray, 30, true);
-		animation.play("fly");
+		this.animation.add("fly", framesArray, 30, true);
+		this.animation.play("fly");
 		
-		facing = FlxObject.RIGHT;
+		this.facing = FlxObject.RIGHT;
 	}
 	
 	override public function update(elapsed:Float)
 	{
-		if (x < 1 * 32 + width * 0.5) xMovement = 1;
-		else if (x > 8 * 32 + width * 0.5) xMovement = -1;
+		if (body.position.x < 1 * 32 + width * 0.5) xMovement = 1;
+		else if (body.position.x > 8 * 32 + width * 0.5) xMovement = -1;
 		
-		velocity.x = xMovement * 64;
+		body.velocity.x = xMovement * 64;
 		
 		if (xMovement == 1) flipX = false;
 		else flipX = true;
