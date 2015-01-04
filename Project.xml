@@ -3,7 +3,7 @@
 	<app title="SwagEngine" file="SwagEngine" main="Main" package="com.UGH.SwagEngine" version="0.0.1" company="Sjoer van der Ploeg" />
 	<app preloader="flixel.system.FlxPreloader" />
 	
-	<window width="1280" height="720" background="#000000" hardware="true" vsync="true" />
+	<window width="1280" height="736" background="#000000" hardware="true" vsync="true" />
 	<window if="desktop" fullscreen="false" resizable="false" />
 	<window if="mobile" orientation="landscape" fullscreen="true" />
 	

@@ -1,10 +1,11 @@
 package swagEngine.yoloController.levelSwag.yoloObjects.animationSwag ;
 
-import nape.dynamics.InteractionFilter;
-import nape.phys.BodyType;
 import flixel.addons.nape.FlxNapeSprite;
 import flixel.FlxG;
 import flixel.FlxObject;
+import nape.dynamics.InteractionFilter;
+import nape.phys.Body;
+import nape.phys.BodyType;
 
 /**
  * ...
@@ -14,24 +15,31 @@ import flixel.FlxObject;
 class Dove extends FlxNapeSprite
 {
 	private var xMovement:Float = 1;
+	private var min:Int = 0;
+	private var max:Int = 0;
 	
-	override public function new(x:Float = 0, y:Float = 0)
+	public function new(x:Float = 0, y:Float = 0, a:String, b:String)
 	{
-		super(x, y);
+		super(x, y, null, false, false);
 		
-		this.loadGraphic("assets/animations/dove.png", true, 64, 64);
+		loadGraphic("assets/animations/dove.png", true, 64, 64);
 		
-		this.body.type = BodyType.KINEMATIC;
-		this.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
+		body = new Body(BodyType.KINEMATIC);
+		body.position.setxy(x, y);
+		
+		body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
 		
 		var framesArray = new Array();
 		
 		for (i in 0...27) framesArray[i] = i;
 		
-		this.animation.add("fly", framesArray, 30, true);
-		this.animation.play("fly");
+		animation.add("fly", framesArray, 30, true);
+		animation.play("fly");
 		
-		this.facing = FlxObject.RIGHT;
+		facing = FlxObject.RIGHT;
+		
+		min = Std.parseInt(a);
+		max = Std.parseInt(b);
 	}
 	
 	override public function update(elapsed:Float)

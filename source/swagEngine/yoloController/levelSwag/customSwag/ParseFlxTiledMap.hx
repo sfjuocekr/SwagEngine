@@ -1,56 +1,58 @@
 package swagEngine.yoloController.levelSwag.customSwag;
 
-import flixel.addons.nape.FlxNapeTilemap;
-import flixel.FlxBasic;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
-import openfl.tiled.FlxTiledMap;
-import openfl.tiled.TiledMap;
-import openfl.tiled.TiledObjectGroup;
-import swagEngine.yoloController.playerSwag.PlayerRenderer;
-import flixel.addons.nape.FlxNapeSprite;
+import openfl.tiled.*;
+import openfl.tiled.display.FlxEntityRenderer;
+import flixel.addons.nape.FlxNapeSpace;
+import flixel.addons.nape.FlxNapeTilemap;
+import nape.phys.Material;
+import nape.dynamics.InteractionFilter;
+import flixel.group.FlxGroup;
+
 /**
 * ...
 * @author Sjoer van der Ploeg
 */
 
-class ParseFlxTiledMap
+class ParseFlxTiledMap extends FlxTiledMap
 {
-	private var level:FlxTiledMap;
-	public var player:PlayerRenderer;
-	public var exit:FlxSprite;
-	public var layers:Array<FlxBasic> = new Array();
 	public var objects:Array<TiledObjectGroup> = new Array();
-	public var width:Float = 0;
-	public var height:Float = 0;
 	public var bgColor:FlxSprite;
-	public var _map:TiledMap;
-	public var yolo:FlxNapeTilemap;
 	
-	public function new(map:String, wantedLayers:Array<String>, wantedObjects:Array<String>, ?levelLayer:String = null)
+	public function new(map:String, wantedObjects:Array<String>)
 	{
-		this.level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");
+		super(TiledMap.fromAssetsWithAlternativeRenderer("assets/levels/" + map + "/level.tmx", new FlxEntityRenderer(), false));
 		
-		this._map = level._map;
+		bgColor = new FlxSprite(0, 0);
+		bgColor.makeGraphic(Std.int(FlxG.stage.stageWidth), Std.int(FlxG.stage.stageHeight), _map.backgroundColor);
+		bgColor.scrollFactor.set(0, 0);
 		
-		this.width = level.totalWidth;
-		this.height = level.totalHeight;
-		
-		this.bgColor = new FlxSprite(0, 0);
-		this.bgColor.makeGraphic(Std.int(FlxG.stage.stageWidth), Std.int(FlxG.stage.stageHeight), level._map.backgroundColor);
-		this.bgColor.scrollFactor.set(0, 0);
-		
-		for (i in wantedLayers)
+		for (o in wantedObjects)
 		{
-			this.layers.push(level.getLayerByName(i));
+			objects.push(_map.getObjectGroupByName(o));
 		}
+	}
+	
+	public function napeMap(layer:String, collide:Bool):FlxNapeTilemap
+	{
+		var napeLayer = new FlxNapeTilemap();
 		
-		for (i in wantedObjects)
-		{
-			this.objects.push(level._map.getObjectGroupByName(i));
-		}
-		
-		// >> WHY DOES THIS NOT WORK?
-		//yolo.loadMapFromCSV(this.level.getLayerByName(levelLayer)._layer.toCSV(), ("assets/levels/" + map + "/level.png"));
-	}	
+			for (t in _map.getLayerByName(layer).tiles)
+				if (t.gid != 0)
+				{
+					napeLayer.loadMapFromCSV(_map.getLayerByName(layer).toCSV(), _map.getTilesetByGID(t.gid).image.texture, t.width, t.height, OFF, 1, 1, 1);
+					napeLayer.alpha = _map.getLayerByName(layer).opacity;
+					napeLayer.setupCollideIndex(1, new Material(0, 0, 0, 1, 0));
+					
+					if (collide) napeLayer.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
+					else napeLayer.body.setShapeFilters(new InteractionFilter(0, 0, 0, 0, 0, 0));
+					
+					break;
+				}
+				
+			napeLayer.body.space = FlxNapeSpace.space;
+			return napeLayer;
+	}
 }

@@ -1,6 +1,7 @@
 package swagEngine.yoloController.levelSwag.yoloObjects ;
 
 import flixel.addons.nape.FlxNapeSprite;
+import nape.phys.Body;
 import nape.phys.BodyType;
 import nape.phys.Material;
 import nape.shape.Polygon;
@@ -21,28 +22,22 @@ class Platform extends FlxNapeSprite
 	
 	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic, a:String, b:String, axis:Bool)
 	{
-		super(x, y, SimpleGraphic);
+		super(x, y, SimpleGraphic, false, false);
 		
-		//body.position.x += graphic.width * 0.5;
-		//body.position.y -= graphic.height * 0.5;
+		body = new Body(BodyType.KINEMATIC);
+		body.position.setxy(x, y);
 		
-		this.body.type = BodyType.KINEMATIC;
+		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5,		-height * 0.5,			width,				2),						new Material(0, 0.15, 0.1, 1, 0)));		// TOP
+		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5, 		-height * 0.5 + 2,		width,				height - 2),			new Material(0, 0, 0, 1, 0))); 			// BOTTOM
 		
-		this.body.shapes.pop();
+		body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
+		physicsEnabled = true;
 		
-		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5,		-this.height * 0.5,			1,					4),					new Material(0, 0, 0, 1, 0))); 		// TOPLEFT
-		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5 + 1,	-this.height * 0.5,			this.width - 2,		4),					new Material(0, 1, 0, 1, 0))); 		// TOP
-		this.body.shapes.add(new Polygon(Polygon.rect( this.width * 0.5 - 1,	-this.height * 0.5,			1,					4),					new Material(0, 0, 0, 1, 0))); 		// TOPRIGHT
-		this.body.shapes.add(new Polygon(Polygon.rect(-this.width * 0.5, 		-this.height * 0.5 + 4,		this.width,			this.height - 4),	new Material(0, 0, 0, 1, 0))); 		// REST
+		if (axis) yMovement = 1;
+		else xMovement = 1;
 		
-		this.body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
-		this.body.type = BodyType.KINEMATIC;
-		
-		if (axis) this.yMovement = 1;
-		else this.xMovement = 1;
-		
-		this.min = Std.parseInt(a);
-		this.max = Std.parseInt(b);
+		min = Std.parseInt(a);
+		max = Std.parseInt(b);
 	}
 	
 	override public function update (elapsed:Float)

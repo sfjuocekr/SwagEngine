@@ -4,6 +4,7 @@ import nape.dynamics.InteractionFilter;
 import flixel.addons.nape.FlxNapeSprite;
 import nape.phys.BodyType;
 import flixel.FlxSprite;
+import flixel.addons.effects.FlxWaveSprite;
 
 /**
 * ...
@@ -12,15 +13,15 @@ import flixel.FlxSprite;
 
 class Coin extends FlxNapeSprite
 {
-	public function new(x:Float = 0, y:Float = 0, ?SimpleGraphic:Dynamic)
+	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic)
 	{
-		super(x, y, SimpleGraphic);
+		super(x, y, null, false, false);
 		
-		//this.body.position.x += graphic.width * 0.5;
-		//this.body.position.y -= graphic.height * 0.5;
+		loadGraphic(SimpleGraphic);
 		
-		this.body.type = BodyType.KINEMATIC;
+		createRectangularBody(width, height, BodyType.KINEMATIC);
+		physicsEnabled = true;
 		
-		this.body.setShapeFilters(new InteractionFilter(0, 0, 0, 0, 0, 0));
+		body.setShapeFilters(new InteractionFilter(0, 0, 0, 0, 0, 0));
 	}	
 }

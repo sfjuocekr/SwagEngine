@@ -10,7 +10,7 @@ import flixel.util.FlxSave;
 class Settings
 {
 	public static var gameWidth:Int = 1280;
-	public static var gameHeight:Int = 720;
+	public static var gameHeight:Int = 736;
 	public static var zoom:Int = 1;
 	public static var levels:Array<Int> = [0, 1];
 	public static var level:Int = 0;
