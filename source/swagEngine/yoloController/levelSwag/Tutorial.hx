@@ -137,6 +137,8 @@ class Tutorial extends FlxState
 	{
 		if (!FlxG.keys.anyPressed(["LEFT", "RIGHT"])) b.body.velocity.x = a.body.velocity.x * 1.15;
 		if (!FlxG.keys.anyPressed(["UP", "DOWN"])) b.body.velocity.y = a.body.velocity.y;
+		
+		// FIX THE "STICKY" SIDE
 	}
 	
 	override public function update(elapsed:Float)
