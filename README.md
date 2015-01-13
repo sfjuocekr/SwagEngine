@@ -11,6 +11,6 @@ Required libraries:
 	- openfl-tiled-flixel (development branch
 	- nape
 
-The project has some troubles running on neko, but the Visual C++ 2010 and 2013 work fine.
+The project will NOT run with neko, please use a proper target!
 
 - UGH
