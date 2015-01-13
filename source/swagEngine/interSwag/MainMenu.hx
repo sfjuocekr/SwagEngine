@@ -45,7 +45,8 @@ class MainMenu extends FlxState
 		{
 			case 0: System.exit(0);
 			case 1:	FlxG.switchState(new Tutorial());
-			case 2:	FlxG.switchState(new Tagor());
+			case 2:	FlxG.switchState(new Sjoer());
+			case 3:	FlxG.switchState(new Tagor());
 		}
 	}
 	

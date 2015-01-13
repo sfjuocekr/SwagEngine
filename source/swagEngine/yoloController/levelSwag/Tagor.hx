@@ -39,11 +39,10 @@ class Tagor extends FlxState
 	private var UI:Interface;
 	private var player:PlayerRenderer = null;
 	private var bounds:FlxGroup = new FlxGroup();
-	private var coins:FlxGroup = new FlxGroup();
+	private var cards:FlxGroup = new FlxGroup();
 	private var platforms:FlxGroup = new FlxGroup();
 	private var exits:FlxGroup = new FlxGroup();
 	private var solid:FlxGroup = new FlxGroup();
-	private var water:FlxGroup = new FlxGroup();
 	private var enemies:FlxGroup = new FlxGroup();
 	
 	override public function create()
@@ -55,41 +54,27 @@ class Tagor extends FlxState
 		FlxNapeSpace.space.worldLinearDrag = 2;
 		FlxNapeSpace.drawDebug = true;
 		
-		var wantedObjects:Array<String> = ["player_start", "level_exit", "coins", "platforms"];				// 0 = player_start, 1 = level_exit, 2 = coins, 3 = platforms
+		var wantedObjects:Array<String> = ["Cards", "Exit", "Player", "Platforms", "Enemies"];				// 0 = Cards, 1 = Exit, 2 = Player, 3 = Platforms, 4 = Enemies
 		
 		level = new ParseFlxTiledMap(map, wantedObjects);
 		
+		// COLLISION LAYERS ARE DONE BY PHYSICS
 		solid.add(level.napeMap("Level", true));
-		
-		water.add(level.napeMap("Water", false));
 		
 		player = new PlayerRenderer(FlxG.width * 0.5, FlxG.height * 0.5, level._map.getTilesetByGID(level.objects[0].objects[0].gid).image.texture);
 		
+		//FIX IMAGE LAYER DOWN HERE
 		add(level.bgColor);
 		
 		// ADD STUFF TO SHOW FROM HERE ON TO THE STATE WITH ADD:
 		
-		add(level.getLayerByName("Darkwater"));
-		add(level.getLayerByName("Moving_water"));
+		for (card in level.objects[2])
+			cards.add(new Card(card.x, card.y, "assets/levels/" + map + "/" + level._map.getTilesetByGID(card.gid).image.source));
+		add(cards);
 		
-		var yolo:FlxLayer = level.getLayerByName("Clouds_back");
-			yolo.forEach(function(tile:FlxTile) { tile.scrollFactor.set(0.1, 0.1); } );
-		add(yolo);
+		add(level.getLayerByName("Background"));
 		
-		add(level.getLayerByName("Clouds_back"));
-		
-		for (coin in level.objects[2])
-			coins.add(new Coin(coin.x, coin.y, "assets/levels/" + map + "/" + level._map.getTilesetByGID(coin.gid).image.source));
-		add(coins);
-		
-		for (platform in level.objects[3])
-		{
-			if (platform.type == "vertical") platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), true));
-			else if (platform.type == "horizontal") platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), false));
-		}
-		add(platforms);
-		
-		for (level_exit in level.objects[1])
+				for (level_exit in level.objects[1])
 		{
 			var exit = new FlxSprite(level_exit.x - level_exit.width * 0.5, level_exit.y + level_exit.height * 0.5);
 				exit.makeGraphic(level_exit.width, level_exit.height, 0xff3f3f3f);
@@ -98,21 +83,24 @@ class Tagor extends FlxState
 		}
 		add(exits);
 		
-		level.getLayerByName("Clouds_front").forEach(function(tile:FlxTile) { tile.scrollFactor.set(0.2, 0.2); } );
-		add(level.getLayerByName("Clouds_front"));
-		
-		add(level.getLayerByName("Background"));
-		add(solid);
+		add(solid);		// Level
 		add(player);
-		add(level.getLayerByName("Foreground"));
-		add(water);
 		
-		UI = new Interface();
-		add(UI);
+		for (platform in level.objects[3])
+		{
+			if (platform.type == "vertical") platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), true));
+			else if (platform.type == "horizontal") platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), false));
+		}
+		add(platforms);
 		
 		//enemies.add(new Enemy(128, 128, "bird"));
 		//enemies.add(new Enemy(256, 256, "rabbit"));
 		add(enemies);
+		
+		add(level.getLayerByName("Foreground"));
+		
+		UI = new Interface();
+		add(UI);
 		
 		FlxG.camera.setScrollBounds(0, level.totalWidth, 0, level.totalHeight);
 		FlxG.camera.follow(player);
@@ -122,10 +110,10 @@ class Tagor extends FlxState
 		player.setPosition(level.objects[0].objects[0].x, level.objects[0].objects[0].y);
 	}
 	
-	private function getCoin(coin:FlxObject, player:FlxObject)
+	private function getCard(card:FlxObject, player:FlxObject)
 	{	
-		coin.destroy();
-		if (coins.countLiving() == 0) exits.members[0].exists = true;
+		card.destroy();
+		if (cards.countLiving() == 0) exits.members[0].exists = true;
 	}
 	
 	private function doExit(exit:FlxObject, player:FlxObject)
@@ -143,10 +131,8 @@ class Tagor extends FlxState
 	
 	override public function update(elapsed:Float)
 	{
-		if (player.overlaps(water)) player.hurt(10);
-
 		FlxG.overlap(platforms, player, moving);
-		FlxG.overlap(coins, player, getCoin);
+		FlxG.overlap(cards, player, getCard);
 		FlxG.overlap(exits, player, doExit);
 		
 		if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
