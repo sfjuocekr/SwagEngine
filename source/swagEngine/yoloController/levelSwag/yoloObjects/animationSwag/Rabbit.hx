@@ -16,6 +16,8 @@ class Rabbit extends FlxSprite
 		
 		loadGraphic("assets/animations/rabbit.png", true, 64, 128);
 		
+		this.y -= height;
+		
 		var framesArray = new Array();
 		
 		for (i in 0...137) framesArray[i] = i;

@@ -5,12 +5,12 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import openfl.tiled.FlxLayer;
+import openfl.tiled.FlxTiledMap;
 import swagEngine.interSwag.Interface;
 import swagEngine.interSwag.MainMenu;
-import swagEngine.yoloController.levelSwag.customSwag.ParseFlxTiledMap;
 import swagEngine.yoloController.levelSwag.yoloObjects.*;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
-import openfl.tiled.FlxLayer;
 
 /**
  * ...
@@ -20,7 +20,7 @@ import openfl.tiled.FlxLayer;
 class Tutorial extends FlxState
 {
 	private var map:String = "Tutorial";
-	private var level:ParseFlxTiledMap;
+	private var level:FlxTiledMap;
 	private var UI:Interface;
 	private var player:PlayerRenderer = null;
 	private var bounds:FlxGroup = new FlxGroup();
@@ -35,15 +35,16 @@ class Tutorial extends FlxState
 	{
 		super.create();
 		
-		level = new ParseFlxTiledMap(map);
+		level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");
 		
 		solid.add(level.getLayerByName("Level"));
 		
 		water.add(level.getLayerByName("Water"));
 		
-		player = new PlayerRenderer(FlxG.width * 0.5, FlxG.height * 0.5, level._map.getTilesetByGID(level.objects[0].objects[0].gid).image.texture);
+		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
+			 player = new PlayerRenderer(_player.x, _player.y);
 		
-		add(level.bgColor);
+		//add(level.bgColor);
 		
 		// ADD STUFF TO SHOW FROM HERE ON TO THE STATE WITH ADD:
 		
@@ -56,18 +57,18 @@ class Tutorial extends FlxState
 		
 		add(level.getLayerByName("Clouds_back"));
 		
-		for (coin in level.objects[2])
-			coins.add(new Coin(coin.x, coin.y, "assets/levels/" + map + "/" + level._map.getTilesetByGID(coin.gid).image.source));
+		for (coin in level._map.getObjectGroupByName("coins").objects)
+			coins.add(new Coin(coin.x, coin.y, level._map.getTilesetByGID(coin.gid).image.texture));
 		add(coins);
 		
-		for (platform in level.objects[3])
+		for (platform in level._map.getObjectGroupByName("platforms").objects)
 		{
 			if (platform.type == "vertical") platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), true));
 			else if (platform.type == "horizontal") platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), false));
 		}
 		add(platforms);
 		
-		for (level_exit in level.objects[1])
+		for (level_exit in level._map.getObjectGroupByName("level_exit").objects)
 		{
 			var exit = new FlxSprite(level_exit.x - level_exit.width * 0.5, level_exit.y + level_exit.height * 0.5);
 				exit.makeGraphic(level_exit.width, level_exit.height, 0xff3f3f3f);
@@ -92,12 +93,11 @@ class Tutorial extends FlxState
 		//enemies.add(new Enemy(256, 256, "rabbit"));
 		add(enemies);
 		
-		FlxG.camera.setBounds(0, 0, level.totalWidth, level.totalHeight);
+		FlxG.camera.setScrollBounds(0, level.totalWidth, 0, level.totalHeight);
 		FlxG.camera.follow(player);
 		FlxG.worldBounds.set(0, 0, level.totalWidth, level.totalHeight);
 		
 		player.health = 1000;
-		player.setPosition(level.objects[0].objects[0].x, level.objects[0].objects[0].y);
 	}
 	
 	private function getCoin(coin:FlxObject, player:FlxObject)
@@ -111,7 +111,7 @@ class Tutorial extends FlxState
 		if (exit.exists) FlxG.resetState();
 	}
 	
-	override public function update()
+	override public function update(e)
 	{
 		if (player.overlaps(water)) player.hurt(10);
 		
@@ -124,6 +124,6 @@ class Tutorial extends FlxState
 		if (!player.alive) FlxG.resetState();
 		UI.health = player.health;
 		
-		super.update();
+		super.update(e);
 	}
 }

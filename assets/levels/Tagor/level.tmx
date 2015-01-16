@@ -29,10 +29,11 @@
   <image source="background.png"/>
  </imagelayer>
  <objectgroup name="Cards">
-  <object name="card001" type="heart" gid="54" x="512" y="768" width="32" height="48"/>
+  <object name="card001" type="heart" gid="54" x="224" y="672" width="32" height="48"/>
   <object name="card002" type="heart" gid="54" x="2094" y="706" width="32" height="48"/>
   <object name="card003" type="heart" gid="54" x="3420" y="692" width="32" height="48"/>
   <object name="card004" type="heart" gid="54" x="5104" y="151" width="32" height="48"/>
+  <object name="card001" type="heart" gid="54" x="576" y="672" width="32" height="48"/>
  </objectgroup>
  <layer name="Background" width="384" height="32">
   <data encoding="csv">
@@ -140,7 +141,7 @@
     <property name="min" value="131"/>
    </properties>
   </object>
-  <object type="diagonal" gid="55" x="576" y="544" width="64" height="64">
+  <object type="vertical" gid="55" x="576" y="544" width="64" height="64">
    <properties>
     <property name="max" value="18"/>
     <property name="min" value="10"/>
@@ -148,7 +149,7 @@
   </object>
  </objectgroup>
  <objectgroup name="Enemies">
-  <object type="bird" gid="51" x="1376" y="576" width="64" height="64">
+  <object type="bird" gid="51" x="1344" y="576" width="64" height="64">
    <properties>
     <property name="max" value="53"/>
     <property name="min" value="43"/>
@@ -156,6 +157,12 @@
   </object>
   <object type="rabbit" gid="52" x="2080" y="864" width="64" height="128"/>
   <object type="bird" gid="51" x="3412" y="788" width="64" height="64"/>
+  <object type="bird" gid="51" x="256" y="672" width="64" height="64">
+   <properties>
+    <property name="max" value="16"/>
+    <property name="min" value="8"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="Foreground" width="384" height="32">
   <data encoding="csv">

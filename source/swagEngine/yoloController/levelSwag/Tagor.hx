@@ -35,8 +35,6 @@ class Tagor extends FlxState
 	{
 		super.create();
 		
-		FlxG.debugger.visible = true;
-		
 		level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");	
 		
 		add(new FlxSprite(0, 0, level._map.imageLayers[0].image.texture));		// Background_image
@@ -68,8 +66,19 @@ class Tagor extends FlxState
 		}
 		add(platforms);															// Platforms
 		
-		enemies.add(new Enemy(128, 128, "bird", 1, 10, player));
-		enemies.add(new Enemy(256, 256, "rabbit"));
+		for (enemy in level._map.getObjectGroupByName("Enemies").objects)
+		{
+			trace(enemy.type);
+			
+			switch (enemy.type)
+			{
+				case "bird":
+					enemies.add(new Enemy(enemy.x, enemy.y, "bird", enemy.properties.get("min"), enemy.properties.get("max"), player));
+					
+				case "rabbit":
+					enemies.add(new Enemy(enemy.x, enemy.y, "rabbit"));
+			}
+		}
 		add(enemies);															// Enemies
 		
 		add(level.getLayerByName("Foreground"));								// Foreground

@@ -12,14 +12,14 @@ import swagEngine.yoloController.playerSwag.PlayerRenderer;
 
 class Enemy extends FlxGroup
 {
-	public function new(x:Float, y:Float, yolo:String, ?a:Int, ?b:Int, ?player:PlayerRenderer)
+	public function new(x:Float, y:Float, yolo:String, ?a:String, ?b:String, ?player:PlayerRenderer)
 	{
 		super();
 		
 		switch (yolo)
 		{
 			case "bird":
-				add(new Dove(x, y, Std.string(a), Std.string(b), player));
+				add(new Dove(x, y, a, b, player));
 			
 			case "rabbit":
 				add(new Rabbit(x, y));

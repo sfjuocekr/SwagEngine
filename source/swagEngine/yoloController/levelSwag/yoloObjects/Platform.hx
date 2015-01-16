@@ -3,6 +3,7 @@ package swagEngine.yoloController.levelSwag.yoloObjects ;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
+
 /**
  * ...
  * @author Sjoer van der Ploeg
@@ -24,11 +25,9 @@ class Platform extends FlxSprite
 		if (axis) yMovement = 1;
 		else xMovement = 1;
 		
-		
 		min = Std.parseInt(a);
 		max = Std.parseInt(b);
 		
-		collisonXDrag = false;
 		immovable = true;
 	}
 	

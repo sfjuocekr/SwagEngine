@@ -1,6 +1,5 @@
 package swagEngine.yoloController.levelSwag.yoloObjects.animationSwag ;
 
-import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
@@ -23,6 +22,8 @@ class Dove extends FlxSprite
 		
 		loadGraphic("assets/animations/dove.png", true, 64, 64);
 		
+		this.y -= height;
+		
 		var framesArray = new Array();
 		
 		for (i in 0...27) framesArray[i] = i;
@@ -39,11 +40,14 @@ class Dove extends FlxSprite
 	}
 	
 	override public function update(e)
-	{		
-		if (x < 1 * 32 + width * 0.5) xMovement = 1;
-		else if (x > 8 * 32 + width * 0.5) xMovement = -1;
-		
-		velocity.x = xMovement * 64;
+	{		// NEEDS A FIX
+		if (xMovement != 0)
+		{
+			if (x < min * 32) xMovement = 1;
+			else if (x > max * 32) xMovement = -1;
+			
+			velocity.x = xMovement * 64;
+		}
 		
 		if (xMovement == 1) flipX = false;
 		else flipX = true;

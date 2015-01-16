@@ -36,20 +36,19 @@ class Sjoer extends FlxState
 		
 		level = FlxTiledMap.fromAssets("assets/levels/Sjoer/level.tmx");
 		
-		FlxG.camera.setBounds(0, 0, level.totalWidth, level.totalHeight);
-		
 		add(level.layers[0]);		// Background2
 		add(level.layers[1]);		// Background1
 		add(level.layers[2]);		// Foreground
 		add(level.layers[3]);		// Level
 		add(level.layers[4]);		// WaterLayer
 		
-		var playerX = level._map.getObjectGroupByName("Player").objects[0].x + level._map.getObjectGroupByName("Player").objects[0].width * 0.5;
-		var playerY = level._map.getObjectGroupByName("Player").objects[0].y - level._map.getObjectGroupByName("Player").objects[0].height * 0.5;
-		var playerImage = level._map.getTilesetByGID(level._map.getObjectGroupByName("Player").objects[0].gid).image.source;
-		player = new PlayerRenderer(playerX, playerY, "assets/levels/Sjoer/" + playerImage);
-		player.facing = FlxObject.RIGHT;
+		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
+			 player = new PlayerRenderer(_player.x, _player.y);
 		add(player);
+		
+		FlxG.camera.setScrollBounds(0, level.totalWidth, 0, level.totalHeight);
+		FlxG.camera.follow(player);
+		FlxG.worldBounds.set(0, 0, level.totalWidth, level.totalHeight);
 	}
 	
 	private function getCoin(coin:FlxObject, player:FlxObject)
@@ -58,13 +57,13 @@ class Sjoer extends FlxState
 		if (coins.countLiving() == 0) exit.exists = true;
 	}
 
-	override public function update()
+	override public function update(e)
 	{
 		if (FlxG.overlap(boundaries, player)) FlxG.resetState();
 		if (FlxG.overlap(exit, player)) FlxG.resetState();
 		
 		if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 		
-		super.update();
+		super.update(e);
 	}
 }
