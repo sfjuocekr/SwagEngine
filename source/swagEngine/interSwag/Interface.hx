@@ -13,10 +13,10 @@ import flixel.group.FlxGroup;
 
 class Interface	extends FlxSpriteGroup
 {
-	public var cardOverlay:FlxSprite = new FlxSprite();		//0
-	public var actionBar:FlxSprite = new FlxSprite();		//1
-	public var minimap:FlxSprite = new FlxSprite();			//2
-	public var escapeMenu:FlxSprite = new FlxSprite();		//3
+	public var cardOverlay:FlxSprite = new FlxSprite();
+	public var actionBar:FlxSprite = new FlxSprite();
+	public var minimap:FlxSprite = new FlxSprite();
+	public var escapeMenu:FlxSprite = new FlxSprite();
 	
 	public function new() 
 	{
@@ -46,9 +46,9 @@ class Interface	extends FlxSpriteGroup
 		add(escapeMenu);
 	}
 	
-	override public function update(elapsed:Float)
+	override public function update(e)
 	{
-		super.update(FlxG.elapsed);
+		super.update(e);
 		
 		//ADD SOMETHING TO HANDLE THE PAUSE MENU
 		if (FlxG.keys.justPressed.P) escapeMenu.visible = !escapeMenu.visible;

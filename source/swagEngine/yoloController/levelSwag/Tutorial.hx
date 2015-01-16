@@ -1,30 +1,15 @@
 package swagEngine.yoloController.levelSwag ;
 
-import flixel.addons.nape.FlxNapeSpace;
-import flixel.addons.nape.FlxNapeTilemap;
-import flixel.animation.FlxAnimation;
 import flixel.FlxG;
-import flixel.input.keyboard.FlxKey;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
-import flixel.input.keyboard.FlxKeyList;
-import flixel.math.FlxPoint;
-import flixel.tweens.FlxTween;
-import nape.dynamics.InteractionFilter;
-import nape.geom.Vec2;
-import nape.phys.Material;
 import swagEngine.interSwag.Interface;
 import swagEngine.interSwag.MainMenu;
 import swagEngine.yoloController.levelSwag.customSwag.ParseFlxTiledMap;
 import swagEngine.yoloController.levelSwag.yoloObjects.*;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
-import flixel.tile.FlxTilemap;
-import nape.dynamics.InteractionFilter;
-import flixel.addons.nape.FlxNapeSprite;
-import openfl.tiled.FlxTile;
-import flixel.addons.effects.FlxWaveSprite;
 import openfl.tiled.FlxLayer;
 
 /**
@@ -50,18 +35,11 @@ class Tutorial extends FlxState
 	{
 		super.create();
 		
-		FlxNapeSpace.init();
-		FlxNapeSpace.space.gravity.y = 2000;
-		FlxNapeSpace.space.worldLinearDrag = 2;
-		FlxNapeSpace.drawDebug = true;
+		level = new ParseFlxTiledMap(map);
 		
-		var wantedObjects:Array<String> = ["player_start", "level_exit", "coins", "platforms"];				// 0 = player_start, 1 = level_exit, 2 = coins, 3 = platforms
+		solid.add(level.getLayerByName("Level"));
 		
-		level = new ParseFlxTiledMap(map, wantedObjects);
-		
-		solid.add(level.napeMap("Level", true));
-		
-		water.add(level.napeMap("Water", false));
+		water.add(level.getLayerByName("Water"));
 		
 		player = new PlayerRenderer(FlxG.width * 0.5, FlxG.height * 0.5, level._map.getTilesetByGID(level.objects[0].objects[0].gid).image.texture);
 		
@@ -73,7 +51,7 @@ class Tutorial extends FlxState
 		add(level.getLayerByName("Moving_water"));
 		
 		var yolo:FlxLayer = level.getLayerByName("Clouds_back");
-			yolo.forEach(function(tile:FlxTile) { tile.scrollFactor.set(0.1, 0.1); } );
+			//yolo.forEach(function(tile:FlxTile) { tile.scrollFactor.set(0.1, 0.1); } );
 		add(yolo);
 		
 		add(level.getLayerByName("Clouds_back"));
@@ -98,7 +76,7 @@ class Tutorial extends FlxState
 		}
 		add(exits);
 		
-		level.getLayerByName("Clouds_front").forEach(function(tile:FlxTile) { tile.scrollFactor.set(0.2, 0.2); } );
+		//level.getLayerByName("Clouds_front").forEach(function(tile:FlxTile) { tile.scrollFactor.set(0.2, 0.2); } );
 		add(level.getLayerByName("Clouds_front"));
 		
 		add(level.getLayerByName("Background"));
@@ -114,7 +92,7 @@ class Tutorial extends FlxState
 		//enemies.add(new Enemy(256, 256, "rabbit"));
 		add(enemies);
 		
-		FlxG.camera.setScrollBounds(0, level.totalWidth, 0, level.totalHeight);
+		FlxG.camera.setBounds(0, 0, level.totalWidth, level.totalHeight);
 		FlxG.camera.follow(player);
 		FlxG.worldBounds.set(0, 0, level.totalWidth, level.totalHeight);
 		
@@ -133,19 +111,10 @@ class Tutorial extends FlxState
 		if (exit.exists) FlxG.resetState();
 	}
 	
-	private function moving(a:FlxNapeSprite, b:FlxNapeSprite)
-	{
-		if (!FlxG.keys.anyPressed(["LEFT", "RIGHT"])) b.body.velocity.x = a.body.velocity.x * 1.15;
-		if (!FlxG.keys.anyPressed(["UP", "DOWN"])) b.body.velocity.y = a.body.velocity.y;
-		
-		// FIX THE "STICKY" SIDE
-	}
-	
-	override public function update(elapsed:Float)
+	override public function update()
 	{
 		if (player.overlaps(water)) player.hurt(10);
-
-		FlxG.overlap(platforms, player, moving);
+		
 		FlxG.overlap(coins, player, getCoin);
 		FlxG.overlap(exits, player, doExit);
 		
@@ -155,6 +124,6 @@ class Tutorial extends FlxState
 		if (!player.alive) FlxG.resetState();
 		UI.health = player.health;
 		
-		super.update(FlxG.elapsed);
+		super.update();
 	}
 }

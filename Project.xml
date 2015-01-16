@@ -17,7 +17,7 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="openfl-tiled" />
 	<haxelib name="openfl-tiled-flixel" />
-	<haxelib name="nape" />
+	<!--haxelib name="nape" /-->
 	
 	<haxedef name="FLX_NO_NATIVE_CURSOR" />
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
@@ -26,8 +26,8 @@
 	
 	<android minimum-sdk-version="16" target-sdk-version="21" />
 	
-	<haxeflag name="-dce std" />
+	<haxeflag name="-dce full" />
 	
 	<set name="PRERENDERED_ICON" value="true" />
-	<icon path="assets/icon.svg" />	
+	<icon path="assets/icon.png" />	
 </project>

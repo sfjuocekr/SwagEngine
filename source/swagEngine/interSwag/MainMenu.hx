@@ -8,9 +8,6 @@ import flixel.system.FlxAssets;
 import openfl.system.System;
 import swagEngine.swagHandler.Settings;
 import swagEngine.yoloController.levelSwag.*;
-import nape.space.Space;
-import flixel.addons.nape.FlxNapeSpace;
-import nape.geom.Vec2;
 
 /**
  * ...
@@ -24,8 +21,6 @@ class MainMenu extends FlxState
 	override public function create():Void
 	{
 		super.create();
-		
-		if (FlxNapeSpace.space == null) FlxNapeSpace.init();
 		
 		FlxG.mouse.useSystemCursor = false;
 		
@@ -44,9 +39,10 @@ class MainMenu extends FlxState
 		switch (level)
 		{
 			case 0: System.exit(0);
-			case 1:	FlxG.switchState(new Tutorial());
-			case 2:	FlxG.switchState(new Sjoer());
-			case 3:	FlxG.switchState(new Tagor());
+			//case 1:	FlxG.switchState(new Tutorial());
+			//case 2:	FlxG.switchState(new Sjoer());
+			//case 3:	FlxG.switchState(new Tagor());
+			case 1:	FlxG.switchState(new Tagor());
 		}
 	}
 	
@@ -55,9 +51,9 @@ class MainMenu extends FlxState
 		super.destroy();
 	}
 
-	override public function update(elapsed:Float)
+	override public function update(e)
 	{
-		super.update(FlxG.elapsed);
+		super.update(e);
 		
 		if (FlxG.keys.justPressed.ESCAPE) System.exit(0);
 	}	

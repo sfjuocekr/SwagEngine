@@ -1,23 +1,22 @@
 -main ApplicationMain 
--cp C:/Development/GitHub/flixel-addons
+-cp C:/cygdrive/c/HaxeToolkit/haxe/lib/flixel-addons/git
 -D flixel-addons=1.1.0
--cp C:/Development/GitHub/openfl-tiled-flixel
+-cp C:/cygdrive/c/HaxeToolkit/haxe/lib/openfl-tiled-flixel/git
 -D openfl-tiled-flixel=0.0.5
--cp C:/Development/GitHub/openfl-tiled
+-cp C:/cygdrive/c/HaxeToolkit/haxe/lib/openfl-tiled/git
 -D openfl-tiled=0.4.2
 -cp C:/Development/GitHub/openfl
 -D openfl=2.1.7
--cp C:/Development/GitHub/flixel
+-cp C:/cygdrive/c/HaxeToolkit/haxe/lib/flixel/git
 -D flixel=3.3.6
--cp C:/cygdrive/c/HaxeToolkit/haxe/lib/lime/2,0,1
--D lime=2.0.1
--cp C:/cygdrive/c/HaxeToolkit/haxe/lib/nape/2,0,16
--D nape=2.0.16
+-cp C:/cygdrive/c/HaxeToolkit/haxe/lib/lime/2,0,5
+-D lime=2.0.5
 -cp source
--cp C:\cygdrive\c\HaxeToolkit\haxe\lib/lime/2,0,1/legacy
+-cp C:\cygdrive\c\HaxeToolkit\haxe\lib/lime/2,0,5/legacy
 -D FLX_NO_FOCUS_LOST_SCREEN
--D tools=2.0.1
+-D tools=2.0.5
 -D lime-legacy
+-D NAPE_NO_INLINE
 -D FLX_NO_DEBUG
 -D no-compilation
 -D NAPE_RELEASE_BUILD
@@ -29,9 +28,8 @@
 -D desktop
 --remap flash:openfl
 --macro flixel.system.macros.FlxConditionals.run()
--dce std
-#--macro keep(null,['Main', 'flixel.system.FlxAssets', 'flixel.system.ui', 'flixel.input'])
--cp export/windows/cpp/haxe
--cpp export/windows/cpp/obj
+-dce full
+-cp export/windows/neko/haxe
+-neko export/windows/neko/obj/ApplicationMain.n
 #--macro keep("Main")
 

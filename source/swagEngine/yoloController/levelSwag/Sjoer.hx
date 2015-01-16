@@ -8,10 +8,9 @@ import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import swagEngine.interSwag.MainMenu;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
-import flixel.addons.nape.FlxNapeSpace;
-import openfl.tiled.TiledMap;
+import flixel.addons.editors.tiled.TiledMap;
 import openfl.tiled.FlxTiledMap;
-import flixel.addons.nape.FlxNapeTilemap;
+
 /**
  * ...
  * @author Sjoer van der Ploeg
@@ -30,18 +29,14 @@ class Sjoer extends FlxState
 	{
 		super.create();
 		
-		FlxNapeSpace.init();
-		//FlxNapeSpace.space.gravity.y = 1000;
-		FlxNapeSpace.space.worldLinearDrag = 1;
-		FlxNapeSpace.drawDebug = true;
-		
 		var background:FlxSprite = new FlxSprite(0, 0);
 			background.makeGraphic(Std.int(FlxG.stage.stageWidth), Std.int(FlxG.stage.stageHeight), 0xff55b4ff);
 			background.scrollFactor.set(0, 0);
 		add(background);
 		
 		level = FlxTiledMap.fromAssets("assets/levels/Sjoer/level.tmx");
-		FlxG.camera.setScrollBounds(0, level.totalWidth, 0, level.totalHeight);
+		
+		FlxG.camera.setBounds(0, 0, level.totalWidth, level.totalHeight);
 		
 		add(level.layers[0]);		// Background2
 		add(level.layers[1]);		// Background1
@@ -63,13 +58,13 @@ class Sjoer extends FlxState
 		if (coins.countLiving() == 0) exit.exists = true;
 	}
 
-	override public function update(elapsed:Float)
+	override public function update()
 	{
-		//if (FlxG.overlap(boundaries, player)) FlxG.resetState();
-		//if (FlxG.overlap(exit, player)) FlxG.resetState();
+		if (FlxG.overlap(boundaries, player)) FlxG.resetState();
+		if (FlxG.overlap(exit, player)) FlxG.resetState();
 		
 		if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 		
-		super.update(FlxG.elapsed);
+		super.update();
 	}
 }
