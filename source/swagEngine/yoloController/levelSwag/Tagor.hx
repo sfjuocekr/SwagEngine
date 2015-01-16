@@ -11,6 +11,8 @@ import swagEngine.interSwag.Interface;
 import swagEngine.interSwag.MainMenu;
 import swagEngine.yoloController.levelSwag.yoloObjects.*;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
+import openfl.events.TimerEvent;
+import openfl.utils.Timer;
 
 /**
  * ...
@@ -22,7 +24,7 @@ class Tagor extends FlxState
 	private var map:String = "Tagor";
 	private var level:FlxTiledMap;
 	private var UI:Interface;
-	private var player:PlayerRenderer = null;
+	private var player:PlayerRenderer;
 	private var solid:FlxLayer;
 	private var portals:FlxGroup = new FlxGroup();
 	private var cards:FlxGroup = new FlxGroup();
@@ -30,6 +32,9 @@ class Tagor extends FlxState
 	private var exits:FlxGroup = new FlxGroup();
 	private var enemies:FlxGroup = new FlxGroup();
 	private var colliders:FlxGroup = new FlxGroup();
+	
+	private var portaling:Bool = false;
+	private var portalTimer:Timer = new Timer(1000);
 	
 	override public function create()
 	{
@@ -40,7 +45,7 @@ class Tagor extends FlxState
 		add(new FlxSprite(0, 0, level._map.imageLayers[0].image.texture));		// Background_image
 		
 		for (card in level._map.getObjectGroupByName("Cards").objects)
-			cards.add(new Card(card.x, card.y, level._map.getTilesetByGID(card.gid).image.texture));
+			cards.add(new Card(card.x, card.y, level._map.getTilesetByGID(card.gid).image.texture, card.type));
 		add(cards);																// Cards
 		
 		add(level.getLayerByName("Background"));								// Background
@@ -49,7 +54,9 @@ class Tagor extends FlxState
 			exits.add(new Exit(_level_exit.x, _level_exit.y, level._map.getTilesetByGID(_level_exit.gid).image.texture));
 		add(exits);																// Exits
 		
-		// Add portals
+		for (portal in level._map.getObjectGroupByName("Portals").objects)
+			portals.add(new Portal(portal.x, portal.y, level._map.getTilesetByGID(portal.gid).image.texture, portal.name, portal.type));
+		add(portals);
 		
 		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
 			 player = new PlayerRenderer(_player.x, _player.y);
@@ -61,22 +68,26 @@ class Tagor extends FlxState
 			
 		for (platform in level._map.getObjectGroupByName("Platforms").objects)
 		{
-			if (platform.type == "vertical") platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), true));
-			else if (platform.type == "horizontal") platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), false));
+			switch (platform.type)
+			{
+				case "vertical":
+					platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), true));
+					
+				case "horizontal":
+					platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), false));
+			}
 		}
 		add(platforms);															// Platforms
 		
 		for (enemy in level._map.getObjectGroupByName("Enemies").objects)
-		{
-			trace(enemy.type);
-			
-			switch (enemy.type)
+		{	
+			switch (enemy.name)
 			{
 				case "bird":
-					enemies.add(new Enemy(enemy.x, enemy.y, "bird", enemy.properties.get("min"), enemy.properties.get("max"), player));
+					enemies.add(new Enemy(enemy.x, enemy.y, enemy.name, enemy.properties.get("min"), enemy.properties.get("max"), player, enemy.type));
 					
 				case "rabbit":
-					enemies.add(new Enemy(enemy.x, enemy.y, "rabbit"));
+					enemies.add(new Enemy(enemy.x, enemy.y, enemy.name));
 			}
 		}
 		add(enemies);															// Enemies
@@ -104,21 +115,62 @@ class Tagor extends FlxState
 		if (_exit.exists && FlxG.keys.justPressed.SPACE) FlxG.resetState();
 	}
 	
+	private function doPortal(_portal:Portal, _player:FlxObject)
+	{
+		if (FlxG.keys.justPressed.SPACE && !portaling)
+		{
+			portaling = true;
+			
+			for (portal in portals.members)
+			{
+				var temp:Portal = cast(portal, Portal);
+				
+				if (temp.name == _portal.destination)
+				{
+					player.x = temp.x + 16;
+					player.y = temp.y + 64;
+					
+					portalTimer.addEventListener(TimerEvent.TIMER, didPortal);
+					portalTimer.reset();
+					portalTimer.start();
+					
+					break;
+				}
+			}
+		}
+	}
+	
+	private function didPortal(e)
+	{
+		portalTimer.stop();
+		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
+		
+		portaling = false;
+	}
+	
+	override public function destroy()
+	{
+		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
+		portalTimer = null;
+	}
+	
 	override public function update(e)
 	{
 		FlxG.collide(player, platforms);
 		
 		FlxG.overlap(player, solid, FlxObject.separate);
-		
-		super.update(e);
-		
 		FlxG.overlap(cards, player, getCard);
 		FlxG.overlap(exits, player, doExit);
+		FlxG.overlap(portals, player, doPortal);
 		
 		if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
-		if (!player.isOnScreen()) FlxG.resetState();
+		
+		if (!player.isOnScreen() && !portaling) FlxG.resetState();
 		
 		if (!player.alive) FlxG.resetState();
+		
 		UI.health = player.health;
+		
+		super.update(e);
 	}
 }

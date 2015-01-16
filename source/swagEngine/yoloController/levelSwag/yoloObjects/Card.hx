@@ -10,10 +10,14 @@ import flixel.addons.effects.FlxWaveSprite;
 
 class Card extends FlxSprite
 {
-	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic)
+	public var type:String;
+	
+	public function new(_x:Float = 0, _y:Float = 0, _SimpleGraphic:Dynamic, _type:String )
 	{
-		super(x, y, SimpleGraphic);
+		super(_x, _y, _SimpleGraphic);
 		
-		this.y -= height;
+		y -= height;
+		
+		type = _type;
 	}	
 }

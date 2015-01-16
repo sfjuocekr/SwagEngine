@@ -22,7 +22,7 @@ class Interface	extends FlxSpriteGroup
 	{
 		super();
 		
-		this.scrollFactor.set(0, 0);
+		scrollFactor.set(0, 0);
 		
 			cardOverlay.makeGraphic(384, 128, FlxColor.BLACK);
 			cardOverlay.x = FlxG.width - cardOverlay.width;

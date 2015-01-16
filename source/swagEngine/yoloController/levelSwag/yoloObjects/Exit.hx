@@ -9,11 +9,11 @@ import flixel.FlxSprite;
 
 class Exit extends FlxSprite
 {
-	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic) 
+	public function new(_x:Float = 0, _y:Float = 0, _SimpleGraphic:Dynamic) 
 	{
-		super(x, y, SimpleGraphic);
+		super(_x, _y, _SimpleGraphic);
 		
-		this.y -= height;
-		this.exists = false;
+		y -= height;
+		exists = false;
 	}	
 }

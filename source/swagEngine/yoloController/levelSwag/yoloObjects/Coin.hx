@@ -10,8 +10,13 @@ import flixel.addons.effects.FlxWaveSprite;
 
 class Coin extends FlxSprite
 {
-	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic)
+	public var wealth:Int = 1;
+	
+	public function new(_x:Float = 0, _y:Float = 0, _SimpleGraphic:Dynamic, _wealth:String)
 	{
-		super(x, y, SimpleGraphic);
+		super(_x, _y, _SimpleGraphic);
+		y -= height;
+		
+		wealth = Std.parseInt(_wealth);
 	}	
 }

@@ -22,7 +22,7 @@ class Tutorial extends FlxState
 	private var map:String = "Tutorial";
 	private var level:FlxTiledMap;
 	private var UI:Interface;
-	private var player:PlayerRenderer = null;
+	private var player:PlayerRenderer;
 	private var bounds:FlxGroup = new FlxGroup();
 	private var coins:FlxGroup = new FlxGroup();
 	private var platforms:FlxGroup = new FlxGroup();
@@ -58,7 +58,7 @@ class Tutorial extends FlxState
 		add(level.getLayerByName("Clouds_back"));
 		
 		for (coin in level._map.getObjectGroupByName("coins").objects)
-			coins.add(new Coin(coin.x, coin.y, level._map.getTilesetByGID(coin.gid).image.texture));
+			coins.add(new Coin(coin.x, coin.y, level._map.getTilesetByGID(coin.gid).image.texture, coin.type));
 		add(coins);
 		
 		for (platform in level._map.getObjectGroupByName("platforms").objects)

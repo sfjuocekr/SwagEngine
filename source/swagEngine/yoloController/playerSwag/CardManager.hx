@@ -11,7 +11,13 @@ class CardManager
 	private var cardTwo:String = "Clubs";
 	private var cardThree:String = "Hearths";
 	private var cardFour:String = "Spades";
-	public var cardEnergy:Array<Int> = [0, 0, 0, 0];
+	
+	public var cardSlots:Array<Array<Int>> =	[[0],
+												 [0],
+												 [0],
+												 [0]];
+	
+	public var cardEnergy:Array<Int> = [1, 1, 1, 1];
 	
 	public function new() 
 	{

@@ -16,17 +16,17 @@ class Platform extends FlxSprite
 	private var xMovement:Float = 0;
 	private var yMovement:Float = 0;
 	
-	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic, a:String, b:String, axis:Bool)
+	public function new(_x:Float = 0, _y:Float = 0, _SimpleGraphic:Dynamic, _min:String, _b:String, _axis:Bool)
 	{
-		super(x, y, SimpleGraphic);
+		super(_x, _y, _SimpleGraphic);
 		
-		this.y -= height;
+		y -= height;
 		
-		if (axis) yMovement = 1;
+		if (_axis) yMovement = 1;
 		else xMovement = 1;
 		
-		min = Std.parseInt(a);
-		max = Std.parseInt(b);
+		min = Std.parseInt(_min);
+		max = Std.parseInt(_b);
 		
 		immovable = true;
 	}
