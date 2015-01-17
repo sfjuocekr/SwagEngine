@@ -1,5 +1,6 @@
 package swagEngine.yoloController.playerSwag;
 
+import flixel.FlxObject;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
 
@@ -11,30 +12,17 @@ import openfl.utils.Timer;
 class AbilityManager
 {
 	private var player:PlayerRenderer;
-	public var cards:CardManager;
+	private var timer:Timer = new Timer(1000);
 	
-	public var timer:Timer = new Timer(1000);
-	private var intervalTimer:Timer = new Timer(1000);
+	public var scaled:Bool = false;
+	public var jumping:Bool = false;
+	public var cards:CardManager;
 	
 	public function new(_player:PlayerRenderer) 
 	{
 		player = _player;
 		
 		cards = new CardManager();
-		
-		intervalTimer.addEventListener(TimerEvent.TIMER, counter);
-	}
-	
-	public function shrink()
-	{
-		player.maxVelocity.x = 300;
-		player.scale.set(0.5, 0.5);
-		player.updateHitbox();
-		player.scaled = true;
-			
-		timer.addEventListener(TimerEvent.TIMER, growUp);
-		timer.reset();
-		timer.start();		
 	}
 	
 	public function diamonds()
@@ -55,13 +43,38 @@ class AbilityManager
 	public function spades()
 	{
 		trace("DIGLETT!");
+		
+		jump();
 	}
 	
-	public function rotate(_suit:Int)
+	public function jump()
 	{
-		cards.cardSlots[_suit].push(cards.cardSlots[_suit].shift());
+		if (player.isTouching(FlxObject.FLOOR))	player.velocity.y -= scaled ? 500 : 400;
+		else if (cards.cardEnergy[3] > 0 && !player.isTouching(FlxObject.FLOOR) && cards.cardSlots[3][0] == 1)
+		{
+			cards.cardEnergy[3]--;
+			
+			cards.timer.reset();
+			cards.timer.start();
+			
+			player.velocity.y = 0;
+			player.velocity.y -= scaled ? 400 : 300;
+		}
+	}
+	
+	public function shrink()
+	{
+		if (jumping) return;
 		
-		trace(cards.cardSlots[_suit]);
+		player.maxVelocity.x = 300;
+		player.scale.set(0.5, 0.5);
+		player.updateHitbox();
+		
+		scaled = true;
+			
+		timer.addEventListener(TimerEvent.TIMER, growUp);
+		timer.reset();
+		timer.start();		
 	}
 	
 	private function growUp(e)
@@ -73,21 +86,19 @@ class AbilityManager
 		player.y -= player.frameHeight * 0.5;
 		player.scale.set(1, 1);
 		player.updateHitbox();
-		player.scaled = false;
-	}
-	
-	private function counter(e)
-	{
-		trace(intervalTimer.currentCount);
+		scaled = false;
 	}
 	
 	public function destroy()
 	{
 		timer.removeEventListener(TimerEvent.TIMER, growUp);
-		intervalTimer.removeEventListener(TimerEvent.TIMER, counter);
 		
+		cards.destroy();
+		
+		player = null;
 		timer = null;
-		intervalTimer = null;
-		player = null;	
+		scaled = null;
+		jumping = null;
+		cards = null;
 	}
 }

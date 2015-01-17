@@ -32,7 +32,6 @@ class Tagor extends FlxState
 	private var exits:FlxGroup = new FlxGroup();
 	private var enemies:FlxGroup = new FlxGroup();
 	private var colliders:FlxGroup = new FlxGroup();
-	
 	private var portaling:Bool = false;
 	private var portalTimer:Timer = new Timer(1000);
 	
@@ -84,18 +83,18 @@ class Tagor extends FlxState
 			switch (enemy.name)
 			{
 				case "bird":
-					enemies.add(new Enemy(enemy.x, enemy.y, enemy.name, enemy.properties.get("min"), enemy.properties.get("max"), player, enemy.type));
+					enemies.add(new Enemy(enemy.x, enemy.y, enemy.name, player, enemy.properties.get("min"), enemy.properties.get("max"), enemy.type));
 					
 				case "rabbit":
-					enemies.add(new Enemy(enemy.x, enemy.y, enemy.name));
+					enemies.add(new Enemy(enemy.x, enemy.y, enemy.name, player));
 			}
 		}
 		add(enemies);															// Enemies
 		
 		add(level.getLayerByName("Foreground"));								// Foreground
 		
-		UI = new Interface();
-		add(UI);
+		UI = new Interface(player);
+		add(UI);																// Interface
 		
 		FlxG.camera.setScrollBounds(0, level.totalWidth, 0, level.totalHeight);
 		FlxG.camera.follow(player);
@@ -104,8 +103,23 @@ class Tagor extends FlxState
 		player.health = 1000;
 	}
 	
-	private function getCard(_card:FlxObject, _player:FlxObject)
-	{	
+	private function getCard(_card:Card, _player:FlxObject)
+	{
+		switch (_card.type)
+		{
+			case "diamond":
+				player.abilities.cards.cardEnergy[0]++;
+				
+			case "club":
+				player.abilities.cards.cardEnergy[1]++;
+				
+			case "heart":
+				player.abilities.cards.cardEnergy[2]++;
+				
+			case "spade":
+				player.abilities.cards.cardEnergy[3]++;
+		}
+		
 		_card.destroy();
 		if (cards.countLiving() == 0) exits.members[0].exists = true;
 	}
@@ -151,25 +165,40 @@ class Tagor extends FlxState
 	override public function destroy()
 	{
 		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
+		
+		map = null;
+		level = null;
+		UI = null;
+		player = null;
+		solid = null;
+		portals = null;
+		cards = null;
+		platforms = null;
+		exits = null;
+		enemies = null;
+		colliders = null;
+		portaling = null;
 		portalTimer = null;
 	}
 	
 	override public function update(e)
 	{
-		FlxG.collide(player, platforms);
-		
-		FlxG.overlap(player, solid, FlxObject.separate);
-		FlxG.overlap(cards, player, getCard);
-		FlxG.overlap(exits, player, doExit);
-		FlxG.overlap(portals, player, doPortal);
-		
-		if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
-		
-		if (!player.isOnScreen() && !portaling) FlxG.resetState();
-		
-		if (!player.alive) FlxG.resetState();
-		
-		UI.health = player.health;
+		if (UI.escapeMenu.visible) e = 0.0;
+		else
+		{
+			FlxG.collide(player, platforms);
+			
+			FlxG.overlap(player, solid, FlxObject.separate);
+			FlxG.overlap(cards, player, getCard);
+			FlxG.overlap(exits, player, doExit);
+			FlxG.overlap(portals, player, doPortal);
+			
+			if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
+			
+			if (!player.isOnScreen() && !portaling) FlxG.resetState();
+			
+			if (!player.alive) FlxG.resetState();
+		}
 		
 		super.update(e);
 	}

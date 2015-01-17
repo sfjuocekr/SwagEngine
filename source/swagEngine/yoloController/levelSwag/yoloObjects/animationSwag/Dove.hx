@@ -4,7 +4,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
-import swagEngine.yoloController.levelSwag.yoloObjects.EnemyBehavior;
+import swagEngine.yoloController.levelSwag.yoloObjects.behavior.BirdBehavior;
 
 /**
  * ...
@@ -13,7 +13,7 @@ import swagEngine.yoloController.levelSwag.yoloObjects.EnemyBehavior;
 
 class Dove extends FlxSprite
 {
-	private var behavior:EnemyBehavior;
+	private var behavior:BirdBehavior;
 	private var player:PlayerRenderer;
 	
 	public var type:String;
@@ -34,24 +34,35 @@ class Dove extends FlxSprite
 		facing = FlxObject.RIGHT;
 		
 		type = _type;
-		
-		drag.x = 1000;
-		drag.y = 1000;
-		
-		maxVelocity.x = 200;
-		maxVelocity.y = 200;
-		
 		player = _player;
 		
-		behavior = new EnemyBehavior(type, this, player, Std.parseInt(_min), Std.parseInt(_max));
+		drag.x = drag.y = 2000;
+		
+		maxVelocity.x = maxVelocity.y = 300;
+		
+		behavior = new BirdBehavior(type, this, player, Std.parseInt(_min), Std.parseInt(_max));
+	}
+	
+	override public function destroy()
+	{
+		behavior.destroy();
+		
+		behavior = null;
+		player = null;
+		type = null;
+		
+		super.destroy();
 	}
 	
 	override public function update(e)
 	{
+		if (e == 0.0) return;
+		
 		behavior.type = type;
 		behavior.update();
 		
-		if (overlaps(player)) player.hurt(10);
+		if 		(overlaps(player) && player.abilities.cards.cardEnergy[2] >  0) player.abilities.cards.cardEnergy[2]--;
+		else if (overlaps(player) && player.abilities.cards.cardEnergy[2] == 0)	player.hurt(10);
 		
 		if (velocity.x > 0) flipX = false;
 		else flipX = true;

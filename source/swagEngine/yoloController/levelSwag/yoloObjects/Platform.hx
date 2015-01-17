@@ -33,6 +33,8 @@ class Platform extends FlxSprite
 	
 	override public function update(e)
 	{
+		if (e == 0.0) return;
+		
 		if (xMovement != 0)
 		{
 			if (x < min * 32) xMovement = 1;
@@ -50,5 +52,15 @@ class Platform extends FlxSprite
 		}
 		
 		super.update(e);
+	}
+	
+	override public function destroy()
+	{
+		min = null;
+		max = null;
+		xMovement = null;
+		yMovement = null;
+		
+		super.destroy();
 	}
 }

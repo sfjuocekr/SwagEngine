@@ -59,6 +59,8 @@ class Sjoer extends FlxState
 
 	override public function update(e)
 	{
+		if (e == 0.0) return;
+		
 		if (FlxG.overlap(boundaries, player)) FlxG.resetState();
 		if (FlxG.overlap(exit, player)) FlxG.resetState();
 		

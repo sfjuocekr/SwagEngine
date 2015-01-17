@@ -2,9 +2,11 @@ package swagEngine.interSwag;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup;
+import swagEngine.yoloController.playerSwag.PlayerRenderer;
 
 /**
 * ...
@@ -13,14 +15,25 @@ import flixel.group.FlxGroup;
 
 class Interface	extends FlxSpriteGroup
 {
+	private var player:PlayerRenderer;
+	
 	public var cardOverlay:FlxSprite = new FlxSprite();
 	public var actionBar:FlxSprite = new FlxSprite();
 	public var minimap:FlxSprite = new FlxSprite();
 	public var escapeMenu:FlxSprite = new FlxSprite();
 	
-	public function new() 
+	private var healthText:FlxText;
+	
+	private var diamondText:FlxText;
+	private var clubText:FlxText;
+	private var heartText:FlxText;
+	private var spadeText:FlxText;
+	
+	public function new(_player:PlayerRenderer) 
 	{
 		super();
+		
+		player = _player;
 		
 		scrollFactor.set(0, 0);
 		
@@ -44,16 +57,38 @@ class Interface	extends FlxSpriteGroup
 			escapeMenu.y = (FlxG.height * 0.5) - (escapeMenu.height * 0.5);
 			escapeMenu.visible = false;
 		add(escapeMenu);
+		
+			healthText = 	new FlxText(cardOverlay.x + 8,	cardOverlay.y + 8,	368,			"Health: " + Std.string(player.health), 16, true);
+		add(healthText);
+		
+			diamondText = 	new FlxText(healthText.x,		healthText.y + 28,	368,			"Diamonds: " + Std.string(player.abilities.cards.cardEnergy[0]), 16, true);
+		add(diamondText);
+		
+			clubText = 		new FlxText(healthText.x,		diamondText.y + 20,	368,			"Clubs: " + Std.string(player.abilities.cards.cardEnergy[0]), 16, true);
+		add(clubText);
+		
+			heartText = 	new FlxText(healthText.x,		clubText.y + 20,	368,			"Hearts: " + Std.string(player.abilities.cards.cardEnergy[0]), 16, true);
+		add(heartText);
+		
+			spadeText = 	new FlxText(healthText.x,		heartText.y + 20,	368,			"Spades: " + Std.string(player.abilities.cards.cardEnergy[0]), 16, true);
+		add(spadeText);
 	}
 	
 	override public function update(e)
 	{
-		super.update(e);
+		healthText.text =	"Health: " +	Std.string((player.health < 0) ? 0 : player.health);
+		
+		diamondText.text =	"Diamonds: " +	Std.string(player.abilities.cards.cardEnergy[0]);
+		clubText.text =		"Clubs: " +		Std.string(player.abilities.cards.cardEnergy[1]);
+		heartText.text =	"Hearts: " +	Std.string(player.abilities.cards.cardEnergy[2]);
+		spadeText.text =	"Spades: " +	Std.string(player.abilities.cards.cardEnergy[3]);
 		
 		//ADD SOMETHING TO HANDLE THE PAUSE MENU
 		if (FlxG.keys.justPressed.P) escapeMenu.visible = !escapeMenu.visible;
 		if (escapeMenu.visible && FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 		
 		//ADD SOMETHING TO HANDLE UI UPDATES OR DO IT SOMEWHERE ELSE
+		
+		super.update(e);
 	}
 }

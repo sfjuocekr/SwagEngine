@@ -86,7 +86,7 @@ class Tutorial extends FlxState
 		add(level.getLayerByName("Foreground"));
 		add(water);
 		
-		UI = new Interface();
+		UI = new Interface(player);
 		add(UI);
 		
 		//enemies.add(new Enemy(128, 128, "bird"));
@@ -103,6 +103,7 @@ class Tutorial extends FlxState
 	private function getCoin(coin:FlxObject, player:FlxObject)
 	{	
 		coin.destroy();
+		
 		if (coins.countLiving() == 0) exits.members[0].exists = true;
 	}
 	
@@ -113,6 +114,8 @@ class Tutorial extends FlxState
 	
 	override public function update(e)
 	{
+		if (e == 0.0) return;
+		
 		if (player.overlaps(water)) player.hurt(10);
 		
 		FlxG.overlap(coins, player, getCoin);

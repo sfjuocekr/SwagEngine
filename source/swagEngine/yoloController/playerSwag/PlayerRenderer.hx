@@ -3,7 +3,6 @@ package swagEngine.yoloController.playerSwag;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import openfl.events.TimerEvent;
 
 /**
  * ...
@@ -12,11 +11,7 @@ import openfl.events.TimerEvent;
 
 class PlayerRenderer extends FlxSprite
 {
-	public var scaled:Bool = false;
-	
-	private var walkingArray = new Array();
-	private var restingArray = new Array();
-	private var abilities:AbilityManager;
+	public var abilities:AbilityManager;
 	
 	public function new(_x:Float = 0, _y:Float = 0)
 	{
@@ -49,8 +44,8 @@ class PlayerRenderer extends FlxSprite
 		acceleration.y = 1000;
 		acceleration.x = 0;
 		
-		maxVelocity.x = 200;
-		maxVelocity.y = 1000;
+		maxVelocity.x = 250;
+		maxVelocity.y = 500;
 		
 		abilities = new AbilityManager(this);
 		
@@ -59,13 +54,15 @@ class PlayerRenderer extends FlxSprite
 	
 	override public function update(e)
 	{
+		if (e == 0.0) return;
+		
 		acceleration.x = 0;
 		
 		if (FlxG.keys.justPressed.UP)
 		{
-			velocity.y -= scaled ? 500 : 400;
+			abilities.spades();
 		}
-		else if (FlxG.keys.justPressed.DOWN && !scaled)
+		else if (FlxG.keys.justPressed.DOWN)
 		{
 			velocity.y += 100;
 		}
@@ -82,20 +79,24 @@ class PlayerRenderer extends FlxSprite
 			velocity.x += 100;
 			animation.play("walking");
 		}
-		else { animation.play("resting"); }
+		else animation.play("resting");
 		
+		
+		// ROTATE CARDS
 		if (FlxG.keys.justPressed.Q)
-			abilities.rotate(0);
+			abilities.cards.rotate(0);
 			
 		if (FlxG.keys.justPressed.W)
-			abilities.rotate(1);
+			abilities.cards.rotate(1);
 			
 		if (FlxG.keys.justPressed.E)
-			abilities.rotate(2);
+			abilities.cards.rotate(2);
 			
-		if (FlxG.keys.justPressed.R)
-			abilities.rotate(3);
+		//if (FlxG.keys.justPressed.R)		// Probably useless will never rotate spades
+		//	abilities.cards.rotate(3);
 		
+		
+		// USE ABILITY
 		if (FlxG.keys.justPressed.A)
 			abilities.diamonds();
 			
@@ -105,9 +106,12 @@ class PlayerRenderer extends FlxSprite
 		if (FlxG.keys.justPressed.D)
 			abilities.hearths();
 			
-		if (FlxG.keys.justPressed.F)
-			abilities.spades();
-			
+		//if (FlxG.keys.justPressed.F)		// Probably useless space = spades
+		//	abilities.spades();
+		
+		trace(abilities.cards.cardEnergy);
+		trace(abilities.cards.cardSlots);
+		
 		super.update(e);	
 	}
 	
