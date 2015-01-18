@@ -92,9 +92,9 @@ class BirdBehavior
 	{
 		parent = null;
 		player = null;
-		xMovement = null;
-		min = null;
-		max = null;
+		xMovement = 0.0;
+		min = 0;
+		max = 0;
 		retreat = null;
 		type = null;
 	}

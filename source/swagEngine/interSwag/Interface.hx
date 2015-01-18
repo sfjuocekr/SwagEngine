@@ -29,6 +29,12 @@ class Interface	extends FlxSpriteGroup
 	private var heartText:FlxText;
 	private var spadeText:FlxText;
 	
+	
+	private var diamondsText:FlxText;
+	private var clubsText:FlxText;
+	private var heartsText:FlxText;
+	private var spadesText:FlxText;
+	
 	public function new(_player:PlayerRenderer) 
 	{
 		super();
@@ -58,30 +64,55 @@ class Interface	extends FlxSpriteGroup
 			escapeMenu.visible = false;
 		add(escapeMenu);
 		
-			healthText = 	new FlxText(cardOverlay.x + 8,	cardOverlay.y + 8,	368,			"Health: " + Std.string(player.health), 16, true);
+		
+		// energy
+			healthText = 	new FlxText(cardOverlay.x + 8,	cardOverlay.y + 8,	368, null, 16, true);
 		add(healthText);
 		
-			diamondText = 	new FlxText(healthText.x,		healthText.y + 28,	368,			"Diamonds: " + Std.string(player.abilities.cards.cardEnergy[0]), 16, true);
+			diamondText = 	new FlxText(healthText.x,		healthText.y + 28,	368, null, 16, true);
 		add(diamondText);
 		
-			clubText = 		new FlxText(healthText.x,		diamondText.y + 20,	368,			"Clubs: " + Std.string(player.abilities.cards.cardEnergy[0]), 16, true);
+			clubText = 		new FlxText(healthText.x,		diamondText.y + 20,	368, null, 16, true);
 		add(clubText);
 		
-			heartText = 	new FlxText(healthText.x,		clubText.y + 20,	368,			"Hearts: " + Std.string(player.abilities.cards.cardEnergy[0]), 16, true);
+			heartText = 	new FlxText(healthText.x,		clubText.y + 20,	368, null, 16, true);
 		add(heartText);
 		
-			spadeText = 	new FlxText(healthText.x,		heartText.y + 20,	368,			"Spades: " + Std.string(player.abilities.cards.cardEnergy[0]), 16, true);
+			spadeText = 	new FlxText(healthText.x,		heartText.y + 20,	368, null, 16, true);
 		add(spadeText);
+		
+		
+		// slots
+			diamondsText = 	new FlxText(healthText.x,		healthText.y + 28,	368, null, 16, true);
+			diamondsText.alignment = "right";
+		add(diamondsText);
+		
+			clubsText = 	new FlxText(healthText.x,		diamondText.y + 20,	368, null, 16, true);
+			clubsText.alignment = "right";
+		add(clubsText);
+		
+			heartsText = 	new FlxText(healthText.x,		clubText.y + 20,	368, null, 16, true);
+			heartsText.alignment = "right";
+		add(heartsText);
+		
+			spadesText = 	new FlxText(healthText.x,		heartText.y + 20,	368, null, 16, true);
+			spadesText.alignment = "right";
+		add(spadesText);
 	}
 	
 	override public function update(e)
 	{
 		healthText.text =	"Health: " +	Std.string((player.health < 0) ? 0 : player.health);
 		
-		diamondText.text =	"Diamonds: " +	Std.string(player.abilities.cards.cardEnergy[0]);
-		clubText.text =		"Clubs: " +		Std.string(player.abilities.cards.cardEnergy[1]);
-		heartText.text =	"Hearts: " +	Std.string(player.abilities.cards.cardEnergy[2]);
-		spadeText.text =	"Spades: " +	Std.string(player.abilities.cards.cardEnergy[3]);
+		diamondText.text =	"Diamonds: " +	Std.string(player.abilities.cards.energy[0]);
+		clubText.text =		"Clubs: " +		Std.string(player.abilities.cards.energy[1]);
+		heartText.text =	"Hearts: " +	Std.string(player.abilities.cards.energy[2]);
+		spadeText.text =	"Spades: " +	Std.string(player.abilities.cards.energy[3]);
+		
+		diamondsText.text =	player.abilities.cards.slots[0].toString();
+		clubsText.text =	player.abilities.cards.slots[1].toString();
+		heartsText.text =	player.abilities.cards.slots[2].toString();
+		spadesText.text =	player.abilities.cards.slots[3].toString();
 		
 		//ADD SOMETHING TO HANDLE THE PAUSE MENU
 		if (FlxG.keys.justPressed.P) escapeMenu.visible = !escapeMenu.visible;

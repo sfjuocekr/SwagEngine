@@ -18,7 +18,7 @@ class MainMenu extends FlxState
 {
 	private var levelButton:Array<FlxButtonPlus> = new Array();
 	
-	override public function create():Void
+	override public function create()
 	{
 		super.create();
 		
@@ -45,7 +45,7 @@ class MainMenu extends FlxState
 		}
 	}
 	
-	override public function destroy():Void
+	override public function destroy()
 	{
 		super.destroy();
 	}

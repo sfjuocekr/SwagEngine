@@ -3,6 +3,11 @@ package swagEngine.yoloController.playerSwag;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.FlxState;
+import openfl.events.TimerEvent;
+import openfl.utils.Timer;
+import swagEngine.swagHandler.Settings;
+import flixel.group.FlxGroup;
 
 /**
  * ...
@@ -11,9 +16,11 @@ import flixel.FlxSprite;
 
 class PlayerRenderer extends FlxSprite
 {
+	private var timer:Timer = new Timer(1000);
+	
 	public var abilities:AbilityManager;
 	
-	public function new(_x:Float = 0, _y:Float = 0)
+	public function new(_x:Float = 0, _y:Float = 0, _shots:FlxGroup)
 	{
 		super(_x, _y);
 		
@@ -37,20 +44,29 @@ class PlayerRenderer extends FlxSprite
 		collisonXDrag = true;
 		solid = true;
 		
-		drag.x = 2000;
-		drag.y = 1000;
+		drag.x = Settings.drag * 2;
+		drag.y = Settings.drag;
 		
 		//acceleration.y = 0;
-		acceleration.y = 1000;
+		acceleration.y = Settings.acceleration;
 		acceleration.x = 0;
 		
-		maxVelocity.x = 250;
-		maxVelocity.y = 500;
+		maxVelocity.x = Settings.maxVelocity;
+		maxVelocity.y = Settings.maxVelocity * 2;
 		
-		abilities = new AbilityManager(this);
+		abilities = new AbilityManager(this, _shots);
 		
 		animation.play("resting");
+		
+		timer.addEventListener(TimerEvent.TIMER, healthUp);
+		timer.start();	
 	}
+	
+	private function healthUp(e)
+	{
+		if (health < 990) health += 10;
+		else if (health >= 990) health = 1000;
+	}	
 	
 	override public function update(e)
 	{
@@ -60,22 +76,30 @@ class PlayerRenderer extends FlxSprite
 		
 		if (FlxG.keys.justPressed.UP)
 		{
+			facing = FlxObject.UP;
+			
 			abilities.spades();
 		}
 		else if (FlxG.keys.justPressed.DOWN)
 		{
+			facing = FlxObject.DOWN;
+			
 			velocity.y += 100;
 		}
 		
 		if (FlxG.keys.pressed.LEFT)
 		{
 			flipX = true;
+			facing = FlxObject.LEFT;
+			
 			velocity.x -= 100;
 			animation.play("walking");
 		}
 		else if (FlxG.keys.pressed.RIGHT)
 		{
 			flipX = false;
+			facing = FlxObject.RIGHT;
+			
 			velocity.x += 100;
 			animation.play("walking");
 		}
@@ -84,16 +108,16 @@ class PlayerRenderer extends FlxSprite
 		
 		// ROTATE CARDS
 		if (FlxG.keys.justPressed.Q)
-			abilities.cards.rotate(0);
+			abilities.rotate(0);
 			
 		if (FlxG.keys.justPressed.W)
-			abilities.cards.rotate(1);
+			abilities.rotate(1);
 			
 		if (FlxG.keys.justPressed.E)
-			abilities.cards.rotate(2);
+			abilities.rotate(2);
 			
-		//if (FlxG.keys.justPressed.R)		// Probably useless will never rotate spades
-		//	abilities.cards.rotate(3);
+		if (FlxG.keys.justPressed.R)		// Probably useless will never rotate spades
+			abilities.rotate(3);
 		
 		
 		// USE ABILITY
@@ -104,13 +128,10 @@ class PlayerRenderer extends FlxSprite
 			abilities.clubs();
 			
 		if (FlxG.keys.justPressed.D)
-			abilities.hearths();
+			abilities.hearts();
 			
-		//if (FlxG.keys.justPressed.F)		// Probably useless space = spades
-		//	abilities.spades();
-		
-		trace(abilities.cards.cardEnergy);
-		trace(abilities.cards.cardSlots);
+		if (FlxG.keys.justPressed.F)		// Probably useless space = spades
+			abilities.spades();
 		
 		super.update(e);	
 	}

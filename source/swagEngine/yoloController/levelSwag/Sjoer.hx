@@ -25,7 +25,7 @@ class Sjoer extends FlxState
 	public var player:PlayerRenderer;
 	public var boundaries:FlxGroup = new FlxGroup();
 	
-	override public function create():Void
+	override public function create()
 	{
 		super.create();
 		
@@ -43,7 +43,7 @@ class Sjoer extends FlxState
 		add(level.layers[4]);		// WaterLayer
 		
 		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
-			 player = new PlayerRenderer(_player.x, _player.y);
+			 player = new PlayerRenderer(_player.x, _player.y, this);
 		add(player);
 		
 		FlxG.camera.setScrollBounds(0, level.totalWidth, 0, level.totalHeight);

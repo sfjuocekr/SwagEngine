@@ -23,17 +23,20 @@ class Tagor extends FlxState
 {
 	private var map:String = "Tagor";
 	private var level:FlxTiledMap;
+	private var solid:FlxLayer;
+	
 	private var UI:Interface;
 	private var player:PlayerRenderer;
-	private var solid:FlxLayer;
+	
+	private var shots:FlxGroup = new FlxGroup();
 	private var portals:FlxGroup = new FlxGroup();
 	private var cards:FlxGroup = new FlxGroup();
 	private var platforms:FlxGroup = new FlxGroup();
 	private var exits:FlxGroup = new FlxGroup();
 	private var enemies:FlxGroup = new FlxGroup();
-	private var colliders:FlxGroup = new FlxGroup();
+	
 	private var portaling:Bool = false;
-	private var portalTimer:Timer = new Timer(1000);
+	private var portalTimer:Timer = new Timer(100);
 	
 	override public function create()
 	{
@@ -57,8 +60,10 @@ class Tagor extends FlxState
 			portals.add(new Portal(portal.x, portal.y, level._map.getTilesetByGID(portal.gid).image.texture, portal.name, portal.type));
 		add(portals);
 		
+		add(shots);
+		
 		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
-			 player = new PlayerRenderer(_player.x, _player.y);
+			 player = new PlayerRenderer(_player.x, _player.y, shots);
 		add(player);															// Player
 		
 		solid = level.getLayerByName("Level");
@@ -101,26 +106,25 @@ class Tagor extends FlxState
 		FlxG.worldBounds.set(0, 0, level.totalWidth, level.totalHeight);
 		
 		player.health = 1000;
+		
+		shots.maxSize = 8;
+		
+		for (i in 0...shots.maxSize)
+		{
+			var shot = new FlxSprite( -8, -8);		// make a bullet class with a timer
+				shot.makeGraphic(4, 4);
+				shot.exists = false;
+			
+			shots.add(shot);
+		}
 	}
 	
 	private function getCard(_card:Card, _player:FlxObject)
 	{
-		switch (_card.type)
-		{
-			case "diamond":
-				player.abilities.cards.cardEnergy[0]++;
-				
-			case "club":
-				player.abilities.cards.cardEnergy[1]++;
-				
-			case "heart":
-				player.abilities.cards.cardEnergy[2]++;
-				
-			case "spade":
-				player.abilities.cards.cardEnergy[3]++;
-		}
+		_card.kill();
 		
-		_card.destroy();
+		player.abilities.cards.collect(_card.type);
+		
 		if (cards.countLiving() == 0) exits.members[0].exists = true;
 	}
 	
@@ -162,6 +166,12 @@ class Tagor extends FlxState
 		portaling = false;
 	}
 	
+	private function shotEnemy(_shot:FlxObject, _enemy:FlxObject)
+	{
+		_shot.kill();
+		_enemy.kill();
+	}	
+	
 	override public function destroy()
 	{
 		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
@@ -176,8 +186,7 @@ class Tagor extends FlxState
 		platforms = null;
 		exits = null;
 		enemies = null;
-		colliders = null;
-		portaling = null;
+		portaling = false;
 		portalTimer = null;
 	}
 	
@@ -192,6 +201,7 @@ class Tagor extends FlxState
 			FlxG.overlap(cards, player, getCard);
 			FlxG.overlap(exits, player, doExit);
 			FlxG.overlap(portals, player, doPortal);
+			FlxG.overlap(shots, enemies, shotEnemy);
 			
 			if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 			

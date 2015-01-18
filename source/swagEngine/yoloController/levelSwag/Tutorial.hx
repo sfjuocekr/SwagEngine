@@ -42,7 +42,7 @@ class Tutorial extends FlxState
 		water.add(level.getLayerByName("Water"));
 		
 		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
-			 player = new PlayerRenderer(_player.x, _player.y);
+			 player = new PlayerRenderer(_player.x, _player.y, this);
 		
 		//add(level.bgColor);
 		

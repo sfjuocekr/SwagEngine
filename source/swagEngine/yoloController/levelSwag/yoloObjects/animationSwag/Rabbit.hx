@@ -1,5 +1,7 @@
 package swagEngine.yoloController.levelSwag.yoloObjects.animationSwag ;
 
+import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
 
@@ -31,6 +33,8 @@ class Rabbit extends FlxSprite
 		animation.add("inside", framesArray, 2, false);
 		
 		animation.play("pop");
+		
+		immovable = true;
 	}
 	
 	override public function destroy()
@@ -53,8 +57,7 @@ class Rabbit extends FlxSprite
 					y += 64;
 				
 				case "inside":
-					if (overlaps(player)) animation.play("inside");
-					else
+					if (!overlaps(player))
 					{
 						animation.play("pop");
 						
@@ -64,8 +67,8 @@ class Rabbit extends FlxSprite
 					}
 			}
 		
-		if 		(overlaps(player) && animation.name == "pop" && player.abilities.cards.cardEnergy[2] >  0) player.abilities.cards.cardEnergy[2]--;
-		else if (overlaps(player) && animation.name == "pop" && player.abilities.cards.cardEnergy[2] == 0) player.hurt(20);
+		if (overlaps(player) && animation.name == "pop") player.hurt(20);
+		else if (overlaps(player) && animation.name == "inside") FlxG.overlap(player, this, FlxObject.separate);
 		
 		super.update(e);
 	}

@@ -3,6 +3,7 @@ package swagEngine.yoloController.levelSwag.yoloObjects.animationSwag ;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
+import swagEngine.swagHandler.Settings;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
 import swagEngine.yoloController.levelSwag.yoloObjects.behavior.BirdBehavior;
 
@@ -36,9 +37,9 @@ class Dove extends FlxSprite
 		type = _type;
 		player = _player;
 		
-		drag.x = drag.y = 2000;
+		drag.x = drag.y = Settings.drag * 2;
 		
-		maxVelocity.x = maxVelocity.y = 300;
+		maxVelocity.x = maxVelocity.y = (_type == "aggressive") ? Settings.maxVelocity + 50 : Settings.maxVelocity - 50;
 		
 		behavior = new BirdBehavior(type, this, player, Std.parseInt(_min), Std.parseInt(_max));
 	}
@@ -61,11 +62,24 @@ class Dove extends FlxSprite
 		behavior.type = type;
 		behavior.update();
 		
-		if 		(overlaps(player) && player.abilities.cards.cardEnergy[2] >  0) player.abilities.cards.cardEnergy[2]--;
-		else if (overlaps(player) && player.abilities.cards.cardEnergy[2] == 0)	player.hurt(10);
+		if (overlaps(player) && player.abilities.deadly > 0)
+		{
+			kill();
+			
+			player.abilities.deadly--;
+		}
+		else if (overlaps(player) && player.abilities.deadly == 0)	player.hurt(10);
 		
-		if (velocity.x > 0) flipX = false;
-		else flipX = true;
+		if (velocity.x > 0)
+		{
+			flipX = false;
+			facing = FlxObject.RIGHT;
+		}
+		else
+		{
+			flipX = true;
+			facing = FlxObject.LEFT;
+		}
 		
 		super.update(e);
 	}

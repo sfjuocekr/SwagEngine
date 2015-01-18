@@ -10,12 +10,14 @@ import openfl.utils.Timer;
 
 class CardManager
 {
-	public var cardSlots:Array<Array<Int>> =	[[null],	// 0 = Diamonds
-												 [null],	// 1 = Clubs
-												 [null],	// 2 = Hearts
-												 [1]];		// 3 = Spades
+	public var slots:Array<Array<String>> =			[[],	// 0 = Diamonds
+													 [],	// 1 = Clubs
+													 [],	// 2 = Hearts
+													 []];	// 3 = Spades
 	
-	public var cardEnergy:Array<Int> = [0, 0, 0, 1];
+	public var energy:Array<Int> = [1, 1, 1, 1];
+	
+	public var collected:Array<Int> = [0, 0, 0];
 	
 	public var timer:Timer = new Timer(2000);
 	
@@ -25,22 +27,46 @@ class CardManager
 		timer.start();	
 	}
 	
-	private function powerUp(e)
+	public function collect(_suit:String)
 	{
-		if (cardEnergy[3] == 0) cardEnergy[3]++;
+		switch (_suit)
+		{
+			case "diamond":
+				energy[0]++;
+				
+			case "club":
+				energy[1]++;
+				
+			case "heart":
+				energy[2]++;
+				
+			case "spade":
+				energy[3]++;
+		}
+		
+		collected[0]++;
+		
+		if (collected[0] == 10) collected[1]++;
+		if (collected[1] == 5) collected[2]++;
+		if (collected[2] == 1)
+		{
+			trace("GAME OVER!");
+			
+			// play titlescreen animation or whatever.
+		}
 	}
 	
-	public function rotate(_suit:Int)
+	private function powerUp(e)
 	{
-		cardSlots[_suit].push(cardSlots[_suit].shift());
+		if (energy[3] == 0) energy[3]++;
 	}
 	
 	public function destroy()
 	{
 		timer.removeEventListener(TimerEvent.TIMER, powerUp);
 		
-		cardSlots = null;
-		cardEnergy = null;
+		slots = null;
+		energy = null;
 		timer = null;
 	}
 }

@@ -56,10 +56,10 @@ class Platform extends FlxSprite
 	
 	override public function destroy()
 	{
-		min = null;
-		max = null;
-		xMovement = null;
-		yMovement = null;
+		min = 0;
+		max = 0;
+		xMovement = 0;
+		yMovement = 0;
 		
 		super.destroy();
 	}
