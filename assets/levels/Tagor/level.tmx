@@ -30,7 +30,7 @@
  </imagelayer>
  <objectgroup name="Cards">
   <object name="card001" type="heart" gid="84" x="2736" y="752" width="32" height="48"/>
-  <object name="card002" type="heart" gid="84" x="2096" y="792" width="32" height="48"/>
+  <object name="card002" type="heart" gid="84" x="2112" y="768" width="32" height="48"/>
   <object name="card003" type="heart" gid="84" x="3472" y="768" width="32" height="48"/>
   <object name="card004" type="heart" gid="84" x="5104" y="151" width="32" height="48"/>
   <object name="card001" type="heart" gid="84" x="1552" y="696" width="32" height="48"/>
@@ -224,7 +224,7 @@
     <property name="min" value="43"/>
    </properties>
   </object>
-  <object name="rabbit" gid="82" x="2080" y="832" width="64" height="128"/>
+  <object name="rabbit" gid="82" x="2077" y="832" width="64" height="128"/>
   <object name="bird" type="aggressive" gid="81" x="1224" y="456" width="64" height="64">
    <properties>
     <property name="max" value="163"/>
