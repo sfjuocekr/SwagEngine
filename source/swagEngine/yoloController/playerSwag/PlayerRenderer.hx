@@ -79,14 +79,10 @@ class PlayerRenderer extends FlxSprite
 		
 		if (FlxG.keys.justPressed.UP)
 		{
-			facing = FlxObject.UP;
-			
 			abilities.spades();
 		}
 		else if (FlxG.keys.justPressed.DOWN)
 		{
-			facing = FlxObject.DOWN;
-			
 			velocity.y += 100;
 		}
 		
