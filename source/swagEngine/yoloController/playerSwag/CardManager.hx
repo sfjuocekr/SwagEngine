@@ -46,8 +46,16 @@ class CardManager
 		
 		collected[0]++;
 		
-		if (collected[0] == 10) collected[1]++;
-		if (collected[1] == 5) collected[2]++;
+		if (collected[0] == 10)
+		{
+			collected[0] = 0;
+			collected[1]++;
+		}
+		if (collected[1] == 5)
+		{
+			collected[1] = 0;
+			collected[2]++;
+		}
 		if (collected[2] == 1)
 		{
 			trace("GAME OVER!");

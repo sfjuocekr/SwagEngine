@@ -10,7 +10,8 @@ class Falling extends FlxSprite
 {
 	public function new(_x:Float = 0, _y:Float = 0, _SimpleGraphic:Dynamic) 
 	{
-		super(x, y);
+		super(_x, _y, _SimpleGraphic);
 		
+		y -= height;	
 	}
 }

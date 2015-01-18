@@ -43,8 +43,6 @@ class Rabbit extends FlxSprite
 			x -= width;
 			y += height;
 		}
-		
-		trace(x + " " + y + " " + angle);
 	}
 	
 	override public function destroy()

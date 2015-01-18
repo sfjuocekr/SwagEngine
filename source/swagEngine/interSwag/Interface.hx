@@ -29,6 +29,7 @@ class Interface	extends FlxSpriteGroup
 	private var heartText:FlxText;
 	private var spadeText:FlxText;
 	
+	private var cardsText:FlxText;	
 	
 	private var diamondsText:FlxText;
 	private var clubsText:FlxText;
@@ -82,6 +83,11 @@ class Interface	extends FlxSpriteGroup
 		add(spadeText);
 		
 		
+			cardsText = 	new FlxText(cardOverlay.x + 8,	cardOverlay.y + 8,	368, null, 16, true);
+			cardsText.alignment = "right";
+		add(cardsText);
+		
+		
 		// slots
 			diamondsText = 	new FlxText(healthText.x,		healthText.y + 28,	368, null, 16, true);
 			diamondsText.alignment = "right";
@@ -102,12 +108,14 @@ class Interface	extends FlxSpriteGroup
 	
 	override public function update(e)
 	{
-		healthText.text =	"Health: " +	Std.string((player.health < 0) ? 0 : player.health);
+		healthText.text =	"Health: " +		Std.string((player.health < 0) ? 0 : player.health);
 		
-		diamondText.text =	"Diamonds: " +	Std.string(player.abilities.cards.energy[0]);
-		clubText.text =		"Clubs: " +		Std.string(player.abilities.cards.energy[1]);
-		heartText.text =	"Hearts: " +	Std.string(player.abilities.cards.energy[2]);
-		spadeText.text =	"Spades: " +	Std.string(player.abilities.cards.energy[3]);
+		cardsText.text =	"Collection: " +	"B: " + Std.string(player.abilities.cards.collected[0]) + " S: " + Std.string(player.abilities.cards.collected[1]) + " G: " + Std.string(player.abilities.cards.collected[2]);
+		
+		diamondText.text =	"Diamonds: " +		Std.string(player.abilities.cards.energy[0]);
+		clubText.text =		"Clubs: " +			Std.string(player.abilities.cards.energy[1]);
+		heartText.text =	"Hearts: " +		Std.string(player.abilities.cards.energy[2]);
+		spadeText.text =	"Spades: " +		Std.string(player.abilities.cards.energy[3]);
 		
 		diamondsText.text =	player.abilities.cards.slots[0].toString();
 		clubsText.text =	player.abilities.cards.slots[1].toString();
