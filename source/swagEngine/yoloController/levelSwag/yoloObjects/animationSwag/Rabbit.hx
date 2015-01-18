@@ -14,7 +14,7 @@ class Rabbit extends FlxSprite
 {
 	private var player:PlayerRenderer;
 	
-	public function new(_x:Float = 0, _y:Float = 0, _player:PlayerRenderer)
+	public function new(_x:Float = 0, _y:Float = 0, _rotation:Float, _player:PlayerRenderer)
 	{
 		super(_x, _y);
 		
@@ -35,6 +35,12 @@ class Rabbit extends FlxSprite
 		animation.play("pop");
 		
 		immovable = true;
+		
+		angle = _rotation;
+		
+		if (angle != 0) y += height;
+		
+		trace(x + " " + y + " " + angle);
 	}
 	
 	override public function destroy()

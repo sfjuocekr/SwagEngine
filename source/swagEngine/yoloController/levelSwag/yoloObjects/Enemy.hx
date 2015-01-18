@@ -12,7 +12,7 @@ import swagEngine.yoloController.playerSwag.PlayerRenderer;
 
 class Enemy extends FlxGroup
 {
-	public function new(_x:Float, _y:Float, _name:String, ?_player:PlayerRenderer, ?_min:String, ?_max:String, ?_type:String)
+	public function new(_x:Float, _y:Float, _rotation:Float, _name:String, ?_player:PlayerRenderer, ?_min:String, ?_max:String, ?_type:String)
 	{
 		super();
 		
@@ -22,7 +22,7 @@ class Enemy extends FlxGroup
 				add(new Dove(_x, _y, _min, _max, _player, _type));
 			
 			case "rabbit":
-				add(new Rabbit(_x, _y, _player));
+				add(new Rabbit(_x, _y, _rotation, _player));
 		}
 	}
 }
