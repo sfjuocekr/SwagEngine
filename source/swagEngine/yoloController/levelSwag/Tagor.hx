@@ -23,7 +23,9 @@ class Tagor extends FlxState
 {
 	private var map:String = "Tagor";
 	private var level:FlxTiledMap;
+	
 	private var solid:FlxLayer;
+	private var invisible:FlxLayer;
 	
 	private var UI:Interface;
 	private var player:PlayerRenderer;
@@ -46,56 +48,20 @@ class Tagor extends FlxState
 		
 		add(new FlxSprite(0, 0, level._map.imageLayers[0].image.texture));		// Background_image
 		
-		for (card in level._map.getObjectGroupByName("Cards").objects)
-			cards.add(new Card(card.x, card.y, level._map.getTilesetByGID(card.gid).image.texture, card.type));
+		loadLayers();
+		loadObjects();
+		
 		add(cards);																// Cards
-		
 		add(level.getLayerByName("Background"));								// Background
-		
-		var _level_exit = level._map.getObjectByName("level_exit", level._map.getObjectGroupByName("Exits"));
-			exits.add(new Exit(_level_exit.x, _level_exit.y, level._map.getTilesetByGID(_level_exit.gid).image.texture));
 		add(exits);																// Exits
-		
-		for (portal in level._map.getObjectGroupByName("Portals").objects)
-			portals.add(new Portal(portal.x, portal.y, level._map.getTilesetByGID(portal.gid).image.texture, portal.name, portal.type));
-		add(portals);
-		
-		add(shots);
-		
-		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
-			 player = new PlayerRenderer(_player.x, _player.y, shots);
+		add(portals);															// Portals
+		add(shots);								// Objects the player emits
 		add(player);															// Player
-		
-		solid = level.getLayerByName("Level");
-		solid.setActive(true);
+		//falling
+		add(invisible);															// Invicible
 		add(solid);																// Level
-			
-		for (platform in level._map.getObjectGroupByName("Platforms").objects)
-		{
-			switch (platform.type)
-			{
-				case "vertical":
-					platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), true));
-					
-				case "horizontal":
-					platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), false));
-			}
-		}
 		add(platforms);															// Platforms
-		
-		for (enemy in level._map.getObjectGroupByName("Enemies").objects)
-		{	
-			switch (enemy.name)
-			{
-				case "bird":
-					enemies.add(new Enemy(enemy.x, enemy.y, enemy.name, player, enemy.properties.get("min"), enemy.properties.get("max"), enemy.type));
-					
-				case "rabbit":
-					enemies.add(new Enemy(enemy.x, enemy.y, enemy.name, player));
-			}
-		}
 		add(enemies);															// Enemies
-		
 		add(level.getLayerByName("Foreground"));								// Foreground
 		
 		UI = new Interface(player);
@@ -116,6 +82,54 @@ class Tagor extends FlxState
 				shot.exists = false;
 			
 			shots.add(shot);
+		}
+	}
+	
+	private function loadLayers()
+	{
+		solid = level.getLayerByName("Level");
+		solid.setActive(true);
+		
+		invisible = level.getLayerByName("Level");
+		invisible.setActive(true);
+	}
+	
+	private function loadObjects()
+	{
+		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
+			 player = new PlayerRenderer(_player.x, _player.y, shots);
+		
+		for (card in level._map.getObjectGroupByName("Cards").objects)
+			cards.add(new Card(card.x, card.y, level._map.getTilesetByGID(card.gid).image.texture, card.type));
+		
+		var _level_exit = level._map.getObjectByName("level_exit", level._map.getObjectGroupByName("Exits"));
+			exits.add(new Exit(_level_exit.x, _level_exit.y, level._map.getTilesetByGID(_level_exit.gid).image.texture));
+			
+		for (portal in level._map.getObjectGroupByName("Portals").objects)
+			portals.add(new Portal(portal.x, portal.y, level._map.getTilesetByGID(portal.gid).image.texture, portal.name, portal.type));
+			
+		for (platform in level._map.getObjectGroupByName("Platforms").objects)
+		{
+			switch (platform.type)
+			{
+				case "vertical":
+					platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), true));
+					
+				case "horizontal":
+					platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), false));
+			}
+		}
+		
+		for (enemy in level._map.getObjectGroupByName("Enemies").objects)
+		{	
+			switch (enemy.name)
+			{
+				case "bird":
+					enemies.add(new Enemy(enemy.x, enemy.y, enemy.rotation, enemy.name, player, enemy.properties.get("min"), enemy.properties.get("max"), enemy.type));
+					
+				case "rabbit":
+					enemies.add(new Enemy(enemy.x, enemy.y, enemy.rotation, enemy.name, player));
+			}
 		}
 	}
 	

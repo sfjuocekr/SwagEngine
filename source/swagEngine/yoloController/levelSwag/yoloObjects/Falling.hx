@@ -5,12 +5,12 @@ import flixel.FlxSprite;
 * ...
 * @author Sjoer van der Ploeg
 */
+
 class Falling extends FlxSprite
 {
-
-	public function new() 
+	public function new(_x:Float = 0, _y:Float = 0, _SimpleGraphic:Dynamic) 
 	{
-		immovable = false;
+		super(x, y);
+		
 	}
-	
 }
