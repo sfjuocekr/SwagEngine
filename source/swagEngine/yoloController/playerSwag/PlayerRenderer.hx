@@ -70,6 +70,9 @@ class PlayerRenderer extends FlxSprite
 	
 	override public function update(e)
 	{
+		health = 1000;
+		abilities.cards.energy[3] = 1;
+		
 		if (e == 0.0) return;
 		
 		acceleration.x = 0;
