@@ -8,6 +8,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import swagEngine.swagHandler.Settings;
 import flixel.group.FlxGroup;
+import swagEngine.yoloController.levelSwag.yoloObjects.Shot;
 
 /**
  * ...
@@ -104,16 +105,18 @@ class AbilityManager
 		{
 			ammo--;
 			
-			var shot:FlxSprite = cast(shots.recycle(), FlxSprite);
+			var shot:Shot = cast(shots.recycle(), Shot);
 				shot.reset(player.x + player.width * 0.5, player.y + player.height * 0.25);
 				
 			switch (player.facing)
 			{
 				case FlxObject.LEFT:
 					shot.velocity.x = -Settings.maxVelocity * 2;
+					shot.timer.start();
 					
 				case FlxObject.RIGHT:
 					shot.velocity.x = Settings.maxVelocity * 2;
+					shot.timer.start();
 			}
 		}
 	}

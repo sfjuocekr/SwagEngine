@@ -76,13 +76,7 @@ class Tagor extends FlxState
 		shots.maxSize = 8;
 		
 		for (i in 0...shots.maxSize)
-		{
-			var shot = new FlxSprite( -8, -8);		// make a bullet class with a timer
-				shot.makeGraphic(4, 4);
-				shot.exists = false;
-			
-			shots.add(shot);
-		}
+			shots.add(new Shot( -8, -8));
 	}
 	
 	private function loadLayers()

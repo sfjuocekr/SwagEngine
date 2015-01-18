@@ -38,7 +38,11 @@ class Rabbit extends FlxSprite
 		
 		angle = _rotation;
 		
-		if (angle != 0) y += height;
+		if (angle == 180)
+		{
+			x -= width;
+			y += height;
+		}
 		
 		trace(x + " " + y + " " + angle);
 	}
