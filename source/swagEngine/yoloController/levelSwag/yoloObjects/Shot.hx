@@ -16,16 +16,16 @@ class Shot extends FlxSprite
 	
 	public var timer:Timer = new Timer(10);
 	
-	public function new(_x:Float=0, _y:Float=0) 
+	public function new(_x:Float=0, _y:Float=0, _SimpleGraphic:Dynamic) 
 	{
-		super(_x, _y, "assets/images/fireball.png");
+		super(_x, _y, _SimpleGraphic);
 		
 		exists = false;
 		
 		timer.addEventListener(TimerEvent.TIMER, stop);
 		
-		scale.x = 0.25;
-		scale.y = 0.25;
+		scale.x = 1 / (frameWidth / 64);
+		scale.y = 1 / (frameHeight / 32);
 		
 		updateHitbox();
 	}
@@ -50,7 +50,6 @@ class Shot extends FlxSprite
 			offset.y += yDiff;
 			y += yDiff;
 	*/	
-		//updateHitbox();
 		
 		travel++;
 	}
