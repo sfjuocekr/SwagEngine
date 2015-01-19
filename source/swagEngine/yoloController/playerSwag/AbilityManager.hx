@@ -120,13 +120,13 @@ class AbilityManager
 				case FlxObject.LEFT:
 					shot.flipX = true;
 					shot.x -= player.width;
-					shot.velocity.x = -Settings.maxVelocity * 2;
+					shot.velocity.x = -Settings.maxVelocity * 2 + player.velocity.x;
 					shot.timer.start();
 					
 				case FlxObject.RIGHT:
 					shot.flipX = false;
 					shot.x += player.width;
-					shot.velocity.x = Settings.maxVelocity * 2;
+					shot.velocity.x = Settings.maxVelocity * 2 + player.velocity.x;
 					shot.timer.start();
 			}
 			

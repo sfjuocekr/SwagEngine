@@ -5,6 +5,8 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import openfl.display.BitmapData;
+import openfl.display.Sprite;
 import openfl.tiled.FlxLayer;
 import openfl.tiled.FlxTiledMap;
 import swagEngine.interSwag.Interface;
@@ -14,6 +16,11 @@ import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.Rabbit;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
+import flixel.FlxSprite;
+import format.SVG;
+import openfl.Assets;
+import openfl.display.BitmapData;
+import openfl.display.Sprite;
 
 /**
  * ...
@@ -40,6 +47,8 @@ class Tagor extends FlxState
 	
 	private var portaling:Bool = false;
 	private var portalTimer:Timer = new Timer(100);
+	
+	private var fireball:BitmapData;
 	
 	override public function create()
 	{
@@ -68,7 +77,7 @@ class Tagor extends FlxState
 		add(level.getLayerByName("Foreground"));								// Foreground
 		
 		UI = new Interface(player);
-		add(UI);																// Interface
+		add(UI);								// Interface
 		
 		FlxG.camera.setScrollBounds(0, level.totalWidth, 0, level.totalHeight);
 		FlxG.camera.follow(player);
@@ -76,13 +85,25 @@ class Tagor extends FlxState
 		
 		player.health = 1000;
 		
+		fireball = SVGToBitmapData("assets/images/Fireball.svg");
+		
 		shots.maxSize = 16;
 		
 		for (i in 0...shots.maxSize)
-			shots.add(new Shot( -64, -64));
+			shots.add(new Shot( -64, -64, fireball));
+	}
+	
+	private function SVGToBitmapData(_assetPath:String):BitmapData
+	{
+		var sprite:Sprite = new Sprite();
 		
-		//add(new Fireball(128, 128));
+		var svg:SVG = new SVG(Assets.getText(_assetPath));
+			svg.render(sprite.graphics, 0, 0, Std.int(svg.data.width), Std.int(svg.data.height));
 		
+		var bitmap:BitmapData = new BitmapData(Std.int(sprite.width), Std.int(sprite.height), true, 0x0);
+			bitmap.draw(sprite);
+		
+		return bitmap;
 	}
 	
 	private function loadLayers()

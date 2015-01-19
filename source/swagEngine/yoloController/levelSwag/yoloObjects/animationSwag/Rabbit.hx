@@ -23,13 +23,15 @@ class Rabbit extends FlxSprite
 		
 		loadGraphic("assets/animations/rabbit.png", true, 64, 128);
 		
+		angle = _rotation;
+		
 		switch (angle)
 		{
 			case 0:
 				y -= height;
+			
 			case 180:
-				x -= width * 2;
-				y += height;
+				x -= width;
 		}
 		
 		originalY = y;
@@ -45,8 +47,6 @@ class Rabbit extends FlxSprite
 		animation.play("pop");
 		
 		immovable = true;
-		
-		angle = _rotation;
 	}
 	
 	override public function destroy()
@@ -70,27 +70,25 @@ class Rabbit extends FlxSprite
 				if (overlaps(player))
 				{
 					height = 64;
-					offset.y = 64;
-					y = originalY + 64;
+					offset.y = (angle == 180) ? 0 : 64;
+					y = (angle == 180) ? originalY : originalY + 64;
 					
 					FlxG.overlap(player, this, FlxObject.separate);
-					trace("poop");
+					
+					player.hurt(20);	// FIX UPSIDE DOWN
+					trace(player.touching);
 				}
 			
 			case "inside":
 				if (animation.finished && !overlaps(player)) animation.play("pop");
+				else if (animation.finished && overlaps(player) && player.touching == 0) animation.play("pop");
 				
 				height = 64;
-				offset.y = 64;
-				y = originalY + 64;
+				offset.y = (angle == 180) ? 0 : 64;
+				y = (angle == 180) ? originalY : originalY + 64;
 					
 				FlxG.overlap(player, this, FlxObject.separate);
 		}
-		
-		if (overlaps(player) && animation.name == "pop") player.hurt(20);
-		//else if (overlaps(player) && animation.name == "inside") FlxG.overlap(player, this, FlxObject.separate);
-		
-		//FlxG.overlap(player, this, FlxObject.separate);
 		
 		super.update(e);
 	}
