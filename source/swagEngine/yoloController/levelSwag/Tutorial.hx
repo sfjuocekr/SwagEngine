@@ -112,7 +112,7 @@ class Tutorial extends FlxState
 		if (exit.exists) FlxG.resetState();
 	}
 	
-	override public function update(e)
+	override public function update(e:Float)
 	{
 		if (e == 0.0) return;
 		

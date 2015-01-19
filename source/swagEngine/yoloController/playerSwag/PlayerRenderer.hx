@@ -68,12 +68,13 @@ class PlayerRenderer extends FlxSprite
 		else if (health >= 990) health = 1000;
 	}	
 	
-	override public function update(e)
+	override public function update(e:Float)
 	{
 		health = 1000;
-		abilities.cards.energy[3] = 1;
+		for (i in 0...abilities.cards.energy.length)
+			abilities.cards.energy[i] = 1;
 		
-		if (e == 0.0) return;
+		if (e == 0) return;
 		
 		acceleration.x = 0;
 		

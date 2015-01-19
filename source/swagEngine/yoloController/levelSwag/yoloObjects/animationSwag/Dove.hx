@@ -55,7 +55,7 @@ class Dove extends FlxSprite
 		super.destroy();
 	}
 	
-	override public function update(e)
+	override public function update(e:Float)
 	{
 		if (e == 0.0) return;
 		

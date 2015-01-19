@@ -57,9 +57,9 @@ class Sjoer extends FlxState
 		if (coins.countLiving() == 0) exit.exists = true;
 	}
 
-	override public function update(e)
+	override public function update(e:Float)
 	{
-		if (e == 0.0) return;
+		if (e == 0) return;
 		
 		if (FlxG.overlap(boundaries, player)) FlxG.resetState();
 		if (FlxG.overlap(exit, player)) FlxG.resetState();

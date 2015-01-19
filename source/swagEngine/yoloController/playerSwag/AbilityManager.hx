@@ -1,6 +1,8 @@
 package swagEngine.yoloController.playerSwag;
 
 import flixel.FlxObject;
+import flixel.graphics.FlxGraphic;
+import openfl.display.BitmapData;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
 import flixel.FlxG;
@@ -37,6 +39,11 @@ class AbilityManager
 	public var spades:Void->Void;
 	
 	private var map:Map<String, Void->Void> = new Map<String, Void->Void>();
+	
+	private var earth:FlxSprite = new FlxSprite(-64, -64, "assets/images/earth.png");
+	private var wind:FlxSprite = new FlxSprite(-64, -64, "assets/images/wind.png");
+	private var fire:FlxSprite = new FlxSprite(-64, -64, "assets/images/fire.png");
+	private var water:FlxSprite = new FlxSprite(-64, -64, "assets/images/water.png");
 	
 	public function new(_player:PlayerRenderer, _shots:FlxGroup) 
 	{
@@ -106,18 +113,27 @@ class AbilityManager
 			ammo--;
 			
 			var shot:Shot = cast(shots.recycle(), Shot);
-				shot.reset(player.x + player.width * 0.5, player.y + player.height * 0.25);
+				shot.reset(player.x, player.y + player.height * 0.25);
 				
 			switch (player.facing)
 			{
 				case FlxObject.LEFT:
+					shot.flipX = true;
+					shot.x -= player.width;
 					shot.velocity.x = -Settings.maxVelocity * 2;
 					shot.timer.start();
 					
 				case FlxObject.RIGHT:
+					shot.flipX = false;
+					shot.x += player.width;
 					shot.velocity.x = Settings.maxVelocity * 2;
 					shot.timer.start();
 			}
+			
+			shot.alpha = 1;
+			//shot.scale.y = 1;
+			//shot.height = 128;
+			//shot.offset.y = 0;
 		}
 	}
 	

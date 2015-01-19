@@ -12,24 +12,46 @@ import openfl.utils.Timer;
 
 class Shot extends FlxSprite
 {
-	public var timer:Timer = new Timer(1000);
+	private var travel:Int = 0;
 	
-	public function new(X:Float=0, Y:Float=0, ?_SimpleGraphic:Dynamic) 
+	public var timer:Timer = new Timer(10);
+	
+	public function new(_x:Float=0, _y:Float=0) 
 	{
-		super(X, Y, _SimpleGraphic);
-		
-		makeGraphic(4, 4);
+		super(_x, _y, "assets/images/fireball.png");
 		
 		exists = false;
 		
 		timer.addEventListener(TimerEvent.TIMER, stop);
+		
+		scale.x = 0.25;
+		scale.y = 0.25;
+		
+		updateHitbox();
 	}
 	
 	private function stop(e)
 	{
-		timer.stop();
-		timer.reset();
+		if (travel == 100)
+		{
+			timer.stop();
+			timer.reset();
+			
+			travel = 0;
+			
+			kill();
+		}
 		
-		kill();
+		alpha *= 0.98;
+		
+/*		var yDiff:Float = (height - (height * 0.975)) * 0.5;
+			scale.y *= 0.975;
+			height *= 0.975;
+			offset.y += yDiff;
+			y += yDiff;
+	*/	
+		//updateHitbox();
+		
+		travel++;
 	}
 }

@@ -31,9 +31,9 @@ class Platform extends FlxSprite
 		immovable = true;
 	}
 	
-	override public function update(e)
+	override public function update(e:Float)
 	{
-		if (e == 0.0) return;
+		if (e == 0) return;
 		
 		if (xMovement != 0)
 		{

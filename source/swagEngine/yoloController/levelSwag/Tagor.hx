@@ -10,6 +10,7 @@ import openfl.tiled.FlxTiledMap;
 import swagEngine.interSwag.Interface;
 import swagEngine.interSwag.MainMenu;
 import swagEngine.yoloController.levelSwag.yoloObjects.*;
+import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.Rabbit;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
@@ -44,6 +45,8 @@ class Tagor extends FlxState
 	{
 		super.create();
 		
+		FlxG.debugger.drawDebug = true;
+		
 		level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");	
 		
 		add(new FlxSprite(0, 0, level._map.imageLayers[0].image.texture));		// Background_image
@@ -73,10 +76,13 @@ class Tagor extends FlxState
 		
 		player.health = 1000;
 		
-		shots.maxSize = 8;
+		shots.maxSize = 16;
 		
 		for (i in 0...shots.maxSize)
-			shots.add(new Shot( -8, -8));
+			shots.add(new Shot( -64, -64));
+		
+		//add(new Fireball(128, 128));
+		
 	}
 	
 	private function loadLayers()
@@ -177,7 +183,15 @@ class Tagor extends FlxState
 	private function shotEnemy(_shot:FlxObject, _enemy:FlxObject)
 	{
 		_shot.kill();
-		_enemy.kill();
+		
+		if (Type.getClass(_enemy) == Rabbit)
+		{
+			if (cast(_enemy, Rabbit).animation.curAnim.name == "pop")
+			{
+				_enemy.kill();
+			}
+		}
+		else _enemy.kill();
 	}	
 	
 	override public function destroy()
@@ -198,9 +212,9 @@ class Tagor extends FlxState
 		portalTimer = null;
 	}
 	
-	override public function update(e)
+	override public function update(e:Float)
 	{
-		if (UI.escapeMenu.visible) e = 0.0;
+		if (UI.escapeMenu.visible) e = 0;
 		else
 		{
 			FlxG.collide(player, platforms);

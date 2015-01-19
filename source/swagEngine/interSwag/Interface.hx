@@ -106,7 +106,7 @@ class Interface	extends FlxSpriteGroup
 		add(spadesText);
 	}
 	
-	override public function update(e)
+	override public function update(e:Float)
 	{
 		healthText.text =	"Health: " +		Std.string((player.health < 0) ? 0 : player.health);
 		

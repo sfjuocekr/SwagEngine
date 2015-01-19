@@ -13,6 +13,7 @@ import swagEngine.yoloController.playerSwag.PlayerRenderer;
 class Rabbit extends FlxSprite
 {
 	private var player:PlayerRenderer;
+	private var originalY:Float = 0;
 	
 	public function new(_x:Float = 0, _y:Float = 0, _rotation:Float, _player:PlayerRenderer)
 	{
@@ -22,7 +23,16 @@ class Rabbit extends FlxSprite
 		
 		loadGraphic("assets/animations/rabbit.png", true, 64, 128);
 		
-		y -= height;
+		switch (angle)
+		{
+			case 0:
+				y -= height;
+			case 180:
+				x -= width * 2;
+				y += height;
+		}
+		
+		originalY = y;
 		
 		var framesArray = new Array();
 			for (i in 5...135) framesArray[i - 5] = i;
@@ -37,12 +47,6 @@ class Rabbit extends FlxSprite
 		immovable = true;
 		
 		angle = _rotation;
-		
-		if (angle == 180)
-		{
-			x -= width;
-			y += height;
-		}
 	}
 	
 	override public function destroy()
@@ -54,29 +58,39 @@ class Rabbit extends FlxSprite
 	{
 		if (e == 0.0) return;
 		
-		if (animation.finished)
-			switch (animation.name)
-			{
-				case "pop":
-					animation.play("inside");
+		switch (animation.name)
+		{
+			case "pop":
+				if (animation.finished) animation.play("inside");
+				
+				height = 128;
+				offset.y = 0;
+				y = originalY;
 					
+				if (overlaps(player))
+				{
 					height = 64;
 					offset.y = 64;
-					y += 64;
+					y = originalY + 64;
+					
+					FlxG.overlap(player, this, FlxObject.separate);
+					trace("poop");
+				}
+			
+			case "inside":
+				if (animation.finished && !overlaps(player)) animation.play("pop");
 				
-				case "inside":
-					if (!overlaps(player))
-					{
-						animation.play("pop");
-						
-						height = 128;
-						offset.y = 0;
-						y -= 64;
-					}
-			}
+				height = 64;
+				offset.y = 64;
+				y = originalY + 64;
+					
+				FlxG.overlap(player, this, FlxObject.separate);
+		}
 		
 		if (overlaps(player) && animation.name == "pop") player.hurt(20);
-		else if (overlaps(player) && animation.name == "inside") FlxG.overlap(player, this, FlxObject.separate);
+		//else if (overlaps(player) && animation.name == "inside") FlxG.overlap(player, this, FlxObject.separate);
+		
+		//FlxG.overlap(player, this, FlxObject.separate);
 		
 		super.update(e);
 	}
