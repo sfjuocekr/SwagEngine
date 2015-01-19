@@ -59,7 +59,7 @@ class Interface	extends FlxSpriteGroup
 			minimap.y = 0;
 		add(minimap);
 		
-			escapeMenu.makeGraphic(256, 384, FlxColor.BLACK);
+			escapeMenu.loadGraphic("assets/images/pause_menu.png");
 			escapeMenu.x = (FlxG.width * 0.5) - (escapeMenu.width * 0.5);
 			escapeMenu.y = (FlxG.height * 0.5) - (escapeMenu.height * 0.5);
 			escapeMenu.visible = false;
