@@ -22,10 +22,4 @@ class Spider extends FlxSprite
 		animation.add("dangle", framesArray, 5, true);
 		animation.play("dangle");
 	}
-	
-	override public function update(e:Float)
-	{
-		trace(animation.curAnim.curIndex);
-		super.update(e);
-	}
 }
