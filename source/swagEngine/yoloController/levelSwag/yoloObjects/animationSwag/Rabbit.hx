@@ -66,7 +66,7 @@ class Rabbit extends FlxSprite
 				height = 128;
 				offset.y = 0;
 				y = originalY;
-					
+				
 				if (overlaps(player))
 				{
 					height = 64;
@@ -76,7 +76,7 @@ class Rabbit extends FlxSprite
 					FlxG.overlap(player, this, FlxObject.separate);
 					
 					player.hurt(20);	// FIX UPSIDE DOWN
-					trace(player.touching);
+					trace(touching);
 				}
 			
 			case "inside":

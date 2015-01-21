@@ -5,22 +5,19 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import format.SVG;
+import openfl.Assets;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
+import openfl.events.TimerEvent;
 import openfl.tiled.FlxLayer;
 import openfl.tiled.FlxTiledMap;
+import openfl.utils.Timer;
 import swagEngine.interSwag.Interface;
 import swagEngine.interSwag.MainMenu;
 import swagEngine.yoloController.levelSwag.yoloObjects.*;
 import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.Rabbit;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
-import openfl.events.TimerEvent;
-import openfl.utils.Timer;
-import flixel.FlxSprite;
-import format.SVG;
-import openfl.Assets;
-import openfl.display.BitmapData;
-import openfl.display.Sprite;
 
 /**
  * ...
@@ -34,6 +31,8 @@ class Tagor extends FlxState
 	
 	private var solid:FlxLayer;
 	private var invisible:FlxLayer;
+	private var visible:FlxLayer;
+	private var falling:FlxLayer;
 	
 	private var UI:Interface;
 	private var player:PlayerRenderer;
@@ -69,7 +68,9 @@ class Tagor extends FlxState
 		add(portals);															// Portals
 		add(shots);								// Objects the player emits
 		add(player);															// Player
-		//falling
+		
+		add(falling);															// Falling
+		
 		add(invisible);															// Invicible
 		add(solid);																// Level
 		add(platforms);															// Platforms
@@ -111,8 +112,13 @@ class Tagor extends FlxState
 		solid = level.getLayerByName("Level");
 		solid.setActive(true);
 		
-		invisible = level.getLayerByName("Level");
-		invisible.setActive(true);
+		invisible = level.getLayerByName("Invisible");
+		invisible.setActive(false);
+		invisible.exists = true;
+		
+		visible = level.getLayerByName("Visible");
+		visible.setActive(true);
+		visible.exists = false;		
 	}
 	
 	private function loadObjects()
@@ -128,6 +134,9 @@ class Tagor extends FlxState
 			
 		for (portal in level._map.getObjectGroupByName("Portals").objects)
 			portals.add(new Portal(portal.x, portal.y, level._map.getTilesetByGID(portal.gid).image.texture, portal.name, portal.type));
+			
+		//for (fall in level._map.getObjectGroupByName("Falling").objects)
+		//	cards.add(new Falling(fall.x, fall.y, level._map.getTilesetByGID(fall.gid).getTileRectByGID(fall.gid)));
 			
 		for (platform in level._map.getObjectGroupByName("Platforms").objects)
 		{
@@ -241,10 +250,18 @@ class Tagor extends FlxState
 			FlxG.collide(player, platforms);
 			
 			FlxG.overlap(player, solid, FlxObject.separate);
+			FlxG.overlap(player, falling, FlxObject.separate);
+			
 			FlxG.overlap(cards, player, getCard);
 			FlxG.overlap(exits, player, doExit);
 			FlxG.overlap(portals, player, doPortal);
 			FlxG.overlap(shots, enemies, shotEnemy);
+			
+			if (FlxG.keys.justPressed.V)
+			{
+				invisible.exists = !invisible.exists;
+				visible.exists = !visible.exists;	
+			}
 			
 			if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 			

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE map SYSTEM "http://mapeditor.org/dtd/1.0/map.dtd">
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="384" height="32" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="level" tilewidth="32" tileheight="32">
   <image source="level.png" trans="ff00ff" width="320" height="273"/>
@@ -227,7 +226,7 @@
     <property name="min" value="43"/>
    </properties>
   </object>
-  <object name="rabbit" gid="82" x="2077" y="832" width="64" height="128"/>
+  <object name="rabbit" gid="82" x="2080" y="832" width="64" height="128"/>
   <object name="bird" type="aggressive" gid="81" x="1224" y="456" width="64" height="64">
    <properties>
     <property name="max" value="163"/>
@@ -264,6 +263,7 @@
    </properties>
   </object>
   <object name="rabbit" gid="82" x="11168" y="608"/>
+  <object name="rabbit" gid="82" x="2208" y="704" width="64" height="128" rotation="180"/>
  </objectgroup>
  <layer name="Foreground" width="384" height="32">
   <data encoding="csv">
