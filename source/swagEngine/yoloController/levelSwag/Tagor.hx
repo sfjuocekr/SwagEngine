@@ -29,13 +29,16 @@ class Tagor extends FlxState
 	private var map:String = "Tagor";
 	private var level:FlxTiledMap;
 	
+	private var UI:Interface;
+	private var player:PlayerRenderer;
+	
 	private var solid:FlxLayer;
 	private var invisibles:FlxLayer;
 	private var visibles:FlxLayer;
 	private var falling:FlxLayer;
 	
-	private var UI:Interface;
-	private var player:PlayerRenderer;
+	private var foreground:FlxLayer;
+	private var background:FlxLayer;
 	
 	private var shots:FlxGroup = new FlxGroup();
 	private var portals:FlxGroup = new FlxGroup();
@@ -63,7 +66,7 @@ class Tagor extends FlxState
 		loadObjects();
 		
 		add(cards);																// Cards
-		add(level.getLayerByName("Background"));								// Background
+		add(background);														// Background
 		add(exits);																// Exits
 		add(portals);															// Portals
 		add(shots);								// Objects the player emits
@@ -77,7 +80,7 @@ class Tagor extends FlxState
 		add(solid);																// Level
 		add(platforms);															// Platforms
 		add(enemies);															// Enemies
-		add(level.getLayerByName("Foreground"));								// Foreground
+		add(foreground);														// Foreground
 		
 		UI = new Interface(player);
 		add(UI);								// Interface
@@ -122,6 +125,12 @@ class Tagor extends FlxState
 		
 		falling = level.getLayerByName("Falling");
 		falling.setActive(true);
+		
+		foreground = level.getLayerByName("Foreground");
+		foreground.setActive(true);
+		
+		background = level.getLayerByName("Background");
+		background.setActive(true);
 	}
 	
 	private function loadObjects()
@@ -223,6 +232,15 @@ class Tagor extends FlxState
 		}
 		else _enemy.kill();
 	}
+	
+	private function shotLevel(_shot:FlxObject, _tile:FlxObject)
+	{
+		if (_tile.exists)
+		{
+			//_shot.kill();
+			_tile.kill();
+		}
+	}
 
 	private function fallTile(_player:FlxObject, _tile:FlxObject)
 	{
@@ -230,6 +248,7 @@ class Tagor extends FlxState
 		
 		FlxObject.separateY(_player, _tile);
 		
+		_tile.acceleration.y = 500;
 		_tile.drag.y = 500;
 	}
 	
@@ -268,7 +287,14 @@ class Tagor extends FlxState
 			FlxG.overlap(cards, player, getCard);
 			FlxG.overlap(exits, player, doExit);
 			FlxG.overlap(portals, player, doPortal);
+			
 			FlxG.overlap(shots, enemies, shotEnemy);
+			
+			FlxG.overlap(shots, solid, shotLevel);
+			FlxG.overlap(shots, visibles, shotLevel);
+			FlxG.overlap(shots, invisibles, shotLevel);
+			FlxG.overlap(shots, foreground, shotLevel);
+			FlxG.overlap(shots, background, shotLevel);
 			
 			invisibles.exists = !player.abilities.seeing;
 			visibles.exists = player.abilities.seeing;
