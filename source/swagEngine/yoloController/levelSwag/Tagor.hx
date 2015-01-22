@@ -249,8 +249,13 @@ class Tagor extends FlxState
 		
 		FlxObject.separateY(_player, _tile);
 		
-		_tile.acceleration.y = 500;
-		_tile.drag.y = 500;
+		_tile.drag.y = 200;
+	}
+	
+	private function FML(_player:FlxObject, _tile:FlxObject)
+	{
+		// FIX ONE WAY PLATFORMS, SOMEDAY!
+		FlxObject.separate(_tile, _player);
 	}
 	
 	override public function destroy()
@@ -269,6 +274,8 @@ class Tagor extends FlxState
 		enemies = null;
 		portaling = false;
 		portalTimer = null;
+		
+		FlxG.debugger.drawDebug = false;
 	}
 	
 	override public function update(e:Float)
@@ -280,9 +287,8 @@ class Tagor extends FlxState
 			
 			FlxG.overlap(player, solid, FlxObject.separate);
 			
-			if (visibles.exists) FlxG.overlap(player, visibles, FlxObject.separate);		// FIX ONE WAY PLATFORMS, SOMEDAY!
+			if (visibles.exists) FlxG.overlap(player, visibles, FML);
 			
-			FlxG.overlap(player, falling, FlxObject.separate);
 			FlxG.overlap(player, falling, fallTile);
 			
 			FlxG.overlap(cards, player, getCard);
