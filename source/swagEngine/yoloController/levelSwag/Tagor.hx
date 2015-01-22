@@ -113,7 +113,7 @@ class Tagor extends FlxState
 		solid.setActive(true);
 		
 		invisibles = level.getLayerByName("Invisible");
-		invisibles.setActive(false);
+		invisibles.setActive(true);
 		invisibles.exists = true;
 		
 		visibles = level.getLayerByName("Visible");
@@ -250,6 +250,9 @@ class Tagor extends FlxState
 			FlxG.collide(player, platforms);
 			
 			FlxG.overlap(player, solid, FlxObject.separate);
+			
+			if (invisibles.exists) FlxG.overlap(player, invisibles, FlxObject.separate);
+			
 			FlxG.overlap(player, falling, FlxObject.separate);
 			
 			FlxG.overlap(cards, player, getCard);
@@ -257,11 +260,8 @@ class Tagor extends FlxState
 			FlxG.overlap(portals, player, doPortal);
 			FlxG.overlap(shots, enemies, shotEnemy);
 			
-			if (FlxG.keys.justPressed.V)
-			{
-				invisibles.exists = !invisibles.exists;
-				visibles.exists = !visibles.exists;	
-			}
+			invisibles.exists = player.abilities.seeing;
+			visibles.exists = !player.abilities.seeing;
 			
 			if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 			

@@ -66,7 +66,10 @@ class CardManager
 	
 	private function powerUp(e)
 	{
-		if (energy[3] == 0) energy[3]++;
+		for (i in 0...4)
+			if (energy[i] == 0) energy[i]++;
+		
+		//if (energy[3] == 0) energy[3]++;
 	}
 	
 	public function destroy()

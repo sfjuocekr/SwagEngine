@@ -23,13 +23,14 @@ class AbilityManager
 	private var shots:FlxGroup;
 	
 	private var timer:Timer = new Timer(2500);
-	private var activeTimer:Timer = new Timer(5000);
+	private var seeTimer:Timer = new Timer(5000);
 	
 	public var scaled:Bool = false;
 	public var jumping:Bool = false;
 	public var floating:Bool = false;
 	public var deadly:Int = 0;
 	public var ammo:Int = 0;
+	public var seeing:Bool = false;
 	
 	public var cards:CardManager;
 	
@@ -52,10 +53,14 @@ class AbilityManager
 		
 		cards = new CardManager();
 		
+		cards.slots[0].push("shrink");
 		cards.slots[0].push("float");
-		cards.slots[1].push("shrink");
+		
+		cards.slots[1].push("see");
+		
 		cards.slots[2].push("shoot");
 		cards.slots[2].push("touch");
+		
 		cards.slots[3].push("jump");
 		
 		map.set("float", float);
@@ -63,6 +68,7 @@ class AbilityManager
 		map.set("shoot", shoot);
 		map.set("jump", jump);
 		map.set("touch", touchOfDeath);
+		map.set("see", see);
 		
 		for (i in 0...4) setAbilities(i);
 	}
@@ -89,13 +95,34 @@ class AbilityManager
 		}
 	}
 	
+	private function see()
+	{
+		if (cards.energy[1] > 0 && !seeing)
+		{
+			cards.energy[1]--;
+			
+			seeing = true;
+			
+			seeTimer.addEventListener(TimerEvent.TIMER, unsee);
+			seeTimer.reset();
+			seeTimer.start();
+		}
+	}
+	
+	private function unsee(e)
+	{
+		seeing = false;
+		seeTimer.removeEventListener(TimerEvent.TIMER, unsee);
+		seeTimer.stop();
+	}
+	
 	private function touchOfDeath()
 	{
-		if (cards.energy[2] > 0 && deadly == 0)
+		if (cards.energy[2] > 1 && deadly == 0)
 		{
-			cards.energy[2]--;
+			cards.energy[2] -= 2;
 			
-			deadly = 3;
+			deadly = 1;
 		}
 	}
 	
@@ -105,7 +132,7 @@ class AbilityManager
 		{
 			cards.energy[2]--;
 			
-			ammo = 8;
+			ammo = 2;
 		}
 		
 		if (ammo > 0)
@@ -121,14 +148,14 @@ class AbilityManager
 					shot.flipX = true;
 					shot.x -= player.width;
 					shot.velocity.x = -Settings.maxVelocity * 2 + player.velocity.x;
-					shot.timer.start();
 					
 				case FlxObject.RIGHT:
 					shot.flipX = false;
 					shot.x += player.width;
 					shot.velocity.x = Settings.maxVelocity * 2 + player.velocity.x;
-					shot.timer.start();
 			}
+			
+			shot.timer.start();
 			
 			shot.alpha = 1;
 			//shot.scale.y = 1;
