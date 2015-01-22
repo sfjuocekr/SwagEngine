@@ -70,7 +70,7 @@ class PlayerRenderer extends FlxSprite
 	
 	override public function update(e:Float)
 	{
-		health = 1000;
+		//health = 1000;
 		for (i in 0...abilities.cards.energy.length)
 			abilities.cards.energy[i] = 1;
 		
@@ -132,6 +132,17 @@ class PlayerRenderer extends FlxSprite
 			
 		if (FlxG.keys.justPressed.F)		// Probably useless space = spades
 			abilities.spades();
+		
+		if (FlxG.keys.justPressed.I)
+		{
+			animation.curAnim.frameRate++;
+			trace(animation.curAnim.frameRate);
+		}
+		else if (FlxG.keys.justPressed.K)
+		{
+			animation.curAnim.frameRate--;
+			trace(animation.curAnim.frameRate);
+		}
 		
 		super.update(e);	
 	}

@@ -30,8 +30,8 @@ class Tagor extends FlxState
 	private var level:FlxTiledMap;
 	
 	private var solid:FlxLayer;
-	private var invisible:FlxLayer;
-	private var visible:FlxLayer;
+	private var invisibles:FlxLayer;
+	private var visibles:FlxLayer;
 	private var falling:FlxLayer;
 	
 	private var UI:Interface;
@@ -71,7 +71,7 @@ class Tagor extends FlxState
 		
 		add(falling);															// Falling
 		
-		add(invisible);															// Invicible
+		add(invisibles);															// Invicible
 		add(solid);																// Level
 		add(platforms);															// Platforms
 		add(enemies);															// Enemies
@@ -112,13 +112,13 @@ class Tagor extends FlxState
 		solid = level.getLayerByName("Level");
 		solid.setActive(true);
 		
-		invisible = level.getLayerByName("Invisible");
-		invisible.setActive(false);
-		invisible.exists = true;
+		invisibles = level.getLayerByName("Invisible");
+		invisibles.setActive(false);
+		invisibles.exists = true;
 		
-		visible = level.getLayerByName("Visible");
-		visible.setActive(true);
-		visible.exists = false;		
+		visibles = level.getLayerByName("Visible");
+		visibles.setActive(true);
+		visibles.exists = false;		
 	}
 	
 	private function loadObjects()
@@ -259,8 +259,8 @@ class Tagor extends FlxState
 			
 			if (FlxG.keys.justPressed.V)
 			{
-				invisible.exists = !invisible.exists;
-				visible.exists = !visible.exists;	
+				invisibles.exists = !invisibles.exists;
+				visibles.exists = !visibles.exists;	
 			}
 			
 			if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
