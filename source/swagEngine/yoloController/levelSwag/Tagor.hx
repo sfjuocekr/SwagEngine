@@ -68,10 +68,12 @@ class Tagor extends FlxState
 		add(portals);															// Portals
 		add(shots);								// Objects the player emits
 		add(player);															// Player
-		
+
 		add(falling);															// Falling
 		
-		add(invisibles);															// Invicible
+		add(invisibles);														// Invicible
+		add(visibles);															// Invicible
+		
 		add(solid);																// Level
 		add(platforms);															// Platforms
 		add(enemies);															// Enemies
@@ -114,11 +116,12 @@ class Tagor extends FlxState
 		
 		invisibles = level.getLayerByName("Invisible");
 		invisibles.setActive(true);
-		invisibles.exists = true;
 		
 		visibles = level.getLayerByName("Visible");
 		visibles.setActive(true);
-		visibles.exists = false;		
+		
+		falling = level.getLayerByName("Falling");
+		falling.setActive(true);
 	}
 	
 	private function loadObjects()
@@ -134,9 +137,6 @@ class Tagor extends FlxState
 			
 		for (portal in level._map.getObjectGroupByName("Portals").objects)
 			portals.add(new Portal(portal.x, portal.y, level._map.getTilesetByGID(portal.gid).image.texture, portal.name, portal.type));
-			
-		//for (fall in level._map.getObjectGroupByName("Falling").objects)
-		//	cards.add(new Falling(fall.x, fall.y, level._map.getTilesetByGID(fall.gid).getTileRectByGID(fall.gid)));
 			
 		for (platform in level._map.getObjectGroupByName("Platforms").objects)
 		{
@@ -222,7 +222,16 @@ class Tagor extends FlxState
 			}
 		}
 		else _enemy.kill();
-	}	
+	}
+
+	private function fallTile(_player:FlxObject, _tile:FlxObject)
+	{
+		_tile.immovable = false;
+		
+		FlxObject.separateY(_player, _tile);
+		
+		_tile.drag.y = 500;
+	}
 	
 	override public function destroy()
 	{
@@ -251,17 +260,18 @@ class Tagor extends FlxState
 			
 			FlxG.overlap(player, solid, FlxObject.separate);
 			
-			if (invisibles.exists) FlxG.overlap(player, invisibles, FlxObject.separate);
+			if (visibles.exists) FlxG.overlap(player, visibles, FlxObject.separate);		// FIX ONE WAY PLATFORMS, SOMEDAY!
 			
 			FlxG.overlap(player, falling, FlxObject.separate);
+			FlxG.overlap(player, falling, fallTile);
 			
 			FlxG.overlap(cards, player, getCard);
 			FlxG.overlap(exits, player, doExit);
 			FlxG.overlap(portals, player, doPortal);
 			FlxG.overlap(shots, enemies, shotEnemy);
 			
-			invisibles.exists = player.abilities.seeing;
-			visibles.exists = !player.abilities.seeing;
+			invisibles.exists = !player.abilities.seeing;
+			visibles.exists = player.abilities.seeing;
 			
 			if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 			
