@@ -29,7 +29,7 @@ class CardManager
 	
 	public function collect(_suit:String)
 	{
-		switch (_suit)
+	/*	switch (_suit)				// HACK ENERGY, ONLY ONE CARD ATM
 		{
 			case "diamond":
 				energy[0]++;
@@ -42,7 +42,7 @@ class CardManager
 				
 			case "spade":
 				energy[3]++;
-		}
+		}	*/
 		
 		collected[0]++;
 		
@@ -51,7 +51,7 @@ class CardManager
 			collected[0] = 0;
 			collected[1]++;
 		}
-		if (collected[1] == 5)
+		if (collected[1] == 3)
 		{
 			collected[1] = 0;
 			collected[2]++;
@@ -68,8 +68,6 @@ class CardManager
 	{
 		for (i in 0...4)
 			if (energy[i] == 0) energy[i]++;
-		
-		//if (energy[3] == 0) energy[3]++;
 	}
 	
 	public function destroy()

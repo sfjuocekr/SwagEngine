@@ -42,9 +42,8 @@ class MainMenu extends FlxState
 		switch (level)
 		{
 			case 0: System.exit(0);
-			case 1:	FlxG.switchState(new Tagor());
-			//case 1:	FlxG.switchState(new Tutorial());
-			case 2:	FlxG.switchState(new Sjoer());
+			case 1:	FlxG.switchState(new Level_0001());
+			//case 2:	FlxG.switchState(new Sjoer());
 			//case 3:	FlxG.switchState(new Tagor());
 		}
 	}

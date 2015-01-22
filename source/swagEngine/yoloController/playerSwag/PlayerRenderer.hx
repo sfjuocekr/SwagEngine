@@ -8,6 +8,7 @@ import openfl.events.TimerEvent;
 import openfl.utils.Timer;
 import swagEngine.swagHandler.Settings;
 import flixel.group.FlxGroup;
+import flixel.util.FlxDestroyUtil;
 
 /**
  * ...
@@ -22,6 +23,7 @@ class PlayerRenderer extends FlxSprite
 	public var abilities:AbilityManager;
 	
 	public var portaling:Bool = false;
+	public var godmode:Bool = false;
 	
 	public function new(_x:Float = 0, _y:Float = 0, _shots:FlxGroup)
 	{
@@ -50,7 +52,6 @@ class PlayerRenderer extends FlxSprite
 		drag.x = Settings.drag * 2;
 		drag.y = Settings.drag;
 		
-		//acceleration.y = 0;
 		acceleration.y = Settings.acceleration;
 		acceleration.x = 0;
 		
@@ -80,13 +81,26 @@ class PlayerRenderer extends FlxSprite
 		portaling = false;
 	}
 	
-	override public function update(e:Float)
+	override public function update(e:Float)			// NEED TO FIX THE UGLY IF BASED KEY INPUT
 	{
-		//health = 1000;
-		//for (i in 0...abilities.cards.energy.length)
-		//	abilities.cards.energy[i] = 1;
+		#if !FLX_NO_DEBUG
+		if (godmode)	// GODMODE HACK
+		{
+			health = 1000;
+			acceleration.y = 0;
+			for (i in 0...abilities.cards.energy.length)
+				abilities.cards.energy[i] = 1;
+		} else if (!godmode) acceleration.y = Settings.acceleration;
+		#end
 		
-		if (e == 0 || portaling) return;
+		if (e == 0) return;
+		
+		if (portaling)	// PORTAL HACK
+		{
+			super.update(e);
+			
+			return;
+		}
 		
 		acceleration.x = 0;
 		
@@ -96,7 +110,7 @@ class PlayerRenderer extends FlxSprite
 		}
 		else if (FlxG.keys.justPressed.DOWN)
 		{
-			velocity.y += 100;
+			velocity.y += abilities.scaled ? 400 : 300;
 		}
 		
 		if (FlxG.keys.pressed.LEFT)
@@ -128,9 +142,8 @@ class PlayerRenderer extends FlxSprite
 		if (FlxG.keys.justPressed.E)
 			abilities.rotate(2);
 			
-		if (FlxG.keys.justPressed.R)		// Probably useless will never rotate spades
+		if (FlxG.keys.justPressed.R)		// Probably useless will never rotate spades? Maybe?
 			abilities.rotate(3);
-		
 		
 		// USE ABILITY
 		if (FlxG.keys.justPressed.A)
@@ -156,16 +169,24 @@ class PlayerRenderer extends FlxSprite
 			trace(animation.curAnim.frameRate);
 		}
 		
+		if (FlxG.keys.justPressed.G)
+			godmode = !godmode;
+		trace(godmode);
 		super.update(e);
 	}
 	
 	override public function destroy()
 	{
 		abilities.destroy();
+		abilities = null;
 		
 		portaling = false;
+		godmode = false;
 		
 		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
+		portalTimer = null;
+		
+		timer.removeEventListener(TimerEvent.TIMER, healthUp);
 		portalTimer = null;
 		
 		super.destroy();

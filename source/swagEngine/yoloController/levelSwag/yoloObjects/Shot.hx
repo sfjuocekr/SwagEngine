@@ -46,13 +46,6 @@ class Shot extends FlxSprite
 		
 		alpha *= 0.98;
 		
-/*		var yDiff:Float = (height - (height * 0.975)) * 0.5;
-			scale.y *= 0.975;
-			height *= 0.975;
-			offset.y += yDiff;
-			y += yDiff;
-	*/	
-		
 		travel++;
 	}
 	

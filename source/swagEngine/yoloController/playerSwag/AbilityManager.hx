@@ -28,9 +28,10 @@ class AbilityManager
 	public var scaled:Bool = false;
 	public var jumping:Bool = false;
 	public var floating:Bool = false;
+	public var seeing:Bool = false;
+	
 	public var deadly:Int = 0;
 	public var ammo:Int = 0;
-	public var seeing:Bool = false;
 	
 	public var cards:CardManager;
 	
@@ -40,11 +41,6 @@ class AbilityManager
 	public var spades:Void->Void;
 	
 	private var map:Map<String, Void->Void> = new Map<String, Void->Void>();
-	
-	private var earth:FlxSprite = new FlxSprite(-64, -64, "assets/images/earth.png");
-	private var wind:FlxSprite = new FlxSprite(-64, -64, "assets/images/wind.png");
-	private var fire:FlxSprite = new FlxSprite(-64, -64, "assets/images/fire.png");
-	private var water:FlxSprite = new FlxSprite(-64, -64, "assets/images/water.png");
 	
 	public function new(_player:PlayerRenderer, _shots:FlxGroup) 
 	{
@@ -158,10 +154,6 @@ class AbilityManager
 			shot.timer.start();
 			
 			shot.alpha = 1;
-			//shot.scale.y = 1;
-			//shot.height = 128;
-			//shot.offset.y = 0;
-			
 			shot.health = 2;
 		}
 	}
@@ -211,9 +203,9 @@ class AbilityManager
 	private function shrink()
 	{
 		if (jumping || scaled) return;
-		else if (cards.energy[1] > 0)
+		else if (cards.energy[0] > 0)
 		{
-			cards.energy[1]--;
+			cards.energy[0]--;
 			
 			player.maxVelocity.x += 50;
 			player.y += player.frameHeight * 0.5;
@@ -245,21 +237,32 @@ class AbilityManager
 	
 	public function destroy()
 	{
-		timer.removeEventListener(TimerEvent.TIMER, growUp);
-		
-		cards.destroy();
-		
 		player = null;
+		shots = null;
+		
+		timer.removeEventListener(TimerEvent.TIMER, growUp);
+		timer.removeEventListener(TimerEvent.TIMER, normalGravity);
 		timer = null;
+		
+		seeTimer.removeEventListener(TimerEvent.TIMER, unsee);
+		seeTimer = null;
+		
 		scaled = false;
 		jumping = false;
 		floating = false;
+		seeing = false;
 		
+		deadly = 0;
+		ammo = 0;
+		
+		cards.destroy();
 		cards = null;
 		
 		diamonds = null;
 		clubs = null;
 		hearts = null;
 		spades = null;
+		
+		map = null;
 	}
 }
