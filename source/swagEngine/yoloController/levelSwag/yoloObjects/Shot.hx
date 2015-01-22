@@ -28,6 +28,8 @@ class Shot extends FlxSprite
 		scale.y = 1 / (frameHeight / 32);
 		
 		updateHitbox();
+		
+		health = 2;
 	}
 	
 	private function stop(e)
@@ -52,5 +54,13 @@ class Shot extends FlxSprite
 	*/	
 		
 		travel++;
+	}
+	
+	override public function update(e)
+	{
+		if (health == 0)
+			kill();
+		
+		super.update(e);
 	}
 }

@@ -162,7 +162,7 @@ class AbilityManager
 			//shot.height = 128;
 			//shot.offset.y = 0;
 			
-			shot.health = 3;
+			shot.health = 2;
 		}
 	}
 	

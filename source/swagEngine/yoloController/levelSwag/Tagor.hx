@@ -221,7 +221,8 @@ class Tagor extends FlxState
 	
 	private function shotEnemy(_shot:FlxObject, _enemy:FlxObject)
 	{
-		_shot.kill();
+		//_shot.kill();
+		_shot.hurt(2);
 		
 		if (Type.getClass(_enemy) == Rabbit)
 		{
@@ -235,12 +236,12 @@ class Tagor extends FlxState
 	
 	private function shotLevel(_shot:FlxObject, _tile:FlxObject)
 	{
-		if (_tile.exists && _shot.health != 0)
-		{
+		//if (_tile.exists && _shot.health != 0)
+		//{
 			_shot.hurt(1);
 			_tile.kill();
-		}
-		else _shot.kill();
+		//}
+		//else _shot.kill();
 	}
 
 	private function fallTile(_player:FlxObject, _tile:FlxObject)
