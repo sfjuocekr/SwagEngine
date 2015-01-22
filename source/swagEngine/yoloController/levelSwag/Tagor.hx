@@ -235,11 +235,12 @@ class Tagor extends FlxState
 	
 	private function shotLevel(_shot:FlxObject, _tile:FlxObject)
 	{
-		if (_tile.exists)
+		if (_tile.exists && _shot.health != 0)
 		{
-			//_shot.kill();
+			_shot.hurt(1);
 			_tile.kill();
 		}
+		else _shot.kill();
 	}
 
 	private function fallTile(_player:FlxObject, _tile:FlxObject)
