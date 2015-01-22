@@ -47,9 +47,6 @@ class Tagor extends FlxState
 	private var exits:FlxGroup = new FlxGroup();
 	private var enemies:FlxGroup = new FlxGroup();
 	
-	private var portaling:Bool = false;
-	private var portalTimer:Timer = new Timer(100);
-	
 	private var fireball:BitmapData;
 	
 	override public function create()
@@ -188,9 +185,9 @@ class Tagor extends FlxState
 	
 	private function doPortal(_portal:Portal, _player:FlxObject)
 	{
-		if (FlxG.keys.justPressed.SPACE && !portaling)
+		if (FlxG.keys.justPressed.SPACE && !player.portaling)
 		{
-			portaling = true;
+			player.portaling = true;
 			
 			for (portal in portals.members)
 			{
@@ -201,22 +198,13 @@ class Tagor extends FlxState
 					player.x = temp.x + 16;
 					player.y = temp.y + 64;
 					
-					portalTimer.addEventListener(TimerEvent.TIMER, didPortal);
-					portalTimer.reset();
-					portalTimer.start();
+					player.portalTimer.reset();
+					player.portalTimer.start();
 					
 					break;
 				}
 			}
 		}
-	}
-	
-	private function didPortal(e)
-	{
-		portalTimer.stop();
-		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
-		
-		portaling = false;
 	}
 	
 	private function shotEnemy(_shot:FlxObject, _enemy:FlxObject)
@@ -260,9 +248,7 @@ class Tagor extends FlxState
 	}
 	
 	override public function destroy()
-	{
-		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
-		
+	{	
 		map = null;
 		level = null;
 		UI = null;
@@ -273,8 +259,6 @@ class Tagor extends FlxState
 		platforms = null;
 		exits = null;
 		enemies = null;
-		portaling = false;
-		portalTimer = null;
 		
 		FlxG.debugger.drawDebug = false;
 	}
@@ -309,7 +293,7 @@ class Tagor extends FlxState
 			
 			if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 			
-			if (!player.isOnScreen() && !portaling) FlxG.resetState();
+			if (!player.isOnScreen() && !player.portaling) FlxG.resetState();
 			
 			if (!player.alive) FlxG.resetState();
 		}

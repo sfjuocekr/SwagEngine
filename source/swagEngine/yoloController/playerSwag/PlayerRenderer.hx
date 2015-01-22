@@ -17,8 +17,11 @@ import flixel.group.FlxGroup;
 class PlayerRenderer extends FlxSprite
 {
 	private var timer:Timer = new Timer(1000);
+	public var portalTimer:Timer = new Timer(100);
 	
 	public var abilities:AbilityManager;
+	
+	public var portaling:Bool = false;
 	
 	public function new(_x:Float = 0, _y:Float = 0, _shots:FlxGroup)
 	{
@@ -59,14 +62,23 @@ class PlayerRenderer extends FlxSprite
 		animation.play("resting");
 		
 		timer.addEventListener(TimerEvent.TIMER, healthUp);
-		timer.start();	
+		timer.start();
+		
+		portalTimer.addEventListener(TimerEvent.TIMER, didPortal);
 	}
 	
 	private function healthUp(e)
 	{
 		if (health < 990) health += 10;
 		else if (health >= 990) health = 1000;
-	}	
+	}
+	
+	private function didPortal(e)
+	{
+		portalTimer.stop();
+		
+		portaling = false;
+	}
 	
 	override public function update(e:Float)
 	{
@@ -74,7 +86,7 @@ class PlayerRenderer extends FlxSprite
 		//for (i in 0...abilities.cards.energy.length)
 		//	abilities.cards.energy[i] = 1;
 		
-		if (e == 0) return;
+		if (e == 0 || portaling) return;
 		
 		acceleration.x = 0;
 		
@@ -150,6 +162,11 @@ class PlayerRenderer extends FlxSprite
 	override public function destroy()
 	{
 		abilities.destroy();
+		
+		portaling = false;
+		
+		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
+		portalTimer = null;
 		
 		super.destroy();
 	}
