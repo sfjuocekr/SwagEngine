@@ -30,6 +30,7 @@ class PlayerRenderer extends FlxSprite
 		super(_x, _y);
 		
 		loadGraphic("assets/animations/player.png", true, 64, 128);
+		//loadGraphic("assets/animations/playertest.png", true, 64, 128);
 		
 		x -= width * 0.25;
 		y -= height;
@@ -43,6 +44,17 @@ class PlayerRenderer extends FlxSprite
 			for (i in 20...33)
 				framesArray[i - 20] = i;
 		animation.add("resting", framesArray, 5, true);
+		
+		/*var framesArray = new Array();
+			for (i in 0...14)
+				framesArray[i] = i + 133;
+		animation.add("walking", framesArray, 10, true);
+		
+		var framesArray = new Array();
+			for (i in 0...133)
+				framesArray[i] = i;
+		animation.add("resting", framesArray, 10, true);
+		*/
 		
 		facing = FlxObject.RIGHT;
 		
@@ -171,7 +183,7 @@ class PlayerRenderer extends FlxSprite
 		
 		if (FlxG.keys.justPressed.G)
 			godmode = !godmode;
-		trace(godmode);
+		
 		super.update(e);
 	}
 	
