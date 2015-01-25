@@ -41,7 +41,7 @@
   <object type="heart" gid="84" x="7912" y="88"/>
   <object type="heart" gid="84" x="10240" y="512"/>
   <object type="heart" gid="84" x="11168" y="480"/>
-  <object type="heart" gid="84" x="7232" y="160"/>
+  <object type="heart" gid="84" x="7280" y="160"/>
   <object type="heart" gid="84" x="6640" y="160"/>
   <object type="heart" gid="84" x="6112" y="160"/>
   <object type="heart" gid="84" x="4704" y="576"/>
@@ -315,7 +315,7 @@
   <object name="rabbit" gid="82" x="6096" y="224"/>
   <object name="rabbit" gid="82" x="6688" y="0" rotation="180"/>
   <object name="rabbit" gid="82" x="6944" y="0" rotation="180"/>
-  <object name="rabbit" gid="82" x="7280" y="0" rotation="180"/>
+  <object name="rabbit" gid="82" x="7328" y="0" rotation="180"/>
   <object name="rabbit" gid="82" x="6432" y="0" rotation="180"/>
   <object name="bird" type="passive" gid="81" x="6368" y="448">
    <properties>
