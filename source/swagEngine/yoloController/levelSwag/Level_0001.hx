@@ -95,12 +95,12 @@ class Level_0001 extends FlxState
 		for (i in 0...shots.maxSize)
 			shots.add(new Shot( -64, -64, fireball));
 		
-		FlxG.sound.play("assets/music/wtf.wav", 1, false, true, playMusicLoop);
+		FlxG.sound.play("assets/music/intro.wav", 1, false, true, playMusicLoop);
 	}
 	
 	private function playMusicLoop()
 	{
-		FlxG.sound.play("assets/music/wtf.wav", 1, true, true);
+		FlxG.sound.play("assets/music/loop.wav", 1, true, true);
 	}
 	
 	private function SVGToBitmapData(_assetPath:String):BitmapData
