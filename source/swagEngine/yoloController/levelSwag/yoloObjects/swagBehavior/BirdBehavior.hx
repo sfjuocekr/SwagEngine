@@ -1,4 +1,4 @@
-package swagEngine.yoloController.levelSwag.yoloObjects.behavior;
+package swagEngine.yoloController.levelSwag.yoloObjects.swagBehavior;
 
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;

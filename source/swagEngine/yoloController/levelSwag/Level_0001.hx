@@ -16,7 +16,7 @@ import openfl.utils.Timer;
 import swagEngine.interSwag.Interface;
 import swagEngine.interSwag.MainMenu;
 import swagEngine.yoloController.levelSwag.yoloObjects.*;
-import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.Rabbit;
+import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.*;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
 
 /**
@@ -39,6 +39,7 @@ class Level_0001 extends FlxState
 	
 	private var foreground:FlxLayer;
 	private var background:FlxLayer;
+	private var fluffTiles:FlxLayer;
 	
 	private var shots:FlxGroup = new FlxGroup();
 	private var portals:FlxGroup = new FlxGroup();
@@ -46,6 +47,8 @@ class Level_0001 extends FlxState
 	private var platforms:FlxGroup = new FlxGroup();
 	private var exits:FlxGroup = new FlxGroup();
 	private var enemies:FlxGroup = new FlxGroup();
+	private var fluffObjects:FlxGroup = new FlxGroup();
+	private var lightBowls:FlxGroup = new FlxGroup();
 	
 	private var fireball:BitmapData;
 	
@@ -55,13 +58,14 @@ class Level_0001 extends FlxState
 		
 		FlxG.debugger.drawDebug = true;
 		
-		level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");	
+		level = FlxTiledMap.fromAssets("assets/levels/" + map + "/level.tmx");
+		
+		loadLayers();							// Parse layers
+		loadObjects();							// Parse objects
 		
 		add(new FlxSprite(0, 0, level._map.imageLayers[0].image.texture));		// Background_image
 		
-		loadLayers();
-		loadObjects();
-		
+		add(lightBowls);														// LightBowls
 		add(cards);																// Cards
 		add(background);														// Background
 		add(exits);																// Exits
@@ -77,6 +81,10 @@ class Level_0001 extends FlxState
 		add(solid);																// Level
 		add(platforms);															// Platforms
 		add(enemies);															// Enemies
+		
+		add(fluffObjects);						// Add some fluff animations
+		add(fluffTiles);						// Add some tiles belonging to fluff animations
+		
 		add(foreground);														// Foreground
 		
 		UI = new Interface(player);
@@ -135,10 +143,31 @@ class Level_0001 extends FlxState
 		
 		background = level.getLayerByName("Background");
 		background.setActive(true);
+		
+		fluffTiles = level.getLayerByName("FluffTiles");
+		fluffTiles.setActive(true);
 	}
 	
 	private function loadObjects()
 	{
+		for (_fluff in level._map.getObjectGroupByName("FluffObjects").objects)
+		{
+			switch (_fluff.type)
+			{
+				case "spider":
+					fluffObjects.add(new Spider(_fluff.x, _fluff.y));
+					
+				case "light":
+					fluffObjects.add(new Light(_fluff.x, _fluff.y));
+					
+				case "mouse":
+					fluffObjects.add(new Mouse(_fluff.x, _fluff.y, _fluff.properties.get("min"), _fluff.properties.get("max")));
+			}
+		}
+		
+		for (_bowl in level._map.getObjectGroupByName("LightBowls").objects)
+			lightBowls.add(new LightBowl(_bowl.x, _bowl.y));
+		
 		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
 			 player = new PlayerRenderer(_player.x, _player.y, shots);
 		
@@ -151,27 +180,27 @@ class Level_0001 extends FlxState
 		for (portal in level._map.getObjectGroupByName("Portals").objects)
 			portals.add(new Portal(portal.x, portal.y, level._map.getTilesetByGID(portal.gid).image.texture, portal.name, portal.type));
 			
-		for (platform in level._map.getObjectGroupByName("Platforms").objects)
+		for (_platform in level._map.getObjectGroupByName("Platforms").objects)
 		{
-			switch (platform.type)
+			switch (_platform.type)
 			{
 				case "vertical":
-					platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), true));
+					platforms.add(new Platform(_platform.x, _platform.y, level._map.getTilesetByGID(_platform.gid).image.texture, _platform.properties.get("min"), _platform.properties.get("max"), true));
 					
 				case "horizontal":
-					platforms.add(new Platform(platform.x, platform.y, level._map.getTilesetByGID(platform.gid).image.texture, platform.properties.get("min"), platform.properties.get("max"), false));
+					platforms.add(new Platform(_platform.x, _platform.y, level._map.getTilesetByGID(_platform.gid).image.texture, _platform.properties.get("min"), _platform.properties.get("max"), false));
 			}
 		}
 		
-		for (enemy in level._map.getObjectGroupByName("Enemies").objects)
+		for (_enemy in level._map.getObjectGroupByName("Enemies").objects)
 		{	
-			switch (enemy.name)
+			switch (_enemy.name)
 			{
 				case "bird":
-					enemies.add(new Enemy(enemy.x, enemy.y, enemy.rotation, enemy.name, player, enemy.properties.get("min"), enemy.properties.get("max"), enemy.type));
+					enemies.add(new Enemy(_enemy.x, _enemy.y, _enemy.rotation, _enemy.name, player, _enemy.properties.get("min"), _enemy.properties.get("max"), _enemy.type));
 					
 				case "rabbit":
-					enemies.add(new Enemy(enemy.x, enemy.y, enemy.rotation, enemy.name, player));
+					enemies.add(new Enemy(_enemy.x, _enemy.y, _enemy.rotation, _enemy.name, player));
 			}
 		}
 	}
@@ -294,8 +323,6 @@ class Level_0001 extends FlxState
 			
 			invisibles.exists = !player.abilities.seeing;
 			visibles.exists = player.abilities.seeing;
-			
-			if (FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenu());
 			
 			if (!player.isOnScreen() && !player.portaling) FlxG.resetState();
 			

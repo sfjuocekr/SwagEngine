@@ -5,7 +5,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import swagEngine.swagHandler.Settings;
 import swagEngine.yoloController.playerSwag.PlayerRenderer;
-import swagEngine.yoloController.levelSwag.yoloObjects.behavior.BirdBehavior;
+import swagEngine.yoloController.levelSwag.yoloObjects.swagBehavior.BirdBehavior;
 
 /**
  * ...
