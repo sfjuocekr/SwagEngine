@@ -103,7 +103,7 @@
   <object type="heart" gid="84" x="6896" y="160"/>
   <object type="heart" gid="84" x="7912" y="88"/>
   <object type="heart" gid="84" x="10240" y="512"/>
-  <object type="heart" gid="84" x="11168" y="480"/>
+  <object type="heart" gid="84" x="11184" y="480"/>
   <object type="heart" gid="84" x="7280" y="160"/>
   <object type="heart" gid="84" x="6112" y="160"/>
   <object type="heart" gid="84" x="4704" y="544"/>
@@ -117,12 +117,13 @@
   <object type="heart" gid="84" x="8232" y="672"/>
   <object type="heart" gid="84" x="9096" y="480"/>
   <object type="heart" gid="84" x="9920" y="592"/>
-  <object gid="84" x="7456" y="192"/>
-  <object gid="84" x="7744" y="128"/>
-  <object gid="84" x="448" y="544"/>
-  <object gid="84" x="960" y="416"/>
-  <object gid="84" x="9248" y="592"/>
+  <object type="heart" gid="84" x="7456" y="192"/>
+  <object type="heart" gid="84" x="7744" y="128"/>
+  <object type="heart" gid="84" x="448" y="544"/>
+  <object type="heart" gid="84" x="960" y="416"/>
+  <object type="heart" gid="84" x="9248" y="592"/>
   <object type="heart" gid="84" x="9584" y="376"/>
+  <object type="heart" gid="84" x="7920" y="576"/>
  </objectgroup>
  <layer name="Background" width="384" height="32">
   <data encoding="csv">
@@ -400,10 +401,10 @@
    </properties>
   </object>
   <object name="rabbit" gid="82" x="11168" y="608"/>
-  <object name="bird" type="agressive" gid="81" x="9568" y="704">
+  <object name="bird" type="agressive" gid="81" x="9568" y="384">
    <properties>
-    <property name="max" value="297"/>
-    <property name="min" value="301"/>
+    <property name="max" value="288"/>
+    <property name="min" value="310"/>
    </properties>
   </object>
  </objectgroup>
@@ -429,9 +430,9 @@
   <object type="light" gid="89" x="7248" y="672"/>
   <object type="spider" gid="88" x="7456" y="720"/>
   <object type="spider" gid="88" x="8584" y="576"/>
-  <object type="spider" gid="88" x="11400" y="672"/>
+  <object type="spider" gid="88" x="10544" y="696"/>
   <object type="spider" gid="88" x="10840" y="288"/>
-  <object type="spider" gid="88" x="11168" y="672"/>
+  <object type="spider" gid="88" x="10448" y="696"/>
   <object type="spider" gid="88" x="9568" y="320"/>
   <object type="spider" gid="88" x="7904" y="928"/>
   <object type="spider" gid="88" x="7904" y="216"/>
