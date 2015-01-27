@@ -50,6 +50,7 @@ class Level_0001 extends FlxState
 	private var enemies:FlxGroup = new FlxGroup();
 	private var fluffObjects:FlxGroup = new FlxGroup();
 	private var lightBowls:FlxGroup = new FlxGroup();
+	private var light:FlxGroup = new FlxGroup();
 	
 	private var fireball:BitmapData;
 	
@@ -85,6 +86,7 @@ class Level_0001 extends FlxState
 		
 		add(fluffObjects);						// Add some fluff animations
 		add(fluffTiles);						// Add some tiles belonging to fluff animations
+		add(light);								// Add some lights
 		
 		add(foreground);														// Foreground
 		
@@ -159,15 +161,15 @@ class Level_0001 extends FlxState
 					fluffObjects.add(new Spider(_fluff.x, _fluff.y));
 					
 				case "light":
-					fluffObjects.add(new Light(_fluff.x, _fluff.y));
+					light.add(new Light(_fluff.x, _fluff.y));
+					
+				case "lightbowl":
+					lightBowls.add(new LightBowl(_fluff.x, _fluff.y));
 					
 				case "mouse":
 					fluffObjects.add(new Mouse(_fluff.x, _fluff.y, _fluff.properties.get("min"), _fluff.properties.get("max")));
 			}
 		}
-		
-		for (_bowl in level._map.getObjectGroupByName("LightBowls").objects)
-			lightBowls.add(new LightBowl(_bowl.x, _bowl.y));
 		
 		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
 			 player = new PlayerRenderer(_player.x + 16, _player.y, shots);
@@ -330,7 +332,6 @@ class Level_0001 extends FlxState
 			FlxG.overlap(portals, player, doPortal);
 			
 			FlxG.overlap(shots, enemies, shotEnemy);
-			FlxG.overlap(shots, fluffObjects, shotEnemy);
 			
 			FlxG.overlap(shots, solid, shotLevel);
 			
@@ -339,7 +340,8 @@ class Level_0001 extends FlxState
 			
 			FlxG.overlap(shots, foreground, shotFluff);
 			FlxG.overlap(shots, background, shotFluff);
-			FlxG.overlap(shots, fluffTiles, shotFluff);
+			//FlxG.overlap(shots, fluffTiles, shotFluff);
+			FlxG.overlap(shots, fluffObjects, shotFluff);
 			
 			invisibles.exists = !player.abilities.seeing;
 			visibles.exists = player.abilities.seeing;

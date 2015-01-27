@@ -29,8 +29,11 @@ class Dove extends FlxSprite
 		var framesArray = new Array();
 			for (i in 0...27) framesArray[i] = i;
 		
+		for (i in 0...Std.random(framesArray.length))
+			framesArray.push(framesArray.shift());
+		
 		animation.add("fly", framesArray, 30, true);
-		animation.play("fly");
+		animation.play("fly", false, false, -1);
 		
 		facing = FlxObject.RIGHT;
 		

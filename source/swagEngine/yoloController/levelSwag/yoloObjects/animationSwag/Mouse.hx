@@ -21,9 +21,12 @@ class Mouse extends FlxSprite
 		
 		var framesArray = new Array();
 			for (i in 0...4) framesArray[i] = i;
-			
+		
+		for (i in 0...Std.random(framesArray.length))
+			framesArray.push(framesArray.shift());
+		
 		animation.add("dribble", framesArray, 10, true);
-		animation.play("dribble");
+		animation.play("dribble", false, false, -1);
 		
 		min = Std.parseInt(_min);
 		max = Std.parseInt(_max);

@@ -18,8 +18,11 @@ class Spider extends FlxSprite
 		
 		var framesArray = new Array();
 			for (i in 0...24) framesArray[i] = i;
-			
+		
+		for (i in 0...Std.random(framesArray.length))
+			framesArray.push(framesArray.shift());
+		
 		animation.add("dangle", framesArray, 10, true);
-		animation.play("dangle"); 
+		animation.play("dangle", false, false, -1); 
 	}
 }

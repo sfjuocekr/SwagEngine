@@ -44,7 +44,7 @@ class Rabbit extends FlxSprite
 		framesArray = [0, 1, 2, 3, 4, 135, 136, 137];
 		animation.add("inside", framesArray, 2, false);
 		
-		animation.play("pop");
+		animation.play("pop", false, false, -1);
 		
 		immovable = true;
 	}
