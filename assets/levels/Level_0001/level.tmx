@@ -97,7 +97,7 @@
  <objectgroup name="Cards">
   <object type="heart" gid="84" x="2736" y="728" width="32" height="48"/>
   <object type="heart" gid="84" x="2096" y="768" width="32" height="48"/>
-  <object type="heart" gid="84" x="5104" y="151" width="32" height="48"/>
+  <object type="heart" gid="84" x="5104" y="160" width="32" height="48"/>
   <object type="heart" gid="84" x="1552" y="696" width="32" height="48"/>
   <object type="heart" gid="84" x="6384" y="160"/>
   <object type="heart" gid="84" x="6896" y="160"/>
@@ -110,7 +110,7 @@
   <object type="heart" gid="84" x="3600" y="560"/>
   <object type="heart" gid="84" x="704" y="480"/>
   <object type="heart" gid="84" x="4192" y="736"/>
-  <object type="heart" gid="84" x="7616" y="160"/>
+  <object type="heart" gid="84" x="7600" y="160"/>
   <object type="heart" gid="84" x="11424" y="320"/>
   <object type="heart" gid="84" x="11168" y="224"/>
   <object type="heart" gid="84" x="10944" y="160"/>
@@ -401,7 +401,7 @@
    </properties>
   </object>
   <object name="rabbit" gid="82" x="11168" y="608"/>
-  <object name="bird" type="agressive" gid="81" x="9568" y="384">
+  <object name="bird" type="aggressive" gid="81" x="9568" y="384">
    <properties>
     <property name="max" value="288"/>
     <property name="min" value="310"/>
