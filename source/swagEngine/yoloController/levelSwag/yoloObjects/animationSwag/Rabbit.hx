@@ -75,13 +75,11 @@ class Rabbit extends FlxSprite
 					
 					FlxG.overlap(player, this, FlxObject.separate);
 					
-					player.hurt(20);	// FIX UPSIDE DOWN
-					trace(touching);
+					player.hurt(20);
 				}
 			
 			case "inside":
 				if (animation.finished && !overlaps(player)) animation.play("pop");
-				//else if (animation.finished && overlaps(player) && player.touching == 0) animation.play("pop");
 				
 				height = 64;
 				offset.y = (angle == 180) ? 0 : 64;

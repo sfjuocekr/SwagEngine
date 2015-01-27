@@ -22,7 +22,8 @@ class AbilityManager
 	private var player:PlayerRenderer;
 	private var shots:FlxGroup;
 	
-	private var timer:Timer = new Timer(2500);
+	private var floatTimer:Timer = new Timer(2500);
+	private var shrinkTimer:Timer = new Timer(2500);
 	private var seeTimer:Timer = new Timer(5000);
 	
 	public var scaled:Bool = false;
@@ -67,6 +68,10 @@ class AbilityManager
 		map.set("see", see);
 		
 		for (i in 0...4) setAbilities(i);
+		
+		floatTimer.addEventListener(TimerEvent.TIMER, normalGravity);
+		seeTimer.addEventListener(TimerEvent.TIMER, unsee);
+		shrinkTimer.addEventListener(TimerEvent.TIMER, growUp);
 	}
 	
 	public function rotate(_suit:Int)
@@ -93,14 +98,13 @@ class AbilityManager
 	
 	private function see()
 	{
-		if (cards.energy[1] > 0 && !seeing)
+		//if (cards.energy[1] > 0 && !seeing)
+		if (!seeing)
 		{
 			cards.energy[1]--;
 			
 			seeing = true;
 			
-			seeTimer.addEventListener(TimerEvent.TIMER, unsee);
-			seeTimer.reset();
 			seeTimer.start();
 		}
 	}
@@ -108,23 +112,25 @@ class AbilityManager
 	private function unsee(e)
 	{
 		seeing = false;
-		seeTimer.removeEventListener(TimerEvent.TIMER, unsee);
-		seeTimer.stop();
+		
+		seeTimer.reset();
 	}
 	
 	private function touchOfDeath()
 	{
-		if (cards.energy[2] > 1 && deadly == 0)
+		//if (cards.energy[2] > 0 && deadly < 2)
+		if (deadly < 2)
 		{
-			cards.energy[2] -= 2;
+			cards.energy[2] --;
 			
-			deadly = 1;
+			deadly++;
 		}
 	}
 	
 	private function shoot()
 	{
-		if (cards.energy[2] > 0 && ammo == 0)
+		//if (cards.energy[2] > 0 && ammo == 0)
+		if (ammo == 0)
 		{
 			cards.energy[2]--;
 			
@@ -154,19 +160,25 @@ class AbilityManager
 			shot.timer.start();
 			
 			shot.alpha = 1;
-			shot.health = 2;
+			shot.health = 4;
 		}
 	}
 	
 	private function jump()
 	{
-		if (player.isTouching(FlxObject.FLOOR))	player.velocity.y -= scaled ? 500 : 400;
-		else if (cards.energy[3] > 0 && !player.isTouching(FlxObject.FLOOR) && !floating)
+		if (!jumping)
 		{
+			jumping = true;
+			player.velocity.y -= scaled ? 500 : 400;
+		}
+		//else if (cards.energy[3] > 0 && jumping && !floating)
+		else if (jumping && !floating)
+		{
+			jumping = true;
 			cards.energy[3]--;
 			
-			cards.timer.reset();
-			cards.timer.start();
+			cards.spadeTimer.reset();
+			cards.spadeTimer.start();
 			
 			player.velocity.y = 0;
 			player.velocity.y -= scaled ? 400 : 300;
@@ -175,60 +187,50 @@ class AbilityManager
 	
 	private function float()
 	{
-		if (scaled || floating) return;
-		else if (cards.energy[0] > 0)
-		{
+		if (floating) return;
+		
+		//if (cards.energy[0] > 0)
+		//{
 			cards.energy[0]--;
-			
-			player.acceleration.y = 250;
 			
 			floating = true;
 			
-			timer.addEventListener(TimerEvent.TIMER, normalGravity);
-			timer.reset();
-			timer.start();
-		}
+			floatTimer.start();
+		//}
 	}
 	
 	private function normalGravity(e)
 	{
-		timer.removeEventListener(TimerEvent.TIMER, normalGravity);
-		timer.stop();
-		
-		player.acceleration.y = 1000;
+		floatTimer.reset();
 		
 		floating = false;
 	}
 	
 	private function shrink()
 	{
-		if (jumping || scaled) return;
-		else if (cards.energy[0] > 0)
-		{
+		if (scaled) return;
+		
+		//if (cards.energy[0] > 0)
+		//{
 			cards.energy[0]--;
 			
 			player.maxVelocity.x += 50;
 			player.y += player.frameHeight * 0.5;
-			player.x += player.frameWidth * 0.25;
 			player.scale.set(0.5, 0.5);
 			player.updateHitbox();
 			
 			scaled = true;
 				
-			timer.addEventListener(TimerEvent.TIMER, growUp);
-			timer.reset();
-			timer.start();
-		}
+			shrinkTimer.start();
+//		}
 	}
 	
 	private function growUp(e)
 	{
-		timer.removeEventListener(TimerEvent.TIMER, growUp);
-		timer.stop();
+		shrinkTimer.reset();
 		
 		player.maxVelocity.x -= 50;
 		player.y -= player.frameHeight * 0.5;
-		player.x -= player.frameWidth * 0.25;
 		player.scale.set(1, 1);
 		player.updateHitbox();
 		
@@ -240,9 +242,11 @@ class AbilityManager
 		player = null;
 		shots = null;
 		
-		timer.removeEventListener(TimerEvent.TIMER, growUp);
-		timer.removeEventListener(TimerEvent.TIMER, normalGravity);
-		timer = null;
+		floatTimer.removeEventListener(TimerEvent.TIMER, normalGravity);
+		floatTimer = null;
+		
+		shrinkTimer.removeEventListener(TimerEvent.TIMER, growUp);
+		shrinkTimer = null;
 		
 		seeTimer.removeEventListener(TimerEvent.TIMER, unsee);
 		seeTimer = null;

@@ -3,8 +3,10 @@ package swagEngine.interSwag.cardSwag;
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import flixel.util.FlxColor;
 
 /**
  * ...
@@ -13,23 +15,28 @@ import openfl.display.BitmapData;
 
 class Card extends FlxSpriteGroup
 {
-	public var type:String = "none";
+	public var type:String;
+	
+	private var keyText:FlxText;
 	
 	private var front:FlxSprite = new FlxSprite(0, 0, "assets/images/card.png");
 	private var back:FlxSprite = new FlxSprite(0, 0, "assets/images/cardslot.png");
-	
 	private var image:FlxSprite = new FlxSprite(4, 10);
 	
 	public var ready:Bool = false;
 	
-	public function new(_x:Float, _y:Float, _type:String)
+	public function new(_x:Float, _y:Float, _type:String, _key:String)
 	{
 		super(_x, _y);
+		
+		keyText = new FlxText(4, 2, 0, _key, 16, true);
+		keyText.color = FlxColor.BLACK;
 		
 		setType(type);
 		
 		add(front);
 		add(image);
+		add(keyText);
 		add(back);
 	}
 	
@@ -65,7 +72,7 @@ class Card extends FlxSpriteGroup
 	{
 		if (e == 0) return;
 		
-		front.visible = image.visible = ready;
+		front.visible = image.visible = keyText.visible = ready;
 		back.visible = !ready;
 		
 		super.update(e);

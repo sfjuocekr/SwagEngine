@@ -29,7 +29,7 @@ class Shot extends FlxSprite
 		
 		updateHitbox();
 		
-		health = 2;
+		health = 4;
 	}
 	
 	private function stop(e)

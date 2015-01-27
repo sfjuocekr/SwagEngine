@@ -19,17 +19,29 @@ class CardManager
 	
 	public var collected:Array<Int> = [0, 0, 0];
 	
-	public var timer:Timer = new Timer(2000);
+	public var diamondTimer:Timer = new Timer(5000);
+	public var clubTimer:Timer = new Timer(5000);
+	public var heartTimer:Timer = new Timer(2500);
+	public var spadeTimer:Timer = new Timer(1250);
 	
 	public function new() 
 	{
-		timer.addEventListener(TimerEvent.TIMER, powerUp);
-		timer.start();	
+		diamondTimer.addEventListener(TimerEvent.TIMER, powerUpDiamonds);
+		diamondTimer.start();
+		
+		clubTimer.addEventListener(TimerEvent.TIMER, powerUpClubs);
+		clubTimer.start();
+		
+		heartTimer.addEventListener(TimerEvent.TIMER, powerUpHearts);
+		heartTimer.start();
+		
+		spadeTimer.addEventListener(TimerEvent.TIMER, powerUpSpades);
+		spadeTimer.start();
 	}
 	
 	public function collect(_suit:String)
 	{
-	/*	switch (_suit)				// HACK ENERGY, ONLY ONE CARD ATM
+	/*	switch (_suit)				// HACK ENERGY, ONLY ONE CARD ATM MIGHT BE ADDED LATER FOR NOW JUST TIMERS
 		{
 			case "diamond":
 				energy[0]++;
@@ -59,23 +71,42 @@ class CardManager
 		if (collected[2] == 1)
 		{
 			trace("GAME OVER!");
-			
-			// play titlescreen animation or whatever.
 		}
 	}
 	
-	private function powerUp(e)
+	private function powerUpDiamonds(e:TimerEvent)
 	{
-		for (i in 0...4)
-			if (energy[i] == 0) energy[i]++;
+		if (energy[0] == 0) energy[0]++;
+	}
+	
+	private function powerUpClubs(e:TimerEvent)
+	{
+		if (energy[1] == 0) energy[1]++;
+	}
+	
+	private function powerUpHearts(e:TimerEvent)
+	{
+		if (energy[2] == 0) energy[2]++;
+	}
+	
+	private function powerUpSpades(e:TimerEvent)
+	{
+		if (energy[3] == 0) energy[3]++;
 	}
 	
 	public function destroy()
 	{
-		timer.removeEventListener(TimerEvent.TIMER, powerUp);
+		diamondTimer.removeEventListener(TimerEvent.TIMER, powerUpDiamonds);
+		clubTimer.removeEventListener(TimerEvent.TIMER, powerUpClubs);
+		heartTimer.removeEventListener(TimerEvent.TIMER, powerUpHearts);
+		spadeTimer.removeEventListener(TimerEvent.TIMER, powerUpSpades);
 		
 		slots = null;
 		energy = null;
-		timer = null;
+		
+		diamondTimer = null;
+		clubTimer = null;
+		heartTimer = null;
+		spadeTimer = null;
 	}
 }

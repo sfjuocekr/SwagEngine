@@ -5,6 +5,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import openfl.tiled.FlxTile;
 import format.SVG;
 import openfl.Assets;
 import openfl.display.BitmapData;
@@ -169,7 +170,7 @@ class Level_0001 extends FlxState
 			lightBowls.add(new LightBowl(_bowl.x, _bowl.y));
 		
 		var _player = level._map.getObjectByName("player_start", level._map.getObjectGroupByName("Player"));
-			 player = new PlayerRenderer(_player.x, _player.y, shots);
+			 player = new PlayerRenderer(_player.x + 16, _player.y, shots);
 		
 		for (card in level._map.getObjectGroupByName("Cards").objects)
 			cards.add(new Card(card.x, card.y, level._map.getTilesetByGID(card.gid).image.texture, card.type));
@@ -246,21 +247,36 @@ class Level_0001 extends FlxState
 	
 	private function shotEnemy(_shot:FlxObject, _enemy:FlxObject)
 	{
-		_shot.hurt(2);
-		
 		if (Type.getClass(_enemy) == Rabbit)
 		{
+			_shot.hurt(4);
+			
 			if (cast(_enemy, Rabbit).animation.curAnim.name == "pop")
 			{
 				_enemy.kill();
 			}
+			else cast(_enemy, Rabbit).animation.play("pop");
 		}
-		else _enemy.kill();
+		else
+		{
+			_shot.hurt(2);
+			
+			_enemy.kill();
+		}
 	}
 	
-	private function shotLevel(_shot:FlxObject, _tile:FlxObject)
+	private function shotLevel(_shot:FlxObject, _tile:FlxTile)
 	{
-		_shot.hurt(1);
+		if (visibles.members.indexOf(_tile) != -1 || invisibles.members.indexOf(_tile) != -1)
+			_shot.hurt(1);
+		else 
+			_shot.hurt(2);
+		
+		_tile.kill();
+	}
+	
+	private function shotFluff(_shot:FlxObject, _tile:FlxObject)
+	{
 		_tile.kill();
 	}
 
@@ -314,19 +330,22 @@ class Level_0001 extends FlxState
 			FlxG.overlap(portals, player, doPortal);
 			
 			FlxG.overlap(shots, enemies, shotEnemy);
+			FlxG.overlap(shots, fluffObjects, shotEnemy);
 			
 			FlxG.overlap(shots, solid, shotLevel);
+			
 			FlxG.overlap(shots, visibles, shotLevel);
 			FlxG.overlap(shots, invisibles, shotLevel);
-			FlxG.overlap(shots, foreground, shotLevel);
-			FlxG.overlap(shots, background, shotLevel);
+			
+			FlxG.overlap(shots, foreground, shotFluff);
+			FlxG.overlap(shots, background, shotFluff);
+			FlxG.overlap(shots, fluffTiles, shotFluff);
 			
 			invisibles.exists = !player.abilities.seeing;
 			visibles.exists = player.abilities.seeing;
 			
-			if (!player.isOnScreen() && !player.portaling) FlxG.resetState();
-			
-			if (!player.alive) FlxG.resetState();
+			if (!player.isOnScreen() && !player.portaling) player.health = 0;
+			if (!player.alive || player.health <= 0) FlxG.resetState();
 		}
 		
 		super.update(e);

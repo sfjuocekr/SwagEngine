@@ -29,23 +29,10 @@ class PlayerRenderer extends FlxSprite
 	{
 		super(_x, _y);
 		
-		//loadGraphic("assets/animations/player.png", true, 64, 128);
 		loadGraphic("assets/animations/playertest.png", true, 64, 128);
 		
 		x -= width * 0.25;
 		y -= height;
-		
-		/*var framesArray = new Array();
-			for (i in 0...19)
-				framesArray[i] = i;
-		animation.add("walking", framesArray, 30, true);
-		
-		var framesArray = new Array();
-			for (i in 20...33)
-				framesArray[i - 20] = i;
-		animation.add("resting", framesArray, 5, true);
-		*/
-		
 		
 		var framesArray = new Array();
 			for (i in 0...14)
@@ -56,7 +43,6 @@ class PlayerRenderer extends FlxSprite
 			for (i in 0...133)
 				framesArray[i] = i;
 		animation.add("resting", framesArray, 20, true);
-		
 		
 		facing = FlxObject.RIGHT;
 		
@@ -118,11 +104,7 @@ class PlayerRenderer extends FlxSprite
 		
 		acceleration.x = 0;
 		
-		if (FlxG.keys.justPressed.UP)
-		{
-			abilities.spades();
-		}
-		else if (FlxG.keys.justPressed.DOWN)
+		if (FlxG.keys.justPressed.DOWN)
 		{
 			velocity.y += abilities.scaled ? 400 : 300;
 		}
@@ -145,33 +127,49 @@ class PlayerRenderer extends FlxSprite
 		}
 		else animation.play("resting");
 		
-		
-		// ROTATE CARDS
 		if (FlxG.keys.justPressed.Q)
 			abilities.rotate(0);
-			
+		
 		if (FlxG.keys.justPressed.W)
 			abilities.rotate(1);
-			
+		
 		if (FlxG.keys.justPressed.E)
 			abilities.rotate(2);
 			
-		if (FlxG.keys.justPressed.R)		// Probably useless will never rotate spades? Maybe?
+		if (FlxG.keys.justPressed.R)
 			abilities.rotate(3);
 		
-		// USE ABILITY
-		if (FlxG.keys.justPressed.A)
+		if (FlxG.keys.justPressed.A && abilities.cards.energy[0] > 0)
+		{
+			abilities.cards.diamondTimer.reset();
+			abilities.cards.diamondTimer.start();
+			
 			abilities.diamonds();
+		}
+		
+		if (FlxG.keys.justPressed.S && abilities.cards.energy[1] > 0)
+		{
+			abilities.cards.clubTimer.reset();
+			abilities.cards.clubTimer.start();
 			
-		if (FlxG.keys.justPressed.S)
 			abilities.clubs();
+		}
+		
+		if (FlxG.keys.justPressed.D && (abilities.cards.energy[2] > 0 || abilities.ammo > 0))
+		{
+			abilities.cards.heartTimer.reset();
+			abilities.cards.heartTimer.start();
 			
-		if (FlxG.keys.justPressed.D)
 			abilities.hearts();
-			
-		if (FlxG.keys.justPressed.F)		// Probably useless space = spades
+		}
+		
+		if (touching == FlxObject.DOWN || touching == 4112) abilities.jumping = false;	// 4112 = rare ocassion when you are "in" a wall
+		//trace(touching);
+		
+		if (FlxG.keys.anyJustPressed([UP, F]) && (abilities.cards.energy[3] > 0 || !abilities.jumping))
 			abilities.spades();
 		
+#if !FLX_NO_DEBUG		
 		if (FlxG.keys.justPressed.I)
 		{
 			animation.curAnim.frameRate++;
@@ -185,6 +183,12 @@ class PlayerRenderer extends FlxSprite
 		
 		if (FlxG.keys.justPressed.G)
 			godmode = !godmode;
+#end
+
+		// HACKS
+		width = 32;
+		offset.x = 16;
+		acceleration.y = abilities.floating ? 250 : 1000;
 		
 		super.update(e);
 	}

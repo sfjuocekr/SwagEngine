@@ -58,6 +58,8 @@ class Interface	extends FlxSpriteGroup
 	private var hearts:Card;
 	private var spades:Card;
 	
+	private var healthBar:FlxSprite = new FlxSprite();
+	
 	public function new(_player:PlayerRenderer) 
 	{
 		super();
@@ -66,14 +68,12 @@ class Interface	extends FlxSpriteGroup
 		
 		scrollFactor.set(0, 0);
 		
-#if !FLX_NO_DEBUG		
+		#if !FLX_NO_DEBUG		
 			cardOverlay.makeGraphic(384, 128, FlxColor.BLACK);
 			cardOverlay.x = FlxG.width - cardOverlay.width;
 			cardOverlay.y = FlxG.height - cardOverlay.height;
 		add(cardOverlay);
 		
-		
-		// energy
 			healthText = 	new FlxText(cardOverlay.x + 8,	cardOverlay.y + 8,	368, null, 16, true);
 		add(healthText);
 		
@@ -89,13 +89,10 @@ class Interface	extends FlxSpriteGroup
 			spadeText = 	new FlxText(healthText.x,		heartText.y + 20,	368, null, 16, true);
 		add(spadeText);
 		
-		
 			cardsText = 	new FlxText(cardOverlay.x + 8,	cardOverlay.y + 8,	368, null, 16, true);
 			cardsText.alignment = "right";
 		add(cardsText);
 		
-		
-		// slots
 			diamondsText = 	new FlxText(healthText.x,		healthText.y + 28,	368, null, 16, true);
 			diamondsText.alignment = "right";
 		add(diamondsText);
@@ -111,23 +108,26 @@ class Interface	extends FlxSpriteGroup
 			spadesText = 	new FlxText(healthText.x,		heartText.y + 20,	368, null, 16, true);
 			spadesText.alignment = "right";
 		add(spadesText);
-#end
+		#end
 		
 		add(red);
 		add(silver);
 		add(gold);
 		
-		//add cards
-		diamonds =	new Card(480, FlxG.height - 72, player.abilities.cards.slots[0][0]);
-		clubs =		new Card(560, FlxG.height - 72, player.abilities.cards.slots[1][0]);
-		hearts =	new Card(640, FlxG.height - 72, player.abilities.cards.slots[2][0]);
-		spades =	new Card(720, FlxG.height - 72, player.abilities.cards.slots[3][0]);
+		diamonds =	new Card(480, FlxG.height - 72, player.abilities.cards.slots[0][0], "A");
+		clubs =		new Card(560, FlxG.height - 72, player.abilities.cards.slots[1][0], "S");
+		hearts =	new Card(640, FlxG.height - 72, player.abilities.cards.slots[2][0], "D");
+		spades =	new Card(720, FlxG.height - 72, player.abilities.cards.slots[3][0], "F");
 		
 		add(diamonds);
 		add(clubs);
 		add(hearts);
 		add(spades);
-		//
+		
+			healthBar.makeGraphic(312, 8, FlxColor.RED);
+			healthBar.x = FlxG.width * 0.5 - healthBar.width * 0.5 - 4;
+			healthBar.y = FlxG.height - 72 - healthBar.height * 2;
+		add(healthBar);
 		
 			menuBG.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(menuBG);
@@ -168,7 +168,7 @@ class Interface	extends FlxSpriteGroup
 	
 	override public function update(e:Float)
 	{
-#if !FLX_NO_DEBUG
+		#if !FLX_NO_DEBUG
 		healthText.text =	"Health: " +		Std.string((player.health < 0) ? 0 : player.health);
 		
 		cardsText.text =	"Collection: " +	"B: " + Std.string(player.abilities.cards.collected[0]) + " S: " + Std.string(player.abilities.cards.collected[1]) + " G: " + Std.string(player.abilities.cards.collected[2]);
@@ -182,14 +182,12 @@ class Interface	extends FlxSpriteGroup
 		clubsText.text =	player.abilities.cards.slots[1].toString();
 		heartsText.text =	player.abilities.cards.slots[2].toString();
 		spadesText.text =	player.abilities.cards.slots[3].toString();
-#end
+		#end
 		
-		//BALLZ
 		red.alpha = (player.abilities.cards.collected[2] >= 1) ? 0 : 1 - (10 - player.abilities.cards.collected[0]) / 10;
 		silver.alpha = (player.abilities.cards.collected[2] >= 1) ? 0 : 1 - (3 - player.abilities.cards.collected[1]) / 3;
 		gold.alpha = (player.abilities.cards.collected[2] >= 1) ? 1 : 0;
 		
-		// NEW CARD STUFFS
 		diamonds.ready =	(player.abilities.cards.energy[0] > 0);
 		clubs.ready =		(player.abilities.cards.energy[1] > 0);
 		hearts.ready =		(player.abilities.cards.energy[2] > 0);
@@ -200,9 +198,12 @@ class Interface	extends FlxSpriteGroup
 		if (hearts.type !=		player.abilities.cards.slots[2][0]) hearts.setType(player.abilities.cards.slots[2][0]);
 		if (spades.type !=		player.abilities.cards.slots[3][0]) spades.setType(player.abilities.cards.slots[3][0]);
 		
-		// lazy
-		if (FlxG.keys.justPressed.ESCAPE) escapeMenu.visible = !escapeMenu.visible;
+		if (FlxG.keys.justPressed.ESCAPE && escapeMenu.visible) FlxG.switchState(new MainMenu());
+		else if (FlxG.keys.justPressed.ESCAPE) escapeMenu.visible = !escapeMenu.visible;
+		
 		menuBG.visible = resumeButton.visible = saveButton.visible = exitButton.visible = escapeMenu.visible;
+		
+		healthBar.scale.x = (player.health < 0.1) ? 0 : player.health / 1000;
 		
 		super.update(e);
 	}
