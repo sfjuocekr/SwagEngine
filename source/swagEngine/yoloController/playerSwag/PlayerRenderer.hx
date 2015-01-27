@@ -164,7 +164,7 @@ class PlayerRenderer extends FlxSprite
 		}
 		
 		if (touching == FlxObject.DOWN || touching == 4112) abilities.jumping = false;	// 4112 = rare ocassion when you are "in" a wall
-		//trace(touching);
+		trace(touching);	// NEED TO FIND THE LEFT SIDE CONDITION, 4112 = right side. It is a bitmask, too tired to think about it now.
 		
 		if (FlxG.keys.anyJustPressed([UP, F]) && (abilities.cards.energy[3] > 0 || !abilities.jumping))
 			abilities.spades();
