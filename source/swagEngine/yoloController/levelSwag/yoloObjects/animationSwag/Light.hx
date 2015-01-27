@@ -18,7 +18,10 @@ class Light extends FlxSprite
 		
 		var framesArray = new Array();
 			for (i in 0...62) framesArray[i] = i;
-			
+		
+		for (i in 0...Std.random(62))
+			framesArray.push(framesArray.shift());			
+		
 		animation.add("default", framesArray, 10, true);
 		animation.play("default"); 
 	}
