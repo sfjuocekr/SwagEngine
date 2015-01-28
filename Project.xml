@@ -3,7 +3,7 @@
 	<app title="SwagEngine" file="SwagEngine" main="Main" package="com.UGH.SwagEngine" version="0.0.1" company="Sjoer van der Ploeg" />
 	<app preloader="flixel.system.FlxPreloader" />
 	
-	<window width="1280" height="736" background="#000000" hardware="true" vsync="true" />
+	<window width="1280" height="720" background="#000000" hardware="true" vsync="true" />
 	<window if="desktop" fullscreen="false" resizable="false" />
 	<window if="mobile" orientation="landscape" fullscreen="true" />
 	
@@ -17,7 +17,8 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="openfl-tiled" />
 	<haxelib name="openfl-tiled-flixel" />
-	<haxelib name="nape" />
+	<!--haxelib name="nape" /-->
+	<haxelib name="svg" />
 	
 	<haxedef name="FLX_NO_NATIVE_CURSOR" />
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
@@ -26,10 +27,8 @@
 	
 	<android minimum-sdk-version="16" target-sdk-version="21" />
 	
-	<haxeflag name="-dce std" unless="neko" />
-	<haxeflag name="-dce full" if="neko" />
-	<haxeflag name="--macro keep(null,['Main', 'flixel.system.FlxAssets', 'flixel.system.ui', 'flixel.input'])" />
+	<haxeflag name="-dce full" />
 	
 	<set name="PRERENDERED_ICON" value="true" />
-	<icon path="assets/icon.svg" />	
+	<icon path="assets/icon.png" />	
 </project>

@@ -1,54 +1,212 @@
 package swagEngine.yoloController.playerSwag;
 
-import flixel.addons.nape.FlxNapeSprite;
 import flixel.FlxG;
-import nape.phys.Body;
-import nape.phys.BodyType;
-import nape.phys.Material;
-import nape.shape.Polygon;
-import nape.dynamics.InteractionFilter;
 import flixel.FlxObject;
-import flixel.addons.nape.FlxNapeSpace;
+import flixel.FlxSprite;
+import flixel.FlxState;
+import openfl.events.TimerEvent;
+import openfl.utils.Timer;
+import swagEngine.swagHandler.Settings;
+import flixel.group.FlxGroup;
+import flixel.util.FlxDestroyUtil;
 
 /**
  * ...
  * @author Sjoer van der Ploeg
  */
 
-class PlayerRenderer extends FlxNapeSprite
+class PlayerRenderer extends FlxSprite
 {
-	private var controller:PlayerController;
-	public var cards:CardManager;
+	private var timer:Timer = new Timer(1000);
+	public var portalTimer:Timer = new Timer(100);
 	
-	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic)
+	public var abilities:AbilityManager;
+	
+	public var portaling:Bool = false;
+	public var godmode:Bool = false;
+	
+	public function new(_x:Float = 0, _y:Float = 0, _shots:FlxGroup)
 	{
-		super(x, y, SimpleGraphic, false, false);
+		super(_x, _y);
 		
-		body = new Body(BodyType.DYNAMIC);
-		body.position.setxy(x, y);
+		loadGraphic("assets/animations/playertest.png", true, 64, 128);
 		
-		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5,		-height * 0.5,			width, 		height - 2), 		new Material(0, 0, 0, 1, 0))); 		// BODY
-		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5,		 height * 0.5 - 2,		width, 				 2),		new Material(0, 0.1, 0, 1, 0))); // FEET
+		x -= width * 0.25;
+		y -= height;
 		
-		body.allowRotation = false;
-		body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
-		physicsEnabled = true;
+		var framesArray = new Array();
+			for (i in 0...14)
+				framesArray[i] = i + 133;
+		animation.add("walking", framesArray, 20, true);
+		
+		var framesArray = new Array();
+			for (i in 0...133)
+				framesArray[i] = i;
+		animation.add("resting", framesArray, 20, true);
 		
 		facing = FlxObject.RIGHT;
 		
-		controller = new PlayerController(this);
-		cards = new CardManager();
+		collisonXDrag = true;
+		solid = true;
+		
+		drag.x = Settings.drag * 2;
+		drag.y = Settings.drag;
+		
+		acceleration.y = Settings.acceleration;
+		acceleration.x = 0;
+		
+		maxVelocity.x = Settings.maxVelocity;
+		maxVelocity.y = Settings.maxVelocity * 2;
+		
+		abilities = new AbilityManager(this, _shots);
+		
+		animation.play("resting");
+		
+		timer.addEventListener(TimerEvent.TIMER, healthUp);
+		timer.start();
+		
+		portalTimer.addEventListener(TimerEvent.TIMER, didPortal);
 	}
 	
-	override public function update(elapsed:Float)
-	{		
-		controller.update();
+	private function healthUp(e)
+	{
+		if (health < 990) health += 10;
+		else if (health >= 990) health = 1000;
+	}
+	
+	private function didPortal(e)
+	{
+		portalTimer.stop();
 		
-		if (body.velocity.x > 300 && body.velocity.x > 10) body.velocity.x = 300;
-		else if (body.velocity.x < -300 && body.velocity.x < -10) body.velocity.x = -300;
+		portaling = false;
+	}
+	
+	override public function update(e:Float)			// NEED TO FIX THE UGLY IF BASED KEY INPUT
+	{
+		#if !FLX_NO_DEBUG
+		if (godmode)	// GODMODE HACK
+		{
+			health = 1000;
+			acceleration.y = 0;
+			for (i in 0...abilities.cards.energy.length)
+				abilities.cards.energy[i] = 1;
+		} else if (!godmode) acceleration.y = Settings.acceleration;
+		#end
 		
-		if (!(FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT) && body.velocity.x != 0) body.velocity.x *= 0.9;
+		if (e == 0) return;
 		
-		super.update(FlxG.elapsed);	
+		if (portaling)	// PORTAL HACK
+		{
+			super.update(e);
+			
+			return;
+		}
+		
+		acceleration.x = 0;
+		
+		if (FlxG.keys.justPressed.DOWN)
+		{
+			velocity.y += abilities.scaled ? 400 : 300;
+		}
+		
+		if (FlxG.keys.pressed.LEFT)
+		{
+			flipX = true;
+			facing = FlxObject.LEFT;
+			
+			velocity.x -= 100;
+			animation.play("walking");
+		}
+		else if (FlxG.keys.pressed.RIGHT)
+		{
+			flipX = false;
+			facing = FlxObject.RIGHT;
+			
+			velocity.x += 100;
+			animation.play("walking");
+		}
+		else animation.play("resting");
+		
+		if (FlxG.keys.justPressed.Q)
+			abilities.rotate(0);
+		
+		if (FlxG.keys.justPressed.W)
+			abilities.rotate(1);
+		
+		if (FlxG.keys.justPressed.E)
+			abilities.rotate(2);
+			
+		if (FlxG.keys.justPressed.R)
+			abilities.rotate(3);
+		
+		if (FlxG.keys.justPressed.A && abilities.cards.energy[0] > 0)
+		{
+			abilities.cards.diamondTimer.reset();
+			abilities.cards.diamondTimer.start();
+			
+			abilities.diamonds();
+		}
+		
+		if (FlxG.keys.justPressed.S && abilities.cards.energy[1] > 0)
+		{
+			abilities.cards.clubTimer.reset();
+			abilities.cards.clubTimer.start();
+			
+			abilities.clubs();
+		}
+		
+		if (FlxG.keys.justPressed.D && (abilities.cards.energy[2] > 0 || abilities.ammo > 0))
+		{
+			abilities.cards.heartTimer.reset();
+			abilities.cards.heartTimer.start();
+			
+			abilities.hearts();
+		}
+		
+		if (touching == FlxObject.DOWN || touching == 4112) abilities.jumping = false;	// 4112 = rare ocassion when you are "in" a wall
+		trace(touching);	// NEED TO FIND THE LEFT SIDE CONDITION, 4112 = right side. It is a bitmask, too tired to think about it now.
+		
+		if (FlxG.keys.anyJustPressed([UP, F]) && (abilities.cards.energy[3] > 0 || !abilities.jumping))
+			abilities.spades();
+		
+#if !FLX_NO_DEBUG		
+		if (FlxG.keys.justPressed.I)
+		{
+			animation.curAnim.frameRate++;
+			trace(animation.curAnim.frameRate);
+		}
+		else if (FlxG.keys.justPressed.K)
+		{
+			animation.curAnim.frameRate--;
+			trace(animation.curAnim.frameRate);
+		}
+		
+		if (FlxG.keys.justPressed.G)
+			godmode = !godmode;
+#end
+
+		// HACKS
+		width = 32;
+		offset.x = 16;
+		acceleration.y = abilities.floating ? 250 : 1000;
+		
+		super.update(e);
+	}
+	
+	override public function destroy()
+	{
+		abilities.destroy();
+		abilities = null;
+		
+		portaling = false;
+		godmode = false;
+		
+		portalTimer.removeEventListener(TimerEvent.TIMER, didPortal);
+		portalTimer = null;
+		
+		timer.removeEventListener(TimerEvent.TIMER, healthUp);
+		portalTimer = null;
+		
+		super.destroy();
 	}
 }

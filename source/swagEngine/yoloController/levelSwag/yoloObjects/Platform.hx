@@ -1,63 +1,66 @@
 package swagEngine.yoloController.levelSwag.yoloObjects ;
 
-import flixel.addons.nape.FlxNapeSprite;
-import nape.phys.Body;
-import nape.phys.BodyType;
-import nape.phys.Material;
-import nape.shape.Polygon;
 import flixel.FlxG;
-import nape.dynamics.InteractionFilter;
+import flixel.FlxSprite;
+
 
 /**
  * ...
  * @author Sjoer van der Ploeg
  */
 
-class Platform extends FlxNapeSprite
+class Platform extends FlxSprite
 {
 	private var min:Int = 0;
 	private var max:Int = 0;
 	private var xMovement:Float = 0;
 	private var yMovement:Float = 0;
 	
-	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic, a:String, b:String, axis:Bool)
+	public function new(_x:Float = 0, _y:Float = 0, _SimpleGraphic:Dynamic, _min:String, _max:String, _axis:Bool)
 	{
-		super(x, y, SimpleGraphic, false, false);
+		super(_x, _y, _SimpleGraphic);
 		
-		body = new Body(BodyType.KINEMATIC);
-		body.position.setxy(x, y);
+		y -= height;
 		
-		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5,		-height * 0.5,			width,				2),						new Material(0, 0.15, 0.1, 1, 0)));		// TOP
-		body.shapes.add(new Polygon(Polygon.rect(-width * 0.5, 		-height * 0.5 + 2,		width,				height - 2),			new Material(0, 0, 0, 1, 0))); 			// BOTTOM
-		
-		body.setShapeFilters(new InteractionFilter(1, -1, 0, 0, 0, 0));
-		physicsEnabled = true;
-		
-		if (axis) yMovement = 1;
+		if (_axis) yMovement = 1;
 		else xMovement = 1;
 		
-		min = Std.parseInt(a);
-		max = Std.parseInt(b);
+		min = Std.parseInt(_min);
+		max = Std.parseInt(_max);
+		
+		immovable = true;
 	}
 	
-	override public function update (elapsed:Float)
+	override public function update(e:Float)
 	{
+		if (e == 0) return;
+		
 		if (xMovement != 0)
 		{
-			if (body.position.x < min * 32 + width * 0.5) xMovement = 1;
-			else if (body.position.x > max * 32 + width * 0.5) xMovement = -1;
-		
-			body.velocity.x = xMovement * 64;
+			if (x < min * 32) xMovement = 1;
+			else if (x > max * 32) xMovement = -1;
+			
+			velocity.x = xMovement * 64;
 		}
 		
 		if (yMovement != 0)
 		{
-			if (body.position.y < (min * 32) + height * 0.5) yMovement = 1;
-			else if (body.position.y > (max * 32) + height * 0.5) yMovement = -1;
+			if (y < min * 32) yMovement = 1;
+			else if (y > max * 32) yMovement = -1;
 			
-			body.velocity.y = yMovement * 64;
+			velocity.y = yMovement * 64;
 		}
 		
-		super.update(FlxG.elapsed);
+		super.update(e);
+	}
+	
+	override public function destroy()
+	{
+		min = 0;
+		max = 0;
+		xMovement = 0;
+		yMovement = 0;
+		
+		super.destroy();
 	}
 }

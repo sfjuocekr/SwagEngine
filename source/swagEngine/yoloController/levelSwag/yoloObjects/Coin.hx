@@ -1,8 +1,5 @@
 package swagEngine.yoloController.levelSwag.yoloObjects ;
 
-import nape.dynamics.InteractionFilter;
-import flixel.addons.nape.FlxNapeSprite;
-import nape.phys.BodyType;
 import flixel.FlxSprite;
 import flixel.addons.effects.FlxWaveSprite;
 
@@ -11,17 +8,15 @@ import flixel.addons.effects.FlxWaveSprite;
 * @author Sjoer van der Ploeg
 */
 
-class Coin extends FlxNapeSprite
+class Coin extends FlxSprite
 {
-	public function new(x:Float = 0, y:Float = 0, SimpleGraphic:Dynamic)
+	public var wealth:Int = 1;
+	
+	public function new(_x:Float = 0, _y:Float = 0, _SimpleGraphic:Dynamic, _wealth:String)
 	{
-		super(x, y, null, false, false);
+		super(_x, _y, _SimpleGraphic);
+		y -= height;
 		
-		loadGraphic(SimpleGraphic);
-		
-		createRectangularBody(width, height, BodyType.KINEMATIC);
-		physicsEnabled = true;
-		
-		body.setShapeFilters(new InteractionFilter(0, 0, 0, 0, 0, 0));
+		wealth = Std.parseInt(_wealth);
 	}	
 }

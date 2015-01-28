@@ -22,7 +22,7 @@ class Main extends Sprite
 	private var stageWidth:Int;
 	private var stageHeight:Int;
 	
-	public static function main():Void
+	public static function main()
 	{		
 		Lib.current.addChild(new Main());
 	}
@@ -41,7 +41,7 @@ class Main extends Sprite
 		}
 	}
 	
-	private function init(?E:Event):Void 
+	private function init(?E:Event)
 	{
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 		{
@@ -51,7 +51,7 @@ class Main extends Sprite
 		setupGame();
 	}
 	
-	private function setupGame():Void
+	private function setupGame()
 	{
 		stageWidth = Lib.current.stage.stageWidth;
 		stageHeight = Lib.current.stage.stageHeight;

@@ -8,9 +8,6 @@ import flixel.system.FlxAssets;
 import openfl.system.System;
 import swagEngine.swagHandler.Settings;
 import swagEngine.yoloController.levelSwag.*;
-import nape.space.Space;
-import flixel.addons.nape.FlxNapeSpace;
-import nape.geom.Vec2;
 
 /**
  * ...
@@ -21,22 +18,23 @@ class MainMenu extends FlxState
 {
 	private var levelButton:Array<FlxButtonPlus> = new Array();
 	
-	override public function create():Void
+	override public function create()
 	{
 		super.create();
 		
-		if (FlxNapeSpace.space == null) FlxNapeSpace.init();
-		
 		FlxG.mouse.useSystemCursor = false;
+		
+		add(new FlxSprite((Settings.gameWidth / 4), 0, "assets/images/main_menu.png"));
 		
 		for (i in Settings.levels)
 		{
-			levelButton[i] = new FlxButtonPlus((Settings.gameWidth * 0.5) - 64, 32 + (i * 32 + 4), startLevel.bind(i), null, 128, 32);
+			levelButton[i] = new FlxButtonPlus((Settings.gameWidth * 0.5) - 64, 500 + (i * 32 + 4), startLevel.bind(i), null, 128, 32);
 			levelButton[i].loadButtonGraphic(new FlxSprite(0, 0, FlxAssets.getBitmapData("assets/buttons/" + i + ".png")), new FlxSprite(0, 0, FlxAssets.getBitmapData("assets/buttons/" + i + "_hl.png")));
 			add(levelButton[i]);
 		}
 		
 		FlxG.fixedTimestep = false;
+		
 	}
 		
 	private function startLevel(level:Int)
@@ -44,18 +42,18 @@ class MainMenu extends FlxState
 		switch (level)
 		{
 			case 0: System.exit(0);
-			case 1:	FlxG.switchState(new Tutorial());
+			case 1:	FlxG.switchState(new Level_0001());
 		}
 	}
 	
-	override public function destroy():Void
+	override public function destroy()
 	{
 		super.destroy();
 	}
 
-	override public function update(elapsed:Float)
+	override public function update(e:Float)
 	{
-		super.update(FlxG.elapsed);
+		super.update(e);
 		
 		if (FlxG.keys.justPressed.ESCAPE) System.exit(0);
 	}	

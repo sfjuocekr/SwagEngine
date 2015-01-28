@@ -1,27 +1,28 @@
 package swagEngine.yoloController.levelSwag.yoloObjects ;
 
-import flixel.addons.nape.FlxNapeSprite;
 import flixel.group.FlxGroup;
 import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.*;
+import flixel.FlxSprite;
+import swagEngine.yoloController.playerSwag.PlayerRenderer;
 
 /**
  * ...
- * @author ...
+ * @author Sjoer van der Ploeg
  */
 
 class Enemy extends FlxGroup
 {
-	public function new(x:Float, y:Float, yolo:String)
+	public function new(_x:Float, _y:Float, _rotation:Float, _name:String, ?_player:PlayerRenderer, ?_min:String, ?_max:String, ?_type:String)
 	{
 		super();
 		
-		switch (yolo)
+		switch (_name)
 		{
 			case "bird":
-				add(new Dove(x, y));
+				add(new Dove(_x, _y, _min, _max, _player, _type));
 			
 			case "rabbit":
-				add(new Rabbit(x, y));
+				add(new Rabbit(_x, _y, _rotation, _player));
 		}
 	}
 }

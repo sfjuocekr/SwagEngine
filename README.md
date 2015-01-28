@@ -1,7 +1,8 @@
 SwagEngine
 ==========
 
-Prototype game engine using HaxeFlixel, NapePhysics and Tiled.
+Prototype game for our school project.
+
 
 Required libraries:
 
@@ -9,8 +10,6 @@ Required libraries:
 	- flixel-addons (development branch)
 	- openfl-tiled (development branch)
 	- openfl-tiled-flixel (development branch
-	- nape
-
-The project has some troubles running on neko, but the Visual C++ 2010 and 2013 work fine.
+	
 
 - UGH
