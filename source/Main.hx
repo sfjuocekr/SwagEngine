@@ -5,8 +5,8 @@ import flixel.FlxState;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.Lib;
-import swagEngine.interSwag.MainMenu;
-import swagEngine.swagHandler.Settings;
+import intoTheHat.interSwag.MainMenu;
+import intoTheHat.swagHandler.Settings;
 
 
 /**
