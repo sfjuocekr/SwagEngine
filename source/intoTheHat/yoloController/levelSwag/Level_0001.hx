@@ -27,9 +27,10 @@ import openfl.tiled.FlxTiledMap;
 import openfl.utils.Timer;
 import intoTheHat.interSwag.Interface;
 import intoTheHat.interSwag.MainMenu;
-import swagEngine.yoloController.levelSwag.yoloObjects.*;
-import swagEngine.yoloController.levelSwag.yoloObjects.animationSwag.*;
+import intoTheHat.yoloController.levelSwag.yoloObjects.*;
+import intoTheHat.yoloController.levelSwag.yoloObjects.animationSwag.*;
 import intoTheHat.yoloController.playerSwag.PlayerRenderer;
+import intoTheHat.interSwag.Outro;
 
 /**
  * ...
@@ -62,6 +63,7 @@ class Level_0001 extends FlxState
 	private var fluffObjects:FlxGroup = new FlxGroup();
 	private var lightBowls:FlxGroup = new FlxGroup();
 	private var light:FlxGroup = new FlxGroup();
+	private var wizzard:FlxGroup = new FlxGroup();
 	
 	private var fireball:BitmapData;
 	
@@ -100,7 +102,8 @@ class Level_0001 extends FlxState
 		add(light);								// Add some lights
 		
 		add(foreground);														// Foreground
-		
+		add(wizzard);							// Wizzard
+
 		UI = new Interface(player);
 		add(UI);								// Interface
 		
@@ -171,6 +174,9 @@ class Level_0001 extends FlxState
 				case "spider":
 					fluffObjects.add(new Spider(_fluff.x, _fluff.y));
 					
+				case "wizzard":															
+					wizzard.add(new Trollwizard(_fluff.x, _fluff.y, _fluff.properties.get("X"), _fluff.properties.get("Y")));
+					
 				case "light":
 					light.add(new Light(_fluff.x, _fluff.y));
 					
@@ -231,7 +237,7 @@ class Level_0001 extends FlxState
 	
 	private function doExit(_exit:FlxObject, _player:FlxObject)
 	{	
-		if (_exit.exists && FlxG.keys.justPressed.SPACE) FlxG.resetState();
+		if (_exit.exists && FlxG.keys.justPressed.SPACE) FlxG.switchState(new Outro());
 	}
 	
 	private function doPortal(_portal:Portal, _player:FlxObject)
