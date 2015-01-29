@@ -1,13 +1,13 @@
-package swagEngine.interSwag ;
+package intoTheHat.interSwag ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
-import swagEngine.interSwag.MainMenu;
+import intoTheHat.interSwag.MainMenu;
 import flixel.FlxState;
 import openfl.display.BitmapData;
 import openfl.Lib;
-import swagEngine.swagHandler.Settings;
+import intoTheHat.swagHandler.Settings;
 import motion.Actuate;
 import flixel.util.FlxColor;
 
