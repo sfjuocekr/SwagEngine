@@ -26,6 +26,14 @@ class PlayerRenderer extends FlxSprite
 	public var portaling:Bool = false;
 	public var godmode:Bool = false;
 	
+	/**
+	 * Creates the player
+	 * 
+	 * @param	X				The initial X position of the player.
+	 * @param	Y				The initial Y position of the player.
+	 * @param	Shots			The group used for shots fired by the player
+	 */
+	
 	public function new(_x:Float = 0, _y:Float = 0, _shots:FlxGroup)
 	{
 		super(_x, _y);
@@ -69,6 +77,10 @@ class PlayerRenderer extends FlxSprite
 		portalTimer.addEventListener(TimerEvent.TIMER, didPortal);
 	}
 	
+	/**
+	 * Increases the players health. 
+	 */
+	
 	private function healthUp(e)
 	{
 		if (health < 990) health += 10;
@@ -81,6 +93,10 @@ class PlayerRenderer extends FlxSprite
 		
 		portaling = false;
 	}
+	
+	/**
+	 * Handles key presses and draws this FlxSprite.
+	 */
 	
 	override public function update(e:Float)			// NEED TO FIX THE UGLY IF BASED KEY INPUT
 	{
@@ -165,7 +181,10 @@ class PlayerRenderer extends FlxSprite
 		}
 		
 		if (touching == FlxObject.DOWN || touching == 4112) abilities.jumping = false;	// 4112 = rare ocassion when you are "in" a wall
+		
+#if !FLX_NO_DEBUG
 		trace(touching);	// NEED TO FIND THE LEFT SIDE CONDITION, 4112 = right side. It is a bitmask, too tired to think about it now.
+#end
 		
 		if (FlxG.keys.anyJustPressed([UP, F]) && (abilities.cards.energy[3] > 0 || !abilities.jumping))
 			abilities.spades();

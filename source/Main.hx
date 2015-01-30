@@ -51,6 +51,10 @@ class Main extends Sprite
 		setupGame();
 	}
 	
+	/**
+	 * Initializes the game, putting it on the screen.
+	 */
+	
 	private function setupGame()
 	{
 		stageWidth = Lib.current.stage.stageWidth;

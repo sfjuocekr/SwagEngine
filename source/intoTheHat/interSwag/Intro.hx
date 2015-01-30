@@ -297,6 +297,8 @@ class Intro extends FlxState
 			//10 disappears
 			Actuate.tween (story[10], 20, { x: -100 } ); 
 			Actuate.tween (story[10], 5, { alpha: 0 } );
-		}	
+		}
+		
+		if (Std.int(counter) == 80) FlxG.switchState(new MainMenu());
 	}
 }

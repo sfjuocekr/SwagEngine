@@ -24,6 +24,10 @@ class CardManager
 	public var heartTimer:Timer = new Timer(2500);
 	public var spadeTimer:Timer = new Timer(1250);
 	
+	/**
+	 * Increases the players health. 
+	 */
+	
 	public function new() 
 	{
 		diamondTimer.addEventListener(TimerEvent.TIMER, powerUpDiamonds);

@@ -34,12 +34,12 @@ class Outro extends FlxState
 		super.create();
 		// WRITE DOWN HERE
 		
-		_outro.push(new FlxSprite( 0, 0, "assets/outro/made.png"));                 //first the same as the main menu but saying YOU MADE IT BRUUUUH
-		_outro.push(new FlxSprite( 0, 0, "assets/outro/sophie.png"));
-		_outro.push(new FlxSprite( 0, 0, "assets/outro/rado.png"));                    //adding the images to the array
-		_outro.push(new FlxSprite( 0, 0, "assets/outro/sjoer.png"));
-		_outro.push(new FlxSprite( 0, 0, "assets/outro/tagor.png"));
-		_outro.push(new FlxSprite( 0, 0, "assets/outro/mieke.png"));
+		_outro.push(new FlxSprite( 0, 0, "assets/images/made.png"));						//first the same as the main menu but saying YOU MADE IT BRUUUUH
+		_outro.push(new FlxSprite( 0, 0, "assets/images/sophie.png"));
+		_outro.push(new FlxSprite( 0, 0, "assets/images/rado.png"));						//adding the images to the array
+		_outro.push(new FlxSprite( 0, 0, "assets/images/sjoer.png"));
+		_outro.push(new FlxSprite( 0, 0, "assets/images/tagor.png"));
+		_outro.push(new FlxSprite( 0, 0, "assets/images/mieke.png"));
 		
 		for (image in _outro)
 		{
